@@ -7,6 +7,9 @@
     <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">-->
     <!-- Latest compiled and minified CSS -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -28,20 +31,42 @@
 <body>
 
 <div class="container-fluid">
-    <div class="row" id="HeaderRow">
-        <div class="col-lg-4" id="TitleCol">
+    <div class="row align-items-center" id="HeaderRow">
+        <div class="col-sm-4" id="TitleCol">
             <h2 id="HeaderTitle">borgdir.media</h2>
         </div>
-        <div class="col-lg-4" id="TopNavigationCol" role="navigation">
+        <div class="col-sm-4" id="TopNavigationCol" role="navigation">
             <ul class="nav nav-pills" id="TopNavigationList">
                 <li><a href="equipment.html">Equipment</a></li>
                 <li class="divider"></li>
                 <li><a href="login.html">Login</a></li>
             </ul>
         </div>
-        <div class="col-lg-4" id="CartCol" style="text-align: center;">
+        <div class="col-sm-4" id="CartCol" style="text-align: center;">
             <i class="fas fa-shopping-cart"></i>
         </div>
+    </div>
+    <div class="row" id="WelcomeRow">
+        <div class="row-sm-12" id="WelcomeDiv">
+            <div class="mx-auto" style="width: 200px; text-align:center;">
+                <h3>Willkommen bei</h3>
+                <h2>borgdir.media</h2>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center" id="LogRegRow">
+        <div class="col-sm-2">
+            <a href="login.html" class="btn btn-primary">Login</a>
+        </div>
+        <div class="col-sm-2">
+            <a href="register.html" class="btn btn-primary">Registrieren</a>
+        </div>
+    </div>
+    <div class="row" id="CarouselRow">
+        CAROUSEL
+    </div>
+    <div class="row" id="ContentRow">
+        CONTENT
     </div>
 </div>
 
