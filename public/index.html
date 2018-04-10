@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>borgdir.media</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -13,16 +14,19 @@
 <body>
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row" id="HeaderRow">
         <div class="col-sm" id="TitleCol">
-            Borgdir.media
+            <h2 id="HeaderTitle">borgdir.media</h2>
         </div>
-        <div class="col-sm" id="TopNavigationCol">
-            <a href="equipment.html">Equipment</a> |
-            <a href="login.html">Login</a>
+        <div class="col-sm" id="TopNavigationCol" role="navigation">
+            <ul class="nav nav-pills">
+                <li><a href="equipment.html">Equipment</a></li>
+                <li class="divider"></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
         </div>
         <div class="col-sm" id="CartCol">
-            One of three columns
+            <i class="fas fa-shopping-cart"></i>
         </div>
     </div>
 </div>
