@@ -2,10 +2,55 @@
     margin: 1em;
 }
 
+#welcomeMessage {
+    font-size: 1.5em;
+    font-style: italic;
+}
+
 h2 {
-    color: lightslategrey;
+    color: cornflowerblue;
 }
 
 body {
     text-align: center;
+}
+
+/* Carousel base class */
+.carousel {
+    margin-bottom: 4rem;
+}
+
+/* Since positioning the image, we need to help out the caption */
+.carousel-caption {
+    bottom: 3rem;
+    z-index: 10;
+}
+
+/* Declare heights because of positioning of img element */
+.carousel-item {
+    height: 20rem;
+    background-color: #777;
+}
+
+.carousel-item > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    height: 32rem;
+}
+
+#FirstContainer {
+    margin-top: 10em;
+}
+
+.topName {
+    color: cornflowerblue !important;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: cornflowerblue;
+    border-color: cornflowerblue;
 }
