@@ -50,7 +50,21 @@ body {
     font-weight: bold;
 }
 
+.impText {
+    color: cornflowerblue;
+!important;
+    font-weight: bold !important;
+}
+
 .btn-primary {
     background-color: cornflowerblue;
     border-color: cornflowerblue;
+}
+
+.descText {
+    height: 120px;
+}
+
+.stock {
+    margin-left: 8em;
 }
