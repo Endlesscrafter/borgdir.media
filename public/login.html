@@ -2,23 +2,112 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
-          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>borgdir.media | Login</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="../css/borgdir.media.css">
+
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"
             integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl"
             crossorigin="anonymous"></script>
 </head>
 <body>
+
+<!-- HEADER -->
+
+<header>
+    <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+        <a class="navbar-brand col-lg-4 topName" href="#">borgdir.media</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse col-lg-4" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Equipment</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Login<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<!-- BODY CONTENT-->
+
+<main role="main">
+
+    <!-- START CONTAINER -->
+
+    <div class="container-fluid" id="FirstContainer">
+        <div class="row justify-content-center" id="FirstRow">
+            <div class="col-lg-6 mb-5">
+                <p id="welcomeMessage">Login</p>
+            </div>
+        </div>
+    </div>
+    <!-- CONTENT -->
+
+    <div class="container-fluid">
+        <div class="row justify-content-center" id="ContentRow">
+            <div class="col-lg-3">
+                <form>
+                    <div class="form-group">
+                        <label for="registerUsername">Benutzername</label>
+                        <input type="text" class="form-control" id="registerUsername"
+                               placeholder="Benutzername">
+                    </div>
+                </form>
+            </div><!-- /.col-lg-6 -->
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-3">
+                <form>
+                    <div class="form-group">
+                        <label for="inputPassword">Password</label>
+                        <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row justify-content-center m-5">
+            <div class="col-md-auto">
+                <form>
+                    <div class="form-group">
+                        <div class="col-lg-2">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="container">
+        <p class="float-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2018 Philipp Kalytta &middot; <a href="#">Contact</a> &middot; <a href="#">Terms</a></p>
+    </footer>
+
+</main>
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
-        integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
-        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
-        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="../js/vendor/popper.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
 </body>
 </html>
