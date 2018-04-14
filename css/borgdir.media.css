@@ -2,7 +2,7 @@
     margin: 1em;
 }
 
-#welcomeMessage {
+.welcomeMessage {
     font-size: 1.5em;
     font-style: italic;
 }
@@ -63,8 +63,50 @@ body {
 
 .descText {
     height: 120px;
+    max-width: 300px;
 }
 
 .stock {
     margin-left: 8em;
+}
+
+.text-info {
+    color: #32d0ff !important;
+}
+
+/*Cart Spinner and Buttons*/
+
+.cartSpinner {
+    max-width: 120px;
+}
+
+.spinner input {
+    text-align: right;
+}
+
+.input-group-btn-vertical {
+    position: relative;
+    white-space: nowrap;
+    width: 1%;
+    vertical-align: middle;
+    display: table-cell;
+    height: 40px;
+}
+
+.input-group-btn-vertical > .btn {
+    display: block;
+    float: none;
+    min-width: 20px;
+    width: 100%;
+    max-width: 100%;
+    padding: 0px;
+    height: 20px;
+    margin-left: -1px;
+    position: relative;
+    border-radius: 0px;
+    border: 1px darkgray solid;
+}
+
+td {
+    text-align: justify;
 }
