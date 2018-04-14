@@ -74,6 +74,11 @@ body {
     color: #32d0ff !important;
 }
 
+.largeIcon {
+    font-size: 200px;
+    margin: 1rem;
+}
+
 /*Cart Spinner and Buttons*/
 
 .cartSpinner {
