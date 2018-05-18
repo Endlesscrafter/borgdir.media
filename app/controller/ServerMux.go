@@ -39,23 +39,35 @@ func indexHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Fprintf(w, "login")
+
+	tmpl, err := template.ParseFiles("template/login.html")
+	if err == nil {
+		tmpl.ExecuteTemplate(w, "login.html", "DATATATATATA")
+	}
+	//fmt.Fprintf(w, "index")
 }
 
 func cartHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Fprintf(w, "cart")
+	tmpl, err := template.ParseFiles("template/cart.html")
+	if err == nil {
+		tmpl.ExecuteTemplate(w, "carthtml", "DATATATATATA")
+	}
+	//fmt.Fprintf(w, "index")
 }
 
 func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Fprintf(w, "admin")
+	tmpl, err := template.ParseFiles("template/admin/index.html")
+	if err == nil {
+		tmpl.ExecuteTemplate(w, "index.html", "DATATATATATA")
+	}
 }
 
 func main() {
 	router := httprouter.New()
 	router.GET("/", indexHandler)
 	router.GET("/index.html", indexHandler)
-	router.GET("/login/*suburl", loginHandler)
-	router.GET("/cart/*suburl", cartHandler)
+	router.GET("/login.html", loginHandler)
+	router.GET("/cart.html", cartHandler)
 	//Find closest match for /admin, so that all admin sites are handled by adminHandler
 	router.GET("/admin/*suburl", adminHandler)
 	router.GET("/css/*suburl", cssHandler)

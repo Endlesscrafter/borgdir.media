@@ -818,7 +818,7 @@
                     }
 
                     var delta = direction === Direction.PREV ? -1 : 1;
-                    var itemIndex = (activeIndex + delta) % this._items.length;
+                    var itemIndex = (activeIndex + delta ) % this._items.length;
                     return itemIndex === -1 ? this._items[this._items.length - 1] : this._items[itemIndex];
                 };
 
