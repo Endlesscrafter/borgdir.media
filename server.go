@@ -111,7 +111,7 @@ func standardHandler(writer http.ResponseWriter, request *http.Request) {
 		http.Redirect(writer, request, "index", http.StatusFound)
 		return
 	}
-	println("RENDER TEMPLATE: " + "pulbic/" + title)
+	println("RENDER TEMPLATE: " + "public/" + title)
 	renderTemplate(writer, "public/"+title , webpage)
 }
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>borgdir.media | Warenkorb</title>
+    <title>borgdir.media | Equipment</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -32,7 +32,7 @@
                     <a class="nav-link" href="index.html">Home</a>
                 </li>
                 <li class="nav-item  active">
-                    <a class="nav-link" href="equipment.html">Equipment<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#">Equipment<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="my-equipment.html">Meine Geräte</a>
@@ -44,7 +44,7 @@
             </ul>
         </div>
         <div class="col-lg-1">
-            <a href="#" class="nav-link">
+            <a href="cart.html" class="nav-link">
                 <i class="fas fa-shopping-cart"></i>
             </a>
         </div>
@@ -71,175 +71,125 @@
     <!-- START CONTAINER -->
 
     <div class="container-fluid" id="FirstContainer">
-        <div class="row" id="FirstRow">
-            <div class="col-lg-1"></div>
+        <div class="row justify-content-center" id="FirstRow">
             <div class="col-lg-2 mb-5 text-left">
-                <span class="welcomeMessage">Warenkorb</span>
+                <span class="welcomeMessage">Equipment</span>
             </div>
+            <div class="col-lg-1"></div>
+            <div class="col-lg-2">
+                <form>
+                    <input type="text" class="form-control" id="search" placeholder="Suche">
+                </form>
+
+            </div>
+            <div class="col-lg-1 dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownKatMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Kategorie
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownKatMenuButton">
+                    <a class="dropdown-item" href="#">Kat1</a>
+                    <a class="dropdown-item" href="#">Kat2</a>
+                    <a class="dropdown-item" href="#">Kat3</a>
+                </div>
+            </div>
+            <div class="col-lg-3 dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownSortMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Sortieren nach
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownSortMenuButton">
+                    <a class="dropdown-item" href="#">Preis</a>
+                    <a class="dropdown-item" href="#">Anzahl</a>
+                    <a class="dropdown-item" href="#">Kategorie</a>
+                </div>
+            </div>
+            <div class="col-lg-1"></div>
         </div>
     </div>
     <!-- CONTENT -->
-    <div class="container-fluid">
-        <!--Warenkorbliste-->
-        <div class="row">
-            <div class="col-lg-1"></div>
-            <div class="col-lg-10">
-                <table class="table table-hover table-responsive-lg">
-                    <thead class="thead-light">
-                    <tr>
-                        <th scope="col">Equipment</th>
-                        <th scope="col">Beschreibung</th>
-                        <th scope="col">Anzahl</th>
-                        <th scope="col">Rückgabe bis</th>
-                        <th scope="col">Löschen</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row" class="float-left">
-                            <img class="img-fluid"
-                                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                 alt="Generic placeholder image" width="50" height="50">
-                            <div class="ml-5 float-right text-left">
-                                <h4>Kamera 1</h4>
-                                <span class="text-info">Inv.-Nr. 12345656</span>
-                            </div>
-                        </th>
-                        <td class="descText">Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-                            suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-                        </td>
-                        <td>
-                            <div class="input-group spinner cartSpinner">
-                                <input type="text" class="form-control" value="1" min="0" max="5">
-                                <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
-                                    </button>
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-left pl-3">
-                            Rückgabe:<br/>
-                            <span class="text-info">25.05.18</span>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-secondary">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="float-left">
-                            <img class="img-fluid"
-                                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                 alt="Generic placeholder image" width="50" height="50">
-                            <div class="ml-5 float-right text-left">
-                                <h4>Stativ</h4>
-                                <span class="text-info">Inv.-Nr. 12345656</span>
-                            </div>
-                        </th>
-                        <td class="descText">Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-                            suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-                        </td>
-                        <td>
-                            <div class="input-group spinner cartSpinner">
-                                <input type="text" class="form-control" value="1" min="0" max="5">
-                                <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
-                                    </button>
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-left pl-3">
-                            Rückgabe:<br/>
-                            <span class="text-info">25.05.18</span>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-secondary">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="float-left">
-                            <img class="img-fluid"
-                                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                 alt="Generic placeholder image" width="50" height="50">
-                            <div class="ml-5 float-right text-left">
-                                <h4>Mikrophon</h4>
-                                <span class="text-info">Inv.-Nr. 12345656</span>
-                            </div>
-                        </th>
-                        <td class="descText">Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-                            suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-                        </td>
-                        <td>
-                            <div class="input-group spinner cartSpinner">
-                                <input type="text" class="form-control" value="1" min="0" max="5">
-                                <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
-                                    </button>
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-left pl-3">
-                            Rückgabe:<br/>
-                            <span class="text-info">25.05.18</span>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-secondary">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="float-left">
-                            <img class="img-fluid"
-                                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                                 alt="Generic placeholder image" width="50" height="50">
-                            <div class="ml-5 float-right text-left">
-                                <h4>Monitor 50"</h4>
-                                <span class="text-info">Inv.-Nr. 12345656</span>
-                            </div>
-                        </th>
-                        <td class="descText">Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-                            suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-                        </td>
-                        <td>
-                            <div class="input-group spinner cartSpinner">
-                                <input type="text" class="form-control" value="1" min="0" max="5">
-                                <div class="input-group-btn-vertical">
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-up"></i>
-                                    </button>
-                                    <button class="btn btn-default" type="button"><i class="fa fa-caret-down"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-left pl-3">
-                            Rückgabe:<br/>
-                            <span class="text-info">25.05.18</span>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-secondary">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+
+    <div class="container-fluid shopContainer">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-3 text-left float-left">
+                <h4>Kamera 1</h4>
+                <p class="descText">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                    tempor invidunt ut labore et dolore magna aliquyam erat</p>
+                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
+                        class="fas fa-cart-arrow-down"></i></button>
+                <span class="text-danger stock">Entliehen</span>
+            </div>
+            <div class="col-lg-2 float-right">
+                <img class="img-fluid"
+                     src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                     alt="Generic placeholder image" width="150" height="150">
+            </div>
+            <div class="col-lg-3 text-left float-left">
+                <h4>Kamera 1</h4>
+                <p class="descText">sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat</p>
+                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
+                        class="fas fa-cart-arrow-down"></i></button>
+                <span class="text-info stock">2 Verfügbar</span>
+            </div>
+            <div class="col-lg-2 float-right">
+                <img class="img-fluid"
+                     src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                     alt="Generic placeholder image" width="150" height="150">
             </div>
         </div>
-        <div class="row justify-content-end">
-            <div class="col-lg-2">
-                <button type="button" class="btn btn-primary">Jetzt ausleihen</button>
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-3 text-left float-left">
+                <h4>Stativ</h4>
+                <p class="descText">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                    tempor invidunt ut labore et dolore magna aliquyam erat</p>
+                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
+                        class="fas fa-cart-arrow-down"></i></button>
+                <span class="text-info stock">1 Verfügbar</span>
             </div>
-            <div class="col-lg-1"></div>
+            <div class="col-lg-2 float-right">
+                <img class="img-fluid"
+                     src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                     alt="Generic placeholder image" width="150" height="150">
+            </div>
+            <div class="col-lg-3 text-left float-left">
+                <h4>Mikrophon</h4>
+                <p class="descText">sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat</p>
+                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
+                        class="fas fa-cart-arrow-down"></i></button>
+                <span class="text-danger stock">Entliehen</span>
+            </div>
+            <div class="col-lg-2 float-right">
+                <img class="img-fluid"
+                     src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                     alt="Generic placeholder image" width="150" height="150">
+            </div>
+        </div>
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-3 text-left float-left">
+                <h4>Kabeltrommel Wlan-Kabel</h4>
+                <p class="descText">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                    tempor invidunt ut labore et dolore magna aliquyam erat</p>
+                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
+                        class="fas fa-cart-arrow-down"></i></button>
+                <span class="text-warning stock">Vorgemerkt</span>
+            </div>
+            <div class="col-lg-2 float-right">
+                <img class="img-fluid"
+                     src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                     alt="Generic placeholder image" width="150" height="150">
+            </div>
+            <div class="col-lg-3 text-left float-left">
+                <h4>Monitor 50"</h4>
+                <p class="descText">sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat</p>
+                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
+                        class="fas fa-cart-arrow-down"></i></button>
+                <span class="text-info stock">4 Verfügbar</span>
+            </div>
+            <div class="col-lg-2 float-right">
+                <img class="img-fluid"
+                     src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                     alt="Generic placeholder image" width="150" height="150">
+            </div>
         </div>
     </div>
 
@@ -257,7 +207,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="../js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script>window.jQuery || document.write('<script src="../../static/js/vendor/jquery-slim.min.js"><\/script>')</script>
 <script src="../js/vendor/popper.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>
 </body>

@@ -21,7 +21,7 @@
 
 <header>
     <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
-        <a class="navbar-brand col-lg-4 topName" href="#">borgdir.media</a>
+        <a class="navbar-brand col-lg-4 topName" href="index.html">borgdir.media</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -32,10 +32,10 @@
                     <a class="nav-link" href="../index.html">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../equipment.html">Equipment</a>
+                    <a class="nav-link" href="equipment.html">Equipment</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="clients.html">Kunden</a>
+                    <a class="nav-link active" href="#">Kunden<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <!--TODO: Add logout process-->
@@ -65,27 +65,163 @@
 <main role="main">
 
     <!-- START CONTAINER -->
-
     <div class="container-fluid" id="FirstContainer">
-        <div class="row justify-content-center" id="FirstRow">
-            <div class="col-lg-4 mb-5">
-                <span class="welcomeMessage">Administrationsbereich</span>
+        <div class="row" id="FirstRow">
+            <div class="col-lg-1"></div>
+            <div class="col-3 mb-5 text-left">
+                <span class="welcomeMessage">Equipment verwalten</span>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-4">
-                <i class="fas fa-clipboard-list largeIcon"></i>
-                <br/>
-                <a href="equipment.html">
-                    <button type="button" class="btn btn-primary">Equipment-Verwaltung</button>
-                </a>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="container-fluid ">
+        <div class="row mb-3">
+            <div class="col-1"></div>
+            <div class="col-lg-2">
+                <form>
+                    <input type="text" class="form-control" id="search" placeholder="Suche">
+                </form>
+
             </div>
-            <div class="col-4">
-                <i class="fas fa-users largeIcon"></i>
-                <br/>
-                <a href="clients.html">
-                    <button type="button" class="btn btn-primary">Benutzer-Verwaltung</button>
-                </a>
+            <div class="col-lg-1 dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownKatMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Kategorie
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownKatMenuButton">
+                    <a class="dropdown-item" href="#">Kat1</a>
+                    <a class="dropdown-item" href="#">Kat2</a>
+                    <a class="dropdown-item" href="#">Kat3</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <!--Warenkorbliste-->
+        <div class="row">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-10">
+                <table class="table table-hover table-responsive-lg">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Kunde</th>
+                        <th scope="col">Ausgeliehenes Equipment</th>
+                        <th scope="col">Status</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row" class="float-left">
+                            <img class="img-fluid"
+                                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                                 alt="Generic placeholder image" width="50" height="50">
+                            <div class="ml-5 float-right text-left">
+                                <h4>Max Mustermann</h4>
+                                <span class="text-info">ID: 1111</span>
+                                <br/>
+                                <span class="text-warning">Benutzer</span>
+                            </div>
+                        </th>
+                        <td class="descText">Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
+                            suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+                        </td>
+                        <td class="text-left pl-3">
+                            Konto aktiv bis:<br/>
+                            <span class="text-info">25.05.18</span>
+                        </td>
+                        <td>
+                            <a href="edit-client.html">
+                                <button type="button" class="btn btn-secondary">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="float-left">
+                            <img class="img-fluid"
+                                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                                 alt="Generic placeholder image" width="50" height="50">
+                            <div class="ml-5 float-right text-left">
+                                <h4>Max Mustermann</h4>
+                                <span class="text-info">ID: 1111</span>
+                                <br/>
+                                <span class="text-warning">Benutzer</span>
+                            </div>
+                        </th>
+                        <td class="descText">
+                            ---
+                        </td>
+                        <td class="text-left pl-3">
+                            <span class="text-warning">Gesperrt</span>
+                        </td>
+                        <td>
+                            <a href="edit-client.html">
+                                <button type="button" class="btn btn-secondary">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="float-left">
+                            <img class="img-fluid"
+                                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                                 alt="Generic placeholder image" width="50" height="50">
+                            <div class="ml-5 float-right text-left">
+                                <h4>Max Mustermann</h4>
+                                <span class="text-info">ID: 1111</span>
+                                <br/>
+                                <span class="text-warning">Benutzer</span>
+                            </div>
+                        </th>
+                        <td class="descText">Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
+                            suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+                        </td>
+                        <td class="text-left pl-3">
+                            Konto aktiv bis:<br/>
+                            <span class="text-info">25.05.18</span>
+                        </td>
+                        <td>
+                            <a href="edit-client.html">
+                                <button type="button" class="btn btn-secondary">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="float-left">
+                            <img class="img-fluid"
+                                 src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+                                 alt="Generic placeholder image" width="50" height="50">
+                            <div class="ml-5 float-right text-left">
+                                <h4>Max Mustermann</h4>
+                                <span class="text-info">ID: 1111</span>
+                                <br/>
+                                <span class="text-warning">Benutzer</span>
+                            </div>
+                        </th>
+                        <td class="descText">
+                            ---
+                        </td>
+                        <td class="text-left pl-3">
+                            Konto aktiv bis:<br/>
+                            <span class="text-warning">Immer</span>
+                        </td>
+                        <td>
+                            <a href="edit-client.html">
+                                <button type="button" class="btn btn-secondary">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -108,7 +244,7 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-<script>window.jQuery || document.write('<script src="../../js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script>window.jQuery || document.write('<script src="../../../static/js/vendor/jquery-slim.min.js"><\/script>')</script>
 <script src="../../js/vendor/popper.min.js"></script>
 <script src="../../js/bootstrap.min.js"></script>
 </body>
