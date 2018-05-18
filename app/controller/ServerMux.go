@@ -50,7 +50,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 func cartHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	tmpl, err := template.ParseFiles("template/cart.html")
 	if err == nil {
-		tmpl.ExecuteTemplate(w, "carthtml", "DATATATATATA")
+		tmpl.ExecuteTemplate(w, "cart.html", "DATATATATATA")
 	}
 	//fmt.Fprintf(w, "index")
 }
