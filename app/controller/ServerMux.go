@@ -13,6 +13,10 @@ import (
 	"fmt"
 )
 
+type equipmentData struct {
+	ProductData string
+}
+
 func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	content, err := ioutil.ReadFile("static/css" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "text/css")
@@ -73,7 +77,9 @@ func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 
 	tmpl, err := template.ParseFiles("template/equipment.html")
 	if err == nil {
-		tmpl.ExecuteTemplate(w, "equipment.html", "DATATATATATA")
+
+		data := equipmentData{"KEINE KAMERA"}
+		tmpl.ExecuteTemplate(w, "equipment.html", data)
 	}
 	//fmt.Fprintf(w, "index")
 }
