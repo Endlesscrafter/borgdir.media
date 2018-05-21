@@ -11,6 +11,7 @@ import (
 	"html/template"
 	"io/ioutil"
 	"fmt"
+	"strings"
 )
 
 
@@ -44,11 +45,14 @@ type user struct{
 	Password string
 	ProfileImageSRC string
 	UserLevel string
+	Blocked bool
+	ActiveUntilDate string
 }
 
 type siteData struct {
 	Equipment []equipmentData
 	User user
+	AdminUserList []user
 }
 
 //Test Data
@@ -56,8 +60,8 @@ var equip1 = equipmentData{"Kamera Obscura", "Duis mollis, est non commodo luctu
 var equip2 = equipmentData{"Stativ", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder" ,"Verfügbar",2 , "None", true, 2,"/img/equipment/gandalf.gif", true, false, false ,1,"Karl Karstens" ,"25.05.18", "25.05.18", 13452 ,"Schrank",2}
 var equip3 = equipmentData{"Mikrophon", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder" ,"Vorgemerkt",1, "None" , true, 3, "/img/equipment/gandalf.gif", true, false, false,1,"Max Mustermann" ,"25.05.18", "25.05.18", 2374, "Regal 12",2}
 
-var user1 = user{1,"Max Mustermann", "max@muster.de", "asdf", "img/equipment/gandalf.gif", "Benutzer"}
-var user2 = user{2,"Peter Müller", "peter@mueller.de", "asdf", "../img/equipment/gandalf.gif", "Administrator"}
+var user1 = user{1,"Max Mustermann", "max@muster.de", "asdf", "img/equipment/gandalf.gif", "Benutzer", false, "25.07.18"}
+var user2 = user{2,"Peter Müller", "peter@mueller.de", "asdf", "img/equipment/gandalf.gif", "Administrator" ,false, "25.07.22"}
 
 
 func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -211,13 +215,26 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	if params.ByName("suburl") == "/clients.html"{
 		tmpl, err := template.ParseFiles("template/admin/clients.html")
 		if err == nil {
-			tmpl.ExecuteTemplate(w, "clients.html", "DATATATATATA")
+
+			data := siteData{}
+			data.User = user2
+			data.AdminUserList = append(data.AdminUserList, user1)
+			data.AdminUserList = append(data.AdminUserList, user2)
+			data.AdminUserList = append(data.AdminUserList, user1)
+
+			tmpl.ExecuteTemplate(w, "clients.html", data)
 		}
 	}
 	if params.ByName("suburl") == "/edit-client.html"{
 		tmpl, err := template.ParseFiles("template/admin/edit-client.html")
 		if err == nil {
-			tmpl.ExecuteTemplate(w, "edit-client.html", "DATATATATATA")
+
+			data := siteData{}
+			data.User = user2
+			data.AdminUserList = append(data.AdminUserList, user1)
+
+			//AdminUser list contais the one user that should be edited
+			tmpl.ExecuteTemplate(w, "edit-client.html", data)
 		}
 	}
 	if params.ByName("suburl") == "/equipment.html"{
@@ -231,6 +248,16 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 			data.User = user2
 
 			tmpl.ExecuteTemplate(w, "equipment.html", data)
+		}
+	}
+	if strings.Contains(params.ByName("suburl"), "img/"){
+		fmt.Println(params.ByName("suburl"))
+		content, err := ioutil.ReadFile("app/model/images/" + strings.Trim(params.ByName("suburl"),"/img"))
+		w.Header().Set("Content-Type", "image/*")
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			w.Write(content)
 		}
 	}
 }
