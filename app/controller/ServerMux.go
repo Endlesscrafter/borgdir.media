@@ -65,7 +65,7 @@ var user2 = user{2,"Peter Müller", "peter@mueller.de", "asdf", "img/equipment/g
 
 
 func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(params.ByName("suburl"))
+	fmt.Println("static/css" + params.ByName("suburl"))
 	content, err := ioutil.ReadFile("static/css" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "text/css")
 	if err != nil {
@@ -75,7 +75,7 @@ func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params
 	}
 }
 func jsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(params.ByName("suburl"))
+	fmt.Println("static/js" + params.ByName("suburl"))
 	content, err := ioutil.ReadFile("static/js" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "text/javascript")
 	if err != nil {
@@ -87,7 +87,7 @@ func jsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params)
 }
 
 func imgHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(params.ByName("suburl"))
+	fmt.Println("app/model/images/" + params.ByName("suburl"))
 	content, err := ioutil.ReadFile("app/model/images/" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "image/*")
 	if err != nil {
