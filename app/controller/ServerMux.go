@@ -65,7 +65,7 @@ var user2 = user{2,"Peter Müller", "peter@mueller.de", "asdf", "img/equipment/g
 
 
 func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(r.Header.Get("User-Agent") + " " + r.Method + " " + "static/css" + params.ByName("suburl"))
+	logAccess(r, params, "static/css")
 	content, err := ioutil.ReadFile("static/css" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "text/css")
 	if err != nil {
@@ -75,7 +75,7 @@ func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params
 	}
 }
 func jsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(r.Header.Get("User-Agent") + " " + r.Method + " " + "static/js" + params.ByName("suburl"))
+	logAccess(r, params, "static/js")
 	content, err := ioutil.ReadFile("static/js" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "text/javascript")
 	if err != nil {
@@ -87,7 +87,7 @@ func jsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params)
 }
 
 func imgHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(r.Header.Get("User-Agent") + " " + r.Method + " " + "app/model/images/" + params.ByName("suburl"))
+	logAccess(r, params, "app/model/images/")
 	content, err := ioutil.ReadFile("app/model/images/" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "image/*")
 	if err != nil {
@@ -99,7 +99,7 @@ func imgHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(r.Header.Get("User-Agent") + " " + r.Method + " " + params.ByName("suburl"))
+	logAccess(r, params,"")
 	tmpl, err := template.ParseFiles("template/index.html")
 	//Content-Type text/html doesnt fix malformatted css
 	w.Header().Set("Content-Type", "text/html")
@@ -116,7 +116,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(r.Header.Get("User-Agent") + " " + r.Method + " " + params.ByName("suburl"))
+	logAccess(r, params,"")
 	tmpl, err := template.ParseFiles("template/login.html")
 	if err == nil {
 		tmpl.ExecuteTemplate(w, "login.html", "DATATATATATA")
@@ -125,7 +125,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 }
 
 func registerHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(r.Header.Get("User-Agent") + " " + r.Method + " " + params.ByName("suburl"))
+	logAccess(r, params,"")
 	tmpl, err := template.ParseFiles("template/register.html")
 	if err == nil {
 		tmpl.ExecuteTemplate(w, "register.html", "DATATATATATA")
@@ -134,7 +134,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 }
 
 func cartHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(r.Header.Get("User-Agent") + " " + r.Method + " " + params.ByName("suburl"))
+	logAccess(r, params,"")
 	tmpl, err := template.ParseFiles("template/cart.html")
 	if err == nil {
 
@@ -151,7 +151,7 @@ func cartHandler(w http.ResponseWriter, r *http.Request, params httprouter.Param
 }
 
 func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(r.Header.Get("User-Agent") + " " + r.Method + " " + params.ByName("suburl"))
+	logAccess(r, params,"")
 	tmpl, err := template.ParseFiles("template/equipment.html")
 	if err == nil {
 
@@ -171,7 +171,7 @@ func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 }
 
 func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(r.Header.Get("User-Agent") + " " + r.Method + " " + params.ByName("suburl"))
+	logAccess(r, params,"")
 	tmpl, err := template.ParseFiles("template/my-equipment.html")
 	if err == nil {
 
@@ -186,7 +186,7 @@ func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	//fmt.Fprintf(w, "index")
 }
 func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	fmt.Println(r.Header.Get("User-Agent") + " " + r.Method + " " + params.ByName("suburl"))
+	logAccess(r, params,"")
 	tmpl, err := template.ParseFiles("template/profile.html")
 	if err == nil {
 
@@ -199,7 +199,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 
 func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
-	fmt.Println( r.Header.Get("User-Agent") + " " + r.Method + " admin"  + params.ByName( "suburl"))
+	logAccess(r, params,"admin")
 	if params.ByName("suburl") == "/index.html" || params.ByName("suburl") == "/" {
 		tmpl, err := template.ParseFiles("template/admin/index.html")
 		if err == nil {
@@ -251,7 +251,6 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		}
 	}
 	if strings.Contains(params.ByName("suburl"), "img/"){
-		fmt.Println( r.Header.Get("User-Agent") + " " + r.Method + " "  + params.ByName( "suburl"))
 		content, err := ioutil.ReadFile("app/model/images/" + strings.Trim(params.ByName("suburl"),"/img"))
 		w.Header().Set("Content-Type", "image/*")
 		if err != nil {
@@ -260,6 +259,12 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 			w.Write(content)
 		}
 	}
+}
+
+func logAccess(r *http.Request, params httprouter.Params, fileDir string){
+
+	fmt.Println(r.Header.Get("User-Agent") + " " + r.Method + " " + fileDir + params.ByName("suburl"))
+
 }
 
 func main() {
