@@ -111,85 +111,26 @@
 
     <div class="container-fluid shopContainer">
         <div class="row justify-content-center mb-5">
-            <div class="col-lg-3 text-left float-left">
-                <h4>{{.ProductData}}</h4>
-                <p class="descText">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                    tempor invidunt ut labore et dolore magna aliquyam erat</p>
+        {{ range .Equipment}}
+            <div class="col-lg-3 text-left float-left mb-5">
+                <h4>{{.Name}}</h4>
+                <p class="descText">{{.Desc}}</p>
                 <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
                         class="fas fa-cart-arrow-down"></i></button>
-                <span class="text-danger stock">Entliehen</span>
+                {{if eq .Stock "Entliehen"}}
+                    <span class="text-danger stock">Entliehen</span>
+                {{else if eq .Stock "Verfügbar"}}
+                    <span class="text-info stock">{{.StockAmount}} Verfügbar</span>
+                {{else if eq .Stock "Vorgemerkt"}}
+                    <span class="text-warning stock">Vorgemerkt</span>
+                {{end}}
             </div>
             <div class="col-lg-2 float-right">
                 <img class="img-fluid"
-                     src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                     alt="Generic placeholder image" width="150" height="150">
+                     src="{{.ImageSRC}}"
+                     alt="{{.ImageAlt}}" width="150" height="150">
             </div>
-            <div class="col-lg-3 text-left float-left">
-                <h4>Kamera 1</h4>
-                <p class="descText">sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat</p>
-                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
-                        class="fas fa-cart-arrow-down"></i></button>
-                <span class="text-info stock">2 Verfügbar</span>
-            </div>
-            <div class="col-lg-2 float-right">
-                <img class="img-fluid"
-                     src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                     alt="Generic placeholder image" width="150" height="150">
-            </div>
-        </div>
-        <div class="row justify-content-center mb-5">
-            <div class="col-lg-3 text-left float-left">
-                <h4>Stativ</h4>
-                <p class="descText">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                    tempor invidunt ut labore et dolore magna aliquyam erat</p>
-                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
-                        class="fas fa-cart-arrow-down"></i></button>
-                <span class="text-info stock">1 Verfügbar</span>
-            </div>
-            <div class="col-lg-2 float-right">
-                <img class="img-fluid"
-                     src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                     alt="Generic placeholder image" width="150" height="150">
-            </div>
-            <div class="col-lg-3 text-left float-left">
-                <h4>Mikrophon</h4>
-                <p class="descText">sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat</p>
-                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
-                        class="fas fa-cart-arrow-down"></i></button>
-                <span class="text-danger stock">Entliehen</span>
-            </div>
-            <div class="col-lg-2 float-right">
-                <img class="img-fluid"
-                     src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                     alt="Generic placeholder image" width="150" height="150">
-            </div>
-        </div>
-        <div class="row justify-content-center mb-5">
-            <div class="col-lg-3 text-left float-left">
-                <h4>Kabeltrommel Wlan-Kabel</h4>
-                <p class="descText">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                    tempor invidunt ut labore et dolore magna aliquyam erat</p>
-                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
-                        class="fas fa-cart-arrow-down"></i></button>
-                <span class="text-warning stock">Vorgemerkt</span>
-            </div>
-            <div class="col-lg-2 float-right">
-                <img class="img-fluid"
-                     src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                     alt="Generic placeholder image" width="150" height="150">
-            </div>
-            <div class="col-lg-3 text-left float-left">
-                <h4>Monitor 50"</h4>
-                <p class="descText">sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat</p>
-                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
-                        class="fas fa-cart-arrow-down"></i></button>
-                <span class="text-info stock">4 Verfügbar</span>
-            </div>
-            <div class="col-lg-2 float-right">
-                <img class="img-fluid"
-                     src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
-                     alt="Generic placeholder image" width="150" height="150">
-            </div>
+        {{end}}
         </div>
     </div>
 

@@ -13,9 +13,28 @@ import (
 	"fmt"
 )
 
+
 type equipmentData struct {
-	ProductData string
+	Name string
+	Desc string
+	ImageSRC string
+	ImageAlt string
+	Stock string
+	StockAmount int
+	Category string
+	Featured bool
+	FeaturedID int
+	FeaturedImageSRC string
 }
+
+type equipmentList struct {
+	Equipment []equipmentData
+}
+
+//Test Data
+var equip1 = equipmentData{"Kamera Obscura", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder" ,"Entliehen",0 ,"None", true, 1,"/img/equipment/gandalf.gif"}
+var equip2 = equipmentData{"Stativ", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder" ,"Verfügbar",2 , "None", true, 2,"/img/equipment/gandalf.gif"}
+var equip3 = equipmentData{"Mikrophon", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder" ,"Vorgemerkt",1, "None" , true, 3, "/img/equipment/gandalf.gif"}
 
 func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	content, err := ioutil.ReadFile("static/css" + params.ByName("suburl"))
@@ -37,12 +56,29 @@ func jsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params)
 	//fmt.Fprintf(w, string(content))
 }
 
+func imgHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	content, err := ioutil.ReadFile("app/model/images/" + params.ByName("suburl"))
+	w.Header().Set("Content-Type", "image/*")
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		w.Write(content)
+	}
+	//fmt.Fprintf(w, string(content))
+}
+
 func indexHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	tmpl, err := template.ParseFiles("template/index.html")
 	//Content-Type text/html doesnt fix malformatted css
 	w.Header().Set("Content-Type", "text/html")
 	if err == nil {
-		tmpl.ExecuteTemplate(w, "index.html", "DATATATATATA")
+
+		data := equipmentList{}
+		data.Equipment = append(data.Equipment, equip1)
+		data.Equipment = append(data.Equipment, equip2)
+		data.Equipment = append(data.Equipment, equip3)
+
+		tmpl.ExecuteTemplate(w, "index.html", data)
 	}
 	//fmt.Fprintf(w, "index")
 }
@@ -78,7 +114,15 @@ func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	tmpl, err := template.ParseFiles("template/equipment.html")
 	if err == nil {
 
-		data := equipmentData{"KEINE KAMERA"}
+		data := equipmentList{}
+		data.Equipment = append(data.Equipment, equip1)
+		data.Equipment = append(data.Equipment, equip2)
+		data.Equipment = append(data.Equipment, equip3)
+		data.Equipment = append(data.Equipment, equip3)
+		data.Equipment = append(data.Equipment, equip1)
+		data.Equipment = append(data.Equipment, equip1)
+
+		//Always give a even number of data-Sets (0, 2, 4, 6 etc): Otherwise it breaks the Design
 		tmpl.ExecuteTemplate(w, "equipment.html", data)
 	}
 	//fmt.Fprintf(w, "index")
@@ -150,6 +194,7 @@ func main() {
 	router.GET("/admin/*suburl", adminHandler)
 	router.GET("/css/*suburl", cssHandler)
 	router.GET("/js/*suburl", jsHandler)
+	router.GET("/img/*suburl", imgHandler)
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
