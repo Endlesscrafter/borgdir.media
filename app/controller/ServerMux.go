@@ -25,18 +25,43 @@ type equipmentData struct {
 	Featured bool
 	FeaturedID int
 	FeaturedImageSRC string
+	Rented bool
+	Bookmarked bool
+	Repair bool
+	RentedByUserID int64
+	RentedByUserName string
+	RentDate string
+	ReturnDate string
+	InvID int64
+	StorageLocation string
+	equipmentOwnerID int64
 }
 
-type equipmentList struct {
+type user struct{
+	UserID int64
+	Name string
+	Email string
+	Password string
+	ProfileImageSRC string
+	UserLevel string
+}
+
+type siteData struct {
 	Equipment []equipmentData
+	User user
 }
 
 //Test Data
-var equip1 = equipmentData{"Kamera Obscura", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder" ,"Entliehen",0 ,"None", true, 1,"/img/equipment/gandalf.gif"}
-var equip2 = equipmentData{"Stativ", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder" ,"Verfügbar",2 , "None", true, 2,"/img/equipment/gandalf.gif"}
-var equip3 = equipmentData{"Mikrophon", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder" ,"Vorgemerkt",1, "None" , true, 3, "/img/equipment/gandalf.gif"}
+var equip1 = equipmentData{"Kamera Obscura", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder" ,"Entliehen",0 ,"None", true, 1,"/img/equipment/gandalf.gif",true, true, false ,1,"Max Mustermann" ,"25.05.18", "25.05.18", 1245, "Baungasse",2}
+var equip2 = equipmentData{"Stativ", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder" ,"Verfügbar",2 , "None", true, 2,"/img/equipment/gandalf.gif", true, false, false ,1,"Karl Karstens" ,"25.05.18", "25.05.18", 13452 ,"Schrank",2}
+var equip3 = equipmentData{"Mikrophon", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder" ,"Vorgemerkt",1, "None" , true, 3, "/img/equipment/gandalf.gif", true, false, false,1,"Max Mustermann" ,"25.05.18", "25.05.18", 2374, "Regal 12",2}
+
+var user1 = user{1,"Max Mustermann", "max@muster.de", "asdf", "img/equipment/gandalf.gif", "Benutzer"}
+var user2 = user{2,"Peter Müller", "peter@mueller.de", "asdf", "../img/equipment/gandalf.gif", "Administrator"}
+
 
 func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	fmt.Println(params.ByName("suburl"))
 	content, err := ioutil.ReadFile("static/css" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "text/css")
 	if err != nil {
@@ -46,6 +71,7 @@ func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params
 	}
 }
 func jsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	fmt.Println(params.ByName("suburl"))
 	content, err := ioutil.ReadFile("static/js" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "text/javascript")
 	if err != nil {
@@ -57,6 +83,7 @@ func jsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params)
 }
 
 func imgHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	fmt.Println(params.ByName("suburl"))
 	content, err := ioutil.ReadFile("app/model/images/" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "image/*")
 	if err != nil {
@@ -68,12 +95,13 @@ func imgHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	fmt.Println(params.ByName("suburl"))
 	tmpl, err := template.ParseFiles("template/index.html")
 	//Content-Type text/html doesnt fix malformatted css
 	w.Header().Set("Content-Type", "text/html")
 	if err == nil {
 
-		data := equipmentList{}
+		data := siteData{}
 		data.Equipment = append(data.Equipment, equip1)
 		data.Equipment = append(data.Equipment, equip2)
 		data.Equipment = append(data.Equipment, equip3)
@@ -84,7 +112,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-
+	fmt.Println(params.ByName("suburl"))
 	tmpl, err := template.ParseFiles("template/login.html")
 	if err == nil {
 		tmpl.ExecuteTemplate(w, "login.html", "DATATATATATA")
@@ -93,7 +121,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 }
 
 func registerHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-
+	fmt.Println(params.ByName("suburl"))
 	tmpl, err := template.ParseFiles("template/register.html")
 	if err == nil {
 		tmpl.ExecuteTemplate(w, "register.html", "DATATATATATA")
@@ -102,25 +130,35 @@ func registerHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 }
 
 func cartHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	fmt.Println(params.ByName("suburl"))
 	tmpl, err := template.ParseFiles("template/cart.html")
 	if err == nil {
-		tmpl.ExecuteTemplate(w, "cart.html", "DATATATATATA")
+
+		data := siteData{}
+		data.Equipment = append(data.Equipment, equip1)
+		data.Equipment = append(data.Equipment, equip2)
+		data.Equipment = append(data.Equipment, equip3)
+		data.Equipment = append(data.Equipment, equip3)
+		data.User = user1
+
+		tmpl.ExecuteTemplate(w, "cart.html", data)
 	}
 	//fmt.Fprintf(w, "index")
 }
 
 func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-
+	fmt.Println(params.ByName("suburl"))
 	tmpl, err := template.ParseFiles("template/equipment.html")
 	if err == nil {
 
-		data := equipmentList{}
+		data := siteData{}
 		data.Equipment = append(data.Equipment, equip1)
 		data.Equipment = append(data.Equipment, equip2)
 		data.Equipment = append(data.Equipment, equip3)
 		data.Equipment = append(data.Equipment, equip3)
 		data.Equipment = append(data.Equipment, equip1)
 		data.Equipment = append(data.Equipment, equip1)
+		data.User = user1
 
 		//Always give a even number of data-Sets (0, 2, 4, 6 etc): Otherwise it breaks the Design
 		tmpl.ExecuteTemplate(w, "equipment.html", data)
@@ -129,18 +167,28 @@ func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 }
 
 func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-
+	fmt.Println(params.ByName("suburl"))
 	tmpl, err := template.ParseFiles("template/my-equipment.html")
 	if err == nil {
-		tmpl.ExecuteTemplate(w, "my-equipment.html", "DATATATATATA")
+
+		data := siteData{}
+		data.Equipment = append(data.Equipment, equip1)
+		data.Equipment = append(data.Equipment, equip2)
+		data.Equipment = append(data.Equipment, equip3)
+		data.User = user1
+
+		tmpl.ExecuteTemplate(w, "my-equipment.html", data)
 	}
 	//fmt.Fprintf(w, "index")
 }
 func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-
+	fmt.Println(params.ByName("suburl"))
 	tmpl, err := template.ParseFiles("template/profile.html")
 	if err == nil {
-		tmpl.ExecuteTemplate(w, "profile.html", "DATATATATATA")
+
+		data := siteData{}
+		data.User = user1
+		tmpl.ExecuteTemplate(w, "profile.html", data)
 	}
 	//fmt.Fprintf(w, "index")
 }
@@ -175,7 +223,14 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	if params.ByName("suburl") == "/equipment.html"{
 		tmpl, err := template.ParseFiles("template/admin/equipment.html")
 		if err == nil {
-			tmpl.ExecuteTemplate(w, "equipment.html", "DATATATATATA")
+
+			data := siteData{}
+			data.Equipment = append(data.Equipment, equip1)
+			data.Equipment = append(data.Equipment, equip2)
+			data.Equipment = append(data.Equipment, equip3)
+			data.User = user2
+
+			tmpl.ExecuteTemplate(w, "equipment.html", data)
 		}
 	}
 }
