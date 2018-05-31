@@ -15,6 +15,7 @@ import (
 	"strings"
 	"github.com/julienschmidt/httprouter"
 	"database/sql"
+	"time"
 )
 
 const (
@@ -96,7 +97,7 @@ func jsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params)
 }
 
 func imgHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	logAccess(r, params, "app/model/images/")
+	logAccess(r, params, "app/model/images")
 	content, err := ioutil.ReadFile("app/model/images/" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "image/*")
 	if err != nil {
@@ -273,7 +274,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 
 func logAccess(r *http.Request, params httprouter.Params, fileDir string){
 
-	fmt.Println(r.Header.Get("User-Agent") + " " + r.Method + " " + fileDir + params.ByName("suburl"))
+	fmt.Println(time.Now().Format(time.RFC3339) + " " + r.Header.Get("User-Agent") + " " + r.Method + " /" + fileDir + params.ByName("suburl"))
 
 }
 
