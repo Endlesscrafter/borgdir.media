@@ -6,12 +6,21 @@ package main
 
 import (
 	"net/http"
-	"github.com/julienschmidt/httprouter"
+	_ "github.com/julienschmidt/httprouter"
+	_ "github.com/lib/pq"
 	"log"
 	"html/template"
 	"io/ioutil"
 	"fmt"
 	"strings"
+	"github.com/julienschmidt/httprouter"
+	"database/sql"
+)
+
+const (
+	DB_USER     = "goserver"
+	DB_PASSWORD = "c58WvoedyiVRmPjaEoEi"
+	DB_NAME     = "borgdirmedia"
 )
 
 
@@ -35,7 +44,7 @@ type equipmentData struct {
 	ReturnDate string
 	InvID int64
 	StorageLocation string
-	equipmentOwnerID int64
+	EquipmentOwnerID int64
 }
 
 type user struct{
@@ -185,6 +194,7 @@ func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	}
 	//fmt.Fprintf(w, "index")
 }
+
 func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params,"")
 	tmpl, err := template.ParseFiles("template/profile.html")
@@ -267,7 +277,84 @@ func logAccess(r *http.Request, params httprouter.Params, fileDir string){
 
 }
 
+func connectDatabase(){
+
+	//CREATE DATABASE IF NOT EXISTS borgdirmedia OWNER goserver ENCODING 'UTF-8'
+
+	dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
+		DB_USER, DB_PASSWORD, DB_NAME)
+	db, err := sql.Open("postgres", dbinfo)
+	checkErr(err)
+	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatal("Error: Could not establish a connection with the database")
+	}
+
+
+	createTables(db)
+
+}
+
+func createTables(db* sql.DB){
+
+	_, err := db.Exec("CREATE TABLE IF NOT EXISTS users (" +
+		"UserID bigserial NOT NULL," +
+		"Name varchar(60) NOT NULL," +
+		"Email varchar(128) NOT NULL," +
+		"Password varchar(128) NOT NULL," +
+		"ProfileImageSRC text," +
+		"UserLevel varchar(30)," +
+		"Blocked boolean," +
+		"ActiveUntilDate date," +
+		"PRIMARY KEY (UserID)" +
+		");")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err2 := db.Exec("CREATE TABLE IF NOT EXISTS equipment (" +
+		"Name varchar(128)," +
+		"Description text," +
+		"ImageSRC text," +
+		"ImageAlt varchar(128)," +
+		"Stock varchar(30)," +
+		"StockAmount int," +
+		"Category varchar(60)," +
+		"Featured boolean," +
+		"FeaturedID int," +
+		"FeaturedImageSRC text," +
+		"Rented boolean," +
+		"Bookmarked boolean," +
+		"RentedByUserID bigint REFERENCES users(UserID)," +
+		"RentDate date," +
+		"ReturnDate date," +
+		"InvID bigserial," +
+		"StorageLocation varchar(60)," +
+		"EquipmentOwnerID bigint REFERENCES users(UserID),"+
+		"PRIMARY KEY (InvID)" +
+		");")
+
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+
+
+}
+
+func checkErr(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
 func main() {
+
+
+
+	//Start Routing the Information
 	router := httprouter.New()
 	router.GET("/", indexHandler)
 	router.GET("/index.html", indexHandler)
