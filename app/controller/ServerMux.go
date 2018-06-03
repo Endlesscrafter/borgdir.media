@@ -22,6 +22,7 @@ const (
 	DB_USER     = "goserver"
 	DB_PASSWORD = "c58WvoedyiVRmPjaEoEi"
 	DB_NAME     = "borgdirmedia"
+	noDefaultValues = true
 )
 
 
@@ -278,7 +279,7 @@ func logAccess(r *http.Request, params httprouter.Params, fileDir string){
 
 }
 
-func connectDatabase(){
+func  connectDatabase() *sql.DB{
 
 	//CREATE DATABASE IF NOT EXISTS borgdirmedia OWNER goserver ENCODING 'UTF-8'
 
@@ -293,11 +294,71 @@ func connectDatabase(){
 		log.Fatal("Error: Could not establish a connection with the database")
 	}
 
-
+	//Create the tablesa
 	createTables(db)
+
+	//Create default Admin user, a distributor, a standard user and some equipment
+	if noDefaultValues {
+		createDummyValues(db)
+	}
+
+	return db;
+}
+
+//Creates some dummy values
+func createDummyValues(db *sql.DB) {
+
+	_, err := db.Exec("INSERT INTO users VALUES (" +
+		"DEFAULT," +
+		"'Max Mustermann'," +
+		"'max@muster.de'," +
+		"'asdf'," +
+		"'img/equipment/gandalf.gif'," +
+		"'Benutzer'," +
+		"false," +
+		"'2018-07-25'," +
+		");")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err2 := db.Exec("INSERT INTO users VALUES (" +
+		"DEFAULT," +
+		"'Peter Müller'," +
+		"'peter@mueller.de'," +
+		"'asdf'," +
+		"'img/equipment/gandalf.gif'," +
+		"'Administrator'," +
+		"false," +
+		"'2022-08-11'," +
+		");")
+
+	if err2 != nil {
+		log.Fatal(err)
+	}
+
+	_, err3 := db.Exec("INSERT INTO users VALUES (" +
+		"DEFAULT," +
+		"'Distri Butor'," +
+		"'distri@butor.de'," +
+		"'asdf'," +
+		"'img/equipment/gandalf.gif'," +
+		"'Distributor'," +
+		"false," +
+		"'2019-02-15'," +
+		");")
+
+	if err3 != nil {
+		log.Fatal(err)
+	}
+
+	//TODO: Insert equipment 1,2,3
 
 }
 
+
+//Creates the necessary tables in the Database
 func createTables(db* sql.DB){
 
 	_, err := db.Exec("CREATE TABLE IF NOT EXISTS users (" +
@@ -353,23 +414,27 @@ func checkErr(err error) {
 
 func main() {
 
+	db := connectDatabase()
+	if db != nil{
 
+		//Start Routing the Information
+		router := httprouter.New()
+		router.GET("/", indexHandler)
+		router.GET("/index.html", indexHandler)
+		router.GET("/login.html", loginHandler)
+		router.GET("/register.html", registerHandler)
+		router.GET("/cart.html", cartHandler)
+		router.GET("/equipment.html", equipHandler)
+		router.GET("/my-equipment.html", myEquipHandler)
+		router.GET("/profile.html", profileHandler)
+		//Find closest match for /admin, so that all admin sites are handled by adminHandler
+		router.GET("/admin/*suburl", adminHandler)
+		router.GET("/css/*suburl", cssHandler)
+		router.GET("/js/*suburl", jsHandler)
+		router.GET("/img/*suburl", imgHandler)
 
-	//Start Routing the Information
-	router := httprouter.New()
-	router.GET("/", indexHandler)
-	router.GET("/index.html", indexHandler)
-	router.GET("/login.html", loginHandler)
-	router.GET("/register.html", registerHandler)
-	router.GET("/cart.html", cartHandler)
-	router.GET("/equipment.html", equipHandler)
-	router.GET("/my-equipment.html", myEquipHandler)
-	router.GET("/profile.html", profileHandler)
-	//Find closest match for /admin, so that all admin sites are handled by adminHandler
-	router.GET("/admin/*suburl", adminHandler)
-	router.GET("/css/*suburl", cssHandler)
-	router.GET("/js/*suburl", jsHandler)
-	router.GET("/img/*suburl", imgHandler)
+		log.Fatal(http.ListenAndServe(":8080", router))
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	}
+
 }
