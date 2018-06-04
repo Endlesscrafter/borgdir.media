@@ -429,8 +429,61 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 //Gets the featured products
 
 //Gets products, that are not rented and therefore can be rented
+func getAvailableEqip(db *sql.DB) *[]equipmentData {
 
-//Gets products that are rented by the user UserID
+	rows, err := db.Query("SELECT * FROM equipment e WHERE e.Rented == false AND e.Bookmarked == false;")
+
+	checkErr(err)
+
+	var equipment []equipmentData
+	for rows.Next(){
+
+		var inEquip equipmentData
+		rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
+			&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
+			&(inEquip.FeaturedImageSRC), &(inEquip.Rented), &(inEquip.Bookmarked), &(inEquip.Repair),
+			&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
+			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
+		equipment = append(equipment, inEquip)
+
+
+	}
+
+	return &equipment
+
+}
+
+//Gets products that are rented by the user UserID (or that are bookmarked)
+func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) *[]equipmentData {
+
+	var rows *sql.Rows
+	var err error
+
+	if(!bookmarked) {
+		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID == " + string(UserID) + ";")
+
+	} else{
+		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID == " + string(UserID) + " AND e.Bookmarked == true;")
+	}
+	checkErr(err)
+
+	var equipment []equipmentData
+	for rows.Next(){
+
+		var inEquip equipmentData
+		rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
+			&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
+			&(inEquip.FeaturedImageSRC), &(inEquip.Rented), &(inEquip.Bookmarked), &(inEquip.Repair),
+			&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
+			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
+		equipment = append(equipment, inEquip)
+
+
+	}
+
+	return &equipment
+
+}
 
 //Gets the products that are owned by the user UserID
 func getEquipFromOwner(db *sql.DB,  UserID int64) *[]equipmentData{
@@ -458,7 +511,7 @@ func getEquipFromOwner(db *sql.DB,  UserID int64) *[]equipmentData{
 }
 
 //Get one Special product with the given InvID
-func getProduct(db *sql.DB, invID int64) *equipmentData{
+func getEquip(db *sql.DB, invID int64) *equipmentData{
 
 	rows, err := db.Query("SELECT * FROM equipment e WHERE e.InvID == " + string(invID) + ";")
 
