@@ -407,7 +407,7 @@ func createTables(db *sql.DB) {
 func getUserFromName(db *sql.DB, username string, password string, validatePassword bool) *user {
 
 	var inUser *user;
-	rows, err := db.Query("SELECT * FROM users u WHERE u.Name LIKE '" + username + "'")
+	rows, err := db.Query("SELECT * FROM users u WHERE u.Name LIKE '" + username + "';")
 
 	checkErr(err)
 	for rows.Next() {
@@ -424,6 +424,35 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 
 	log.Print("Error: No User with the given username")
 	return nil
+}
+
+//Gets the featured products
+
+//Gets products, that are not rented and therefore can be rented
+
+//Gets products that are rented by the user UserID
+
+//Gets the products that are owned by the user UserID
+
+//Get one Special product with the given InvID
+
+//Gets all Users
+func getAllUsers(db *sql.DB) *[]user{
+
+	var users []user
+	rows, err := db.Query("SELECT * FROM users u;")
+
+	checkErr(err)
+	for rows.Next(){
+
+		var userN user
+		rows.Scan(&(userN.UserID), &(userN.Name), &(userN.Email), &(userN.Password), &(userN.ProfileImageSRC), &(userN.UserLevel), &(userN.Blocked), &(userN.ActiveUntilDate))
+		users = append(users, userN)
+
+	}
+
+	return &users
+
 }
 
 func checkErr(err error) {
