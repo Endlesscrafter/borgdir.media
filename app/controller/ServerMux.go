@@ -426,7 +426,33 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 	return nil
 }
 
-//Gets the featured products
+//Gets the featured products, in correct order
+func getFeaturedProducts(db *sql.DB) *[]equipmentData{
+
+	var equipment []equipmentData
+
+	for i := 1; i <= 4; i++ {
+		rows, err := db.Query("SELECT * FROM equipment e WHERE e.Featured == true AND e.FeaturedID == " + string(i) + ";")
+
+		checkErr(err)
+
+
+		for rows.Next() {
+
+			var inEquip equipmentData
+			rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
+				&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
+				&(inEquip.FeaturedImageSRC), &(inEquip.Rented), &(inEquip.Bookmarked), &(inEquip.Repair),
+				&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
+				&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
+			equipment = append(equipment, inEquip)
+
+		}
+	}
+
+	return &equipment
+
+}
 
 //Gets products, that are not rented and therefore can be rented
 func getAvailableEqip(db *sql.DB) *[]equipmentData {
