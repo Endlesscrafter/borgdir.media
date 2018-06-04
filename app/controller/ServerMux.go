@@ -435,15 +435,36 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 //Gets the products that are owned by the user UserID
 
 //Get one Special product with the given InvID
+func getProduct(db *sql.DB, invID int64) *equipmentData{
+
+	rows, err := db.Query("SELECT * FROM equipment e WHERE e.InvID == " + string(invID) + ";")
+
+
+	checkErr(err)
+	for rows.Next() {
+
+		var inEquip *equipmentData
+		rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
+			&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
+			&(inEquip.FeaturedImageSRC), &(inEquip.Rented), &(inEquip.Bookmarked), &(inEquip.Repair),
+			&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
+			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
+		return inEquip
+
+	}
+
+	log.print("The Product with ID " + string(invID) + "wasn't found in the Database")
+	return nil
+}
 
 //Gets all Users
-func getAllUsers(db *sql.DB) *[]user{
+func getAllUsers(db *sql.DB) *[]user {
 
 	var users []user
 	rows, err := db.Query("SELECT * FROM users u;")
 
 	checkErr(err)
-	for rows.Next(){
+	for rows.Next() {
 
 		var userN user
 		rows.Scan(&(userN.UserID), &(userN.Name), &(userN.Email), &(userN.Password), &(userN.ProfileImageSRC), &(userN.UserLevel), &(userN.Blocked), &(userN.ActiveUntilDate))
