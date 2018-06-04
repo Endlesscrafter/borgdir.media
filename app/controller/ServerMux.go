@@ -453,7 +453,7 @@ func getProduct(db *sql.DB, invID int64) *equipmentData{
 
 	}
 
-	log.print("The Product with ID " + string(invID) + "wasn't found in the Database")
+	log.Print("The Product with ID " + string(invID) + "wasn't found in the Database")
 	return nil
 }
 
