@@ -23,7 +23,7 @@ const (
 	DB_USER         = "goserver"
 	DB_PASSWORD     = "c58WvoedyiVRmPjaEoEi"
 	DB_NAME         = "goserver"
-	noDefaultValues = true
+	noDefaultValues = false
 
 )
 
@@ -626,13 +626,13 @@ func getEquip(db *sql.DB, invID int64) *equipmentData {
 	checkErr(err)
 	for rows.Next() {
 
-		var inEquip *equipmentData
+		var inEquip equipmentData
 		rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
 			&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
 			&(inEquip.FeaturedImageSRC), &(inEquip.Rented), &(inEquip.Bookmarked), &(inEquip.Repair),
 			&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
 			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
-		return inEquip
+		return &inEquip
 
 	}
 
