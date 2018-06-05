@@ -23,8 +23,11 @@ const (
 	DB_USER         = "goserver"
 	DB_PASSWORD     = "c58WvoedyiVRmPjaEoEi"
 	DB_NAME         = "goserver"
-	noDefaultValues = false
+	noDefaultValues = true
+
 )
+
+var GLOBALDB *sql.DB
 
 type equipmentData struct {
 	Name             string
@@ -309,6 +312,10 @@ func connectDatabase() *sql.DB {
 //Creates some dummy values
 func createDummyValues(db *sql.DB) {
 
+	//Delete everything beforehand
+	_, e := db.Exec("DELETE * FROM users; DELETE * FROM equipment;")
+	checkErr(e)
+
 	_, err := db.Exec("INSERT INTO users VALUES (" +
 		"DEFAULT," +
 		"'Max Mustermann'," +
@@ -355,7 +362,78 @@ func createDummyValues(db *sql.DB) {
 	}
 
 	//TODO: Insert equipment 1,2,3 #7
+	_, err4 := db.Exec("INSERT INTO equipment VALUES(" +
+		"'Kamera Obscura'," +
+		"'Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit'," +
+		"'img/equipment/generic.gif'," +
+		"'Generic Placeholder'," +
+		"'Entliehen'," +
+		"0," +
+		"'None'," +
+		"true," +
+		"1," +
+		"'/img/equipment/gandalf.gif'," +
+		"true," +
+		"true," +
+		"false," +
+		"1," +
+		"'Max Mustermann'," +
+		"'2018-05-25'," +
+		"'2018-05-25'," +
+		"DEFAULT," +
+		"'Baungasse'," +
+		"3" +
+		");")
+	checkErr(err4)
 
+	_, err5 := db.Exec("INSERT INTO equipment VALUES(" +
+		"'Stativ'," +
+		"'Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit'," +
+		"'img/equipment/generic.gif'," +
+		"'Generic Placeholder'," +
+		"'Verfügbar'," +
+		"2," +
+		"'None'," +
+		"true," +
+		"2," +
+		"'/img/equipment/gandalf.gif'," +
+		"true," +
+		"false," +
+		"false," +
+		"2," +
+		"'Peter Müller'," +
+		"'2018-05-25'," +
+		"'2018-05-25'," +
+		"DEFAULT," +
+		"'Schrank'," +
+		"3" +
+		");")
+	checkErr(err5)
+
+	_, err6 := db.Exec("INSERT INTO equipment VALUES(" +
+		"'Mikrophon'," +
+		"'Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit'," +
+		"'img/equipment/generic.gif'," +
+		"'Generic Placeholder'," +
+		"'Vorgemerkt'," +
+		"1," +
+		"'None'," +
+		"true," +
+		"3," +
+		"'/img/equipment/gandalf.gif'," +
+		"true," +
+		"false," +
+		"false," +
+		"1," +
+		"'Max Mustermann'," +
+		"'2018-05-25'," +
+		"'2018-05-25'," +
+		"DEFAULT," +
+		"'Regal 12'," +
+		"3" +
+		");")
+	checkErr(err6)
+	
 }
 
 //Creates the necessary tables in the Database
@@ -585,17 +663,17 @@ func checkErr(err error) {
 
 func main() {
 
-	db := connectDatabase()
-	if db != nil {
+	GLOBALDB = connectDatabase()
+	if GLOBALDB != nil {
 
 		fmt.Print("Connection to Database successful\n")
-		fmt.Print(getAllUsers(db))
-		fmt.Print(getUserFromName(db, "Max Mustermann", "", false))
-		fmt.Print(getFeaturedProducts(db))
-		fmt.Print(getAvailableEqip(db))
-		fmt.Print(getRentedEquip(db, 1, false))
-		fmt.Print(getEquipFromOwner(db, 2))
-		fmt.Print(getEquip(db, 1))
+		fmt.Print(getAllUsers(GLOBALDB))
+		fmt.Print(getUserFromName(GLOBALDB, "Max Mustermann", "", false))
+		fmt.Print(getFeaturedProducts(GLOBALDB))
+		fmt.Print(getAvailableEqip(GLOBALDB))
+		fmt.Print(getRentedEquip(GLOBALDB, 1, false))
+		fmt.Print(getEquipFromOwner(GLOBALDB, 2))
+		fmt.Print(getEquip(GLOBALDB, 1))
 		//Start Routing the Information
 		router := httprouter.New()
 		router.GET("/", indexHandler)
@@ -615,5 +693,5 @@ func main() {
 		log.Fatal(http.ListenAndServe(":80", router))
 
 	}
-	defer db.Close()
+	defer GLOBALDB.Close()
 }
