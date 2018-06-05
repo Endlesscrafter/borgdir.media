@@ -473,6 +473,7 @@ func createTables(db *sql.DB) {
 		"Bookmarked boolean," +
 		"Repair boolean," +
 		"RentedByUserID bigint REFERENCES users(UserID)," +
+		"RentedByUserName varchar(60) REFERENCES users(Name)," +
 		"RentDate date," +
 		"ReturnDate date," +
 		"InvID bigserial," +
