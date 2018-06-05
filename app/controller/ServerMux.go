@@ -285,7 +285,7 @@ func connectDatabase() *sql.DB {
 		DB_USER, DB_PASSWORD, DB_NAME)
 	db, err := sql.Open("postgres", dbinfo)
 	checkErr(err)
-	defer db.Close()
+	//defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
@@ -591,7 +591,7 @@ func main() {
 	db := connectDatabase()
 	if db != nil {
 
-		fmt.Print("Connection to Database successful")
+		fmt.Print("Connection to Database successful\n")
 		fmt.Print(getAllUsers(db))
 		//Start Routing the Information
 		router := httprouter.New()
@@ -612,5 +612,5 @@ func main() {
 		log.Fatal(http.ListenAndServe(":80", router))
 
 	}
-
+	defer db.Close()
 }
