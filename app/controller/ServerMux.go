@@ -290,7 +290,7 @@ func connectDatabase() *sql.DB {
 	err = db.Ping()
 	if err != nil {
 		//It fails here TODO: #6 BUG
-		//log.Fatal(err)
+		log.Fatal(err)
 		log.Fatal("Error: Could not establish a connection with the database")
 	}
 
@@ -373,6 +373,7 @@ func createTables(db *sql.DB) {
 		");")
 
 	if err != nil {
+		log.Fatal("Fehler beim Anlegen der users-DB")
 		log.Fatal(err)
 	}
 
@@ -399,6 +400,7 @@ func createTables(db *sql.DB) {
 		");")
 
 	if err2 != nil {
+		log.Fatal("Fehler beim Anlegen der equip-DB")
 		log.Fatal(err2)
 	}
 
