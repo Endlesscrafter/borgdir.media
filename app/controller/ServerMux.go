@@ -70,12 +70,12 @@ type siteData struct {
 }
 
 //Test Data
-//var equip1 = equipmentData{"Kamera Obscura", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Entliehen", 0, "None", true, 1, "/img/equipment/gandalf.gif", true, true, false, 1, "Max Mustermann", "25.05.18", "25.05.18", 1245, "Baungasse", 2}
-//var equip2 = equipmentData{"Stativ", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Verfügbar", 2, "None", true, 2, "/img/equipment/gandalf.gif", true, false, false, 1, "Karl Karstens", "25.05.18", "25.05.18", 13452, "Schrank", 2}
-//var equip3 = equipmentData{"Mikrophon", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Vorgemerkt", 1, "None", true, 3, "/img/equipment/gandalf.gif", true, false, false, 1, "Max Mustermann", "25.05.18", "25.05.18", 2374, "Regal 12", 2}
+var nequip1 = equipmentData{"Kamera Obscura", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Entliehen", 0, "None", true, 1, "/img/equipment/gandalf.gif", true, true, false, 1, "Max Mustermann", "25.05.18", "25.05.18", 1245, "Baungasse", 2}
+var nequip2 = equipmentData{"Stativ", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Verfügbar", 2, "None", true, 2, "/img/equipment/gandalf.gif", true, false, false, 1, "Karl Karstens", "25.05.18", "25.05.18", 13452, "Schrank", 2}
+var nequip3 = equipmentData{"Mikrophon", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Vorgemerkt", 1, "None", true, 3, "/img/equipment/gandalf.gif", true, false, false, 1, "Max Mustermann", "25.05.18", "25.05.18", 2374, "Regal 12", 2}
 
-//var user1 = user{1, "Max Mustermann", "max@muster.de", "asdf", "img/equipment/gandalf.gif", "Benutzer", false, "25.07.18"}
-//var user2 = user{2, "Peter Müller", "peter@mueller.de", "asdf", "img/equipment/gandalf.gif", "Administrator", false, "25.07.22"}
+var nstduser = user{1, "Max Mustermann", "max@muster.de", "asdf", "img/equipment/gandalf.gif", "Benutzer", false, "25.07.18"}
+var nadmuser = user{2, "Peter Müller", "peter@mueller.de", "asdf", "img/equipment/gandalf.gif", "Administrator", false, "25.07.22"}
 
 func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "static/css")
@@ -516,17 +516,23 @@ func createTables(db *sql.DB) {
 //Gets the Cart Items, that the given User has in his cart
 //TODO: Still dummy, has to be used with session cookies
 func getCartItemsForUser(db * sql.DB, UserSessionCookie string) (*[]equipmentData, *user){
-	return nil, nil
+
+	var eq []equipmentData
+	eq = append(eq, nequip1)
+	eq = append(eq, nequip2)
+	eq = append(eq, nequip3)
+
+	return &eq, &nadmuser
 }
 
 //TODO: Still dummy, has to be used with session cookies
 func getLoggedInUser() *user {
-	return nil
+	return &nadmuser
 }
 
 //TODO: Gets the user, that the admin wants to edit, has to be used with session cookies or a flag in the database
 func getEditUser() *user{
-	return nil
+	return &nadmuser
 }
 
 //Gets a User form the Database and returns a pointer to it, if wanted, you can specify a password an let it test against the database one
