@@ -316,7 +316,7 @@ func createDummyValues(db *sql.DB) {
 		"'img/equipment/gandalf.gif'," +
 		"'Benutzer'," +
 		"false," +
-		"'2018-07-25'," +
+		"'2018-07-25'" +
 		");")
 
 	if err != nil {
@@ -331,7 +331,7 @@ func createDummyValues(db *sql.DB) {
 		"'img/equipment/gandalf.gif'," +
 		"'Administrator'," +
 		"false," +
-		"'2022-08-11'," +
+		"'2022-08-11'" +
 		");")
 
 	if err2 != nil {
@@ -346,7 +346,7 @@ func createDummyValues(db *sql.DB) {
 		"'img/equipment/gandalf.gif'," +
 		"'Distributor'," +
 		"false," +
-		"'2019-02-15'," +
+		"'2019-02-15'" +
 		");")
 
 	if err3 != nil {
