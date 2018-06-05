@@ -591,7 +591,7 @@ func main() {
 	db := connectDatabase()
 	if db != nil {
 
-
+		fmt.Print("Connection to Database successful")
 		fmt.Print(getAllUsers(db))
 		//Start Routing the Information
 		router := httprouter.New()
@@ -609,7 +609,7 @@ func main() {
 		router.GET("/js/*suburl", jsHandler)
 		router.GET("/img/*suburl", imgHandler)
 
-		log.Fatal(http.ListenAndServe(":8080", router))
+		log.Fatal(http.ListenAndServe(":80", router))
 
 	}
 
