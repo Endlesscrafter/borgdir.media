@@ -361,6 +361,8 @@ func createDummyValues(db *sql.DB) {
 		log.Fatal(err)
 	}
 
+
+
 	//TODO: Insert equipment 1,2,3 #7
 	_, err4 := db.Exec("INSERT INTO equipment VALUES(" +
 		"'Kamera Obscura'," +
@@ -469,6 +471,7 @@ func createTables(db *sql.DB) {
 		"FeaturedImageSRC text," +
 		"Rented boolean," +
 		"Bookmarked boolean," +
+		"Repair boolean," +
 		"RentedByUserID bigint REFERENCES users(UserID)," +
 		"RentDate date," +
 		"ReturnDate date," +
