@@ -421,7 +421,7 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 			return &inUser
 		} else {
 			log.Print("Error: The User could not be logged in")
-			return nil
+			//TODO: What to do now?
 		}
 		return &inUser
 	}
@@ -436,7 +436,7 @@ func getFeaturedProducts(db *sql.DB) *[]equipmentData{
 	var equipment []equipmentData
 
 	for i := 1; i <= 4; i++ {
-		rows, err := db.Query("SELECT * FROM equipment e WHERE e.Featured == true AND e.FeaturedID == " + string(i) + ";")
+		rows, err := db.Query("SELECT * FROM equipment e WHERE e.Featured = true AND e.FeaturedID = " + string(i) + ";")
 
 		checkErr(err)
 
@@ -461,7 +461,7 @@ func getFeaturedProducts(db *sql.DB) *[]equipmentData{
 //Gets products, that are not rented and therefore can be rented
 func getAvailableEqip(db *sql.DB) *[]equipmentData {
 
-	rows, err := db.Query("SELECT * FROM equipment e WHERE e.Rented == false AND e.Bookmarked == false;")
+	rows, err := db.Query("SELECT * FROM equipment e WHERE e.Rented = false AND e.Bookmarked = false;")
 
 	checkErr(err)
 
@@ -490,10 +490,10 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) *[]equipmentData 
 	var err error
 
 	if(!bookmarked) {
-		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID == " + string(UserID) + ";")
+		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + string(UserID) + ";")
 
 	} else{
-		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID == " + string(UserID) + " AND e.Bookmarked == true;")
+		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + string(UserID) + " AND e.Bookmarked = true;")
 	}
 	checkErr(err)
 
@@ -518,7 +518,7 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) *[]equipmentData 
 //Gets the products that are owned by the user UserID
 func getEquipFromOwner(db *sql.DB,  UserID int64) *[]equipmentData{
 
-	rows, err := db.Query("SELECT * FROM equipment e WHERE e.EquipmentOwnerID == " + string(UserID) + ";")
+	rows, err := db.Query("SELECT * FROM equipment e WHERE e.EquipmentOwnerID = " + string(UserID) + ";")
 
 	checkErr(err)
 
@@ -543,7 +543,7 @@ func getEquipFromOwner(db *sql.DB,  UserID int64) *[]equipmentData{
 //Get one Special product with the given InvID
 func getEquip(db *sql.DB, invID int64) *equipmentData{
 
-	rows, err := db.Query("SELECT * FROM equipment e WHERE e.InvID == " + string(invID) + ";")
+	rows, err := db.Query("SELECT * FROM equipment e WHERE e.InvID = " + string(invID) + ";")
 
 	checkErr(err)
 	for rows.Next() {
