@@ -290,6 +290,7 @@ func connectDatabase() *sql.DB {
 	err = db.Ping()
 	if err != nil {
 		//It fails here TODO: #6 BUG
+		log.Fatal(err)
 		log.Fatal("Error: Could not establish a connection with the database")
 	}
 
