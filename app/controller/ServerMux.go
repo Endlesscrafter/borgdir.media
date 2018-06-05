@@ -16,6 +16,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"database/sql"
 	"time"
+	"strconv"
 )
 
 const (
@@ -409,7 +410,6 @@ func createTables(db *sql.DB) {
 //Gets a User form the Database and returns a pointer to it, if wanted, you can specify a password an let it test against the database one
 func getUserFromName(db *sql.DB, username string, password string, validatePassword bool) *user {
 
-
 	rows, err := db.Query("SELECT * FROM users u WHERE u.Name LIKE '" + username + "';")
 
 	checkErr(err)
@@ -431,15 +431,14 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 }
 
 //Gets the featured products, in correct order
-func getFeaturedProducts(db *sql.DB) *[]equipmentData{
+func getFeaturedProducts(db *sql.DB) *[]equipmentData {
 
 	var equipment []equipmentData
 
 	for i := 1; i <= 4; i++ {
-		rows, err := db.Query("SELECT * FROM equipment e WHERE e.Featured = true AND e.FeaturedID = " + string(i) + ";")
+		rows, err := db.Query("SELECT * FROM equipment e WHERE e.Featured = true AND e.FeaturedID = " + strconv.Itoa(i) + ";")
 
 		checkErr(err)
-
 
 		for rows.Next() {
 
@@ -466,7 +465,7 @@ func getAvailableEqip(db *sql.DB) *[]equipmentData {
 	checkErr(err)
 
 	var equipment []equipmentData
-	for rows.Next(){
+	for rows.Next() {
 
 		var inEquip equipmentData
 		rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
@@ -475,7 +474,6 @@ func getAvailableEqip(db *sql.DB) *[]equipmentData {
 			&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
 			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
 		equipment = append(equipment, inEquip)
-
 
 	}
 
@@ -489,16 +487,16 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) *[]equipmentData 
 	var rows *sql.Rows
 	var err error
 
-	if(!bookmarked) {
-		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + string(UserID) + ";")
+	if (!bookmarked) {
+		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + strconv.FormatInt(UserID, 10) + ";")
 
-	} else{
-		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + string(UserID) + " AND e.Bookmarked = true;")
+	} else {
+		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + strconv.FormatInt(UserID, 10) + " AND e.Bookmarked = true;")
 	}
 	checkErr(err)
 
 	var equipment []equipmentData
-	for rows.Next(){
+	for rows.Next() {
 
 		var inEquip equipmentData
 		rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
@@ -507,7 +505,6 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) *[]equipmentData 
 			&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
 			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
 		equipment = append(equipment, inEquip)
-
 
 	}
 
@@ -516,14 +513,14 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) *[]equipmentData 
 }
 
 //Gets the products that are owned by the user UserID
-func getEquipFromOwner(db *sql.DB,  UserID int64) *[]equipmentData{
+func getEquipFromOwner(db *sql.DB, UserID int64) *[]equipmentData {
 
-	rows, err := db.Query("SELECT * FROM equipment e WHERE e.EquipmentOwnerID = " + string(UserID) + ";")
+	rows, err := db.Query("SELECT * FROM equipment e WHERE e.EquipmentOwnerID = " + strconv.FormatInt(UserID, 10) + ";")
 
 	checkErr(err)
 
 	var equipment []equipmentData
-	for rows.Next(){
+	for rows.Next() {
 
 		var inEquip equipmentData
 		rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
@@ -533,7 +530,6 @@ func getEquipFromOwner(db *sql.DB,  UserID int64) *[]equipmentData{
 			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
 		equipment = append(equipment, inEquip)
 
-
 	}
 
 	return &equipment
@@ -541,7 +537,7 @@ func getEquipFromOwner(db *sql.DB,  UserID int64) *[]equipmentData{
 }
 
 //Get one Special product with the given InvID
-func getEquip(db *sql.DB, invID int64) *equipmentData{
+func getEquip(db *sql.DB, invID int64) *equipmentData {
 
 	rows, err := db.Query("SELECT * FROM equipment e WHERE e.InvID = " + string(invID) + ";")
 
@@ -558,7 +554,7 @@ func getEquip(db *sql.DB, invID int64) *equipmentData{
 
 	}
 
-	log.Print("The Product with ID " + string(invID) + "wasn't found in the Database")
+	log.Print("The Product with ID " + strconv.FormatInt(invID, 10) + "wasn't found in the Database")
 	return nil
 }
 
@@ -597,7 +593,7 @@ func main() {
 		fmt.Print(getUserFromName(db, "Max Mustermann", "", false))
 		fmt.Print(getFeaturedProducts(db))
 		fmt.Print(getAvailableEqip(db))
-		fmt.Print(getRentedEquip(db, 1,false))
+		fmt.Print(getRentedEquip(db, 1, false))
 		fmt.Print(getEquipFromOwner(db, 2))
 		fmt.Print(getEquip(db, 1))
 		//Start Routing the Information
