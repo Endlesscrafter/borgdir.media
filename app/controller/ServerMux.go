@@ -554,7 +554,7 @@ func getEquip(db *sql.DB, invID int64) *equipmentData {
 
 	}
 
-	log.Print("The Product with ID " + strconv.FormatInt(invID, 10) + "wasn't found in the Database")
+	log.Print("The Product with ID " + strconv.FormatInt(invID, 10) + " wasn't found in the Database")
 	return nil
 }
 
