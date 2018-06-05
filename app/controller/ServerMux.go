@@ -70,12 +70,12 @@ type siteData struct {
 }
 
 //Test Data
-var equip1 = equipmentData{"Kamera Obscura", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Entliehen", 0, "None", true, 1, "/img/equipment/gandalf.gif", true, true, false, 1, "Max Mustermann", "25.05.18", "25.05.18", 1245, "Baungasse", 2}
-var equip2 = equipmentData{"Stativ", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Verfügbar", 2, "None", true, 2, "/img/equipment/gandalf.gif", true, false, false, 1, "Karl Karstens", "25.05.18", "25.05.18", 13452, "Schrank", 2}
-var equip3 = equipmentData{"Mikrophon", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Vorgemerkt", 1, "None", true, 3, "/img/equipment/gandalf.gif", true, false, false, 1, "Max Mustermann", "25.05.18", "25.05.18", 2374, "Regal 12", 2}
+//var equip1 = equipmentData{"Kamera Obscura", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Entliehen", 0, "None", true, 1, "/img/equipment/gandalf.gif", true, true, false, 1, "Max Mustermann", "25.05.18", "25.05.18", 1245, "Baungasse", 2}
+//var equip2 = equipmentData{"Stativ", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Verfügbar", 2, "None", true, 2, "/img/equipment/gandalf.gif", true, false, false, 1, "Karl Karstens", "25.05.18", "25.05.18", 13452, "Schrank", 2}
+//var equip3 = equipmentData{"Mikrophon", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Vorgemerkt", 1, "None", true, 3, "/img/equipment/gandalf.gif", true, false, false, 1, "Max Mustermann", "25.05.18", "25.05.18", 2374, "Regal 12", 2}
 
-var user1 = user{1, "Max Mustermann", "max@muster.de", "asdf", "img/equipment/gandalf.gif", "Benutzer", false, "25.07.18"}
-var user2 = user{2, "Peter Müller", "peter@mueller.de", "asdf", "img/equipment/gandalf.gif", "Administrator", false, "25.07.22"}
+//var user1 = user{1, "Max Mustermann", "max@muster.de", "asdf", "img/equipment/gandalf.gif", "Benutzer", false, "25.07.18"}
+//var user2 = user{2, "Peter Müller", "peter@mueller.de", "asdf", "img/equipment/gandalf.gif", "Administrator", false, "25.07.22"}
 
 func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "static/css")
@@ -118,10 +118,12 @@ func indexHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	w.Header().Set("Content-Type", "text/html")
 	if err == nil {
 
+		eq := getFeaturedProducts(GLOBALDB)
+
 		data := siteData{}
-		data.Equipment = append(data.Equipment, equip1)
-		data.Equipment = append(data.Equipment, equip2)
-		data.Equipment = append(data.Equipment, equip3)
+		data.Equipment = append(data.Equipment, (*eq)[0])
+		data.Equipment = append(data.Equipment, (*eq)[1])
+		data.Equipment = append(data.Equipment, (*eq)[2])
 
 		tmpl.ExecuteTemplate(w, "index.html", data)
 	}
@@ -151,12 +153,18 @@ func cartHandler(w http.ResponseWriter, r *http.Request, params httprouter.Param
 	tmpl, err := template.ParseFiles("template/cart.html")
 	if err == nil {
 
+
+		eq, user := getCartItemsForUser(GLOBALDB, "TEST")
+
 		data := siteData{}
-		data.Equipment = append(data.Equipment, equip1)
-		data.Equipment = append(data.Equipment, equip2)
+
+		for _, element := range *eq {
+			data.Equipment = append(data.Equipment, element)
+		}
+		/*data.Equipment = append(data.Equipment, equip2)
 		data.Equipment = append(data.Equipment, equip3)
-		data.Equipment = append(data.Equipment, equip3)
-		data.User = user1
+		data.Equipment = append(data.Equipment, equip3)*/
+		data.User = *user
 
 		tmpl.ExecuteTemplate(w, "cart.html", data)
 	}
@@ -168,14 +176,14 @@ func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	tmpl, err := template.ParseFiles("template/equipment.html")
 	if err == nil {
 
+		eq := getAvailableEqip(GLOBALDB)
+		user := getLoggedInUser()
+
 		data := siteData{}
-		data.Equipment = append(data.Equipment, equip1)
-		data.Equipment = append(data.Equipment, equip2)
-		data.Equipment = append(data.Equipment, equip3)
-		data.Equipment = append(data.Equipment, equip3)
-		data.Equipment = append(data.Equipment, equip1)
-		data.Equipment = append(data.Equipment, equip1)
-		data.User = user1
+		for _, element := range *eq {
+			data.Equipment = append(data.Equipment, element)
+		}
+		data.User = *user
 
 		//Always give a even number of data-Sets (0, 2, 4, 6 etc): Otherwise it breaks the Design
 		tmpl.ExecuteTemplate(w, "equipment.html", data)
@@ -183,16 +191,20 @@ func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	//fmt.Fprintf(w, "index")
 }
 
+
 func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "")
 	tmpl, err := template.ParseFiles("template/my-equipment.html")
 	if err == nil {
 
+		user := getLoggedInUser()
+		eq := getEquipFromOwner(GLOBALDB,user.UserID)
+
 		data := siteData{}
-		data.Equipment = append(data.Equipment, equip1)
-		data.Equipment = append(data.Equipment, equip2)
-		data.Equipment = append(data.Equipment, equip3)
-		data.User = user1
+		for _, element := range *eq {
+			data.Equipment = append(data.Equipment, element)
+		}
+		data.User = *user
 
 		tmpl.ExecuteTemplate(w, "my-equipment.html", data)
 	}
@@ -204,8 +216,10 @@ func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	tmpl, err := template.ParseFiles("template/profile.html")
 	if err == nil {
 
+		user := getLoggedInUser()
+
 		data := siteData{}
-		data.User = user1
+		data.User = *user
 		tmpl.ExecuteTemplate(w, "profile.html", data)
 	}
 	//fmt.Fprintf(w, "index")
@@ -230,11 +244,15 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		tmpl, err := template.ParseFiles("template/admin/clients.html")
 		if err == nil {
 
+
+			user := getLoggedInUser()
+			users := getAllUsers(GLOBALDB)
+
 			data := siteData{}
-			data.User = user2
-			data.AdminUserList = append(data.AdminUserList, user1)
-			data.AdminUserList = append(data.AdminUserList, user2)
-			data.AdminUserList = append(data.AdminUserList, user1)
+			data.User = *user
+			for _, element := range *users {
+				data.AdminUserList = append(data.AdminUserList, element)
+			}
 
 			tmpl.ExecuteTemplate(w, "clients.html", data)
 		}
@@ -243,9 +261,12 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		tmpl, err := template.ParseFiles("template/admin/edit-client.html")
 		if err == nil {
 
+			user := getLoggedInUser()
+			edituser := getEditUser()
+
 			data := siteData{}
-			data.User = user2
-			data.AdminUserList = append(data.AdminUserList, user1)
+			data.User = *user
+			data.AdminUserList = append(data.AdminUserList, *edituser)
 
 			//AdminUser list contais the one user that should be edited
 			tmpl.ExecuteTemplate(w, "edit-client.html", data)
@@ -255,11 +276,14 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		tmpl, err := template.ParseFiles("template/admin/equipment.html")
 		if err == nil {
 
+			user := getLoggedInUser()
+			eq := getEquipFromOwner(GLOBALDB,user.UserID)
+
 			data := siteData{}
-			data.Equipment = append(data.Equipment, equip1)
-			data.Equipment = append(data.Equipment, equip2)
-			data.Equipment = append(data.Equipment, equip3)
-			data.User = user2
+			for _, element := range *eq {
+				data.Equipment = append(data.Equipment, element)
+			}
+			data.User = *user
 
 			tmpl.ExecuteTemplate(w, "equipment.html", data)
 		}
@@ -487,6 +511,22 @@ func createTables(db *sql.DB) {
 		log.Fatal(err2)
 	}
 
+}
+
+//Gets the Cart Items, that the given User has in his cart
+//TODO: Still dummy, has to be used with session cookies
+func getCartItemsForUser(db * sql.DB, UserSessionCookie string) (*[]equipmentData, *user){
+	return nil, nil
+}
+
+//TODO: Still dummy, has to be used with session cookies
+func getLoggedInUser() *user {
+	return nil
+}
+
+//TODO: Gets the user, that the admin wants to edit, has to be used with session cookies or a flag in the database
+func getEditUser() *user{
+	return nil
 }
 
 //Gets a User form the Database and returns a pointer to it, if wanted, you can specify a password an let it test against the database one
