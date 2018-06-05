@@ -22,7 +22,7 @@ const (
 	DB_USER         = "goserver"
 	DB_PASSWORD     = "c58WvoedyiVRmPjaEoEi"
 	DB_NAME         = "goserver"
-	noDefaultValues = true
+	noDefaultValues = false
 )
 
 type equipmentData struct {
