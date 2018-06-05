@@ -591,6 +591,8 @@ func main() {
 	db := connectDatabase()
 	if db != nil {
 
+
+		fmt.Print(getAllUsers(db))
 		//Start Routing the Information
 		router := httprouter.New()
 		router.GET("/", indexHandler)
