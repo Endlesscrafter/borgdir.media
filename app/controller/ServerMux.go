@@ -593,6 +593,12 @@ func main() {
 
 		fmt.Print("Connection to Database successful\n")
 		fmt.Print(getAllUsers(db))
+		fmt.Print(getUserFromName(db, "Max Mustermann", "", false))
+		fmt.Print(getFeaturedProducts(db))
+		fmt.Print(getAvailableEqip(db))
+		fmt.Print(getRentedEquip(db, 1,false))
+		fmt.Print(getEquipFromOwner(db, 2))
+		fmt.Print(getEquip(db, 1))
 		//Start Routing the Information
 		router := httprouter.New()
 		router.GET("/", indexHandler)
