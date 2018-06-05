@@ -409,11 +409,12 @@ func createTables(db *sql.DB) {
 //Gets a User form the Database and returns a pointer to it, if wanted, you can specify a password an let it test against the database one
 func getUserFromName(db *sql.DB, username string, password string, validatePassword bool) *user {
 
-	var inUser *user;
+
 	rows, err := db.Query("SELECT * FROM users u WHERE u.Name LIKE '" + username + "';")
 
 	checkErr(err)
 	for rows.Next() {
+		var inUser *user
 
 		rows.Scan(&(inUser.UserID), &(inUser.Name), &(inUser.Email), &(inUser.Password), &(inUser.ProfileImageSRC), &(inUser.UserLevel), &(inUser.Blocked), &(inUser.ActiveUntilDate))
 		if (validatePassword && inUser.Password == password) {
