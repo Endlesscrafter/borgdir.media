@@ -539,7 +539,7 @@ func getEquipFromOwner(db *sql.DB, UserID int64) *[]equipmentData {
 //Get one Special product with the given InvID
 func getEquip(db *sql.DB, invID int64) *equipmentData {
 
-	rows, err := db.Query("SELECT * FROM equipment e WHERE e.InvID = " + string(invID) + ";")
+	rows, err := db.Query("SELECT * FROM equipment e WHERE e.InvID = " + strconv.FormatInt(invID,10) + ";")
 
 	checkErr(err)
 	for rows.Next() {
