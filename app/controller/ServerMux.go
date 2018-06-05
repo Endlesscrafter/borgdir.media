@@ -414,16 +414,16 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 
 	checkErr(err)
 	for rows.Next() {
-		var inUser *user
+		var inUser user
 
 		rows.Scan(&(inUser.UserID), &(inUser.Name), &(inUser.Email), &(inUser.Password), &(inUser.ProfileImageSRC), &(inUser.UserLevel), &(inUser.Blocked), &(inUser.ActiveUntilDate))
 		if (validatePassword && inUser.Password == password) {
-			return inUser
+			return &inUser
 		} else {
 			log.Print("Error: The User could not be logged in")
 			return nil
 		}
-		return inUser
+		return &inUser
 	}
 
 	log.Print("Error: No User with the given username")
