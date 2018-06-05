@@ -313,7 +313,7 @@ func connectDatabase() *sql.DB {
 func createDummyValues(db *sql.DB) {
 
 	//Delete everything beforehand
-	_, e := db.Exec("DELETE * FROM users; DELETE * FROM equipment;")
+	_, e := db.Exec("DELETE FROM users; DELETE FROM equipment;")
 	checkErr(e)
 
 	_, err := db.Exec("INSERT INTO users VALUES (" +
@@ -433,7 +433,7 @@ func createDummyValues(db *sql.DB) {
 		"3" +
 		");")
 	checkErr(err6)
-	
+
 }
 
 //Creates the necessary tables in the Database
