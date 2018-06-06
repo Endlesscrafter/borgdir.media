@@ -542,12 +542,16 @@ func getCartItemsForUser(db *sql.DB, UserSessionCookie string) (*[]equipmentData
 //TODO: Still dummy, has to be used with session cookies
 func getLoggedInUser() *user {
 
+	//Get Cookie with UserID
+	//THEN:
+	//query := "SELECT * FROM users u WHERE u.userid = " + userid + ";"
+
 	logDatabase("!!!DUMMY!!!", fmt.Sprint(nadmuser))
 
 	return &nadmuser
 }
 
-//TODO: Gets the user, that the admin wants to edit, has to be used with session cookies or a flag in the database
+//TODO: Gets the user, that the admin wants to edit, has to be used with session cookies or a flag in the database or query string on the URL
 func getEditUser() *user {
 
 	logDatabase("!!!DUMMY!!!", fmt.Sprint(nadmuser))
