@@ -40,7 +40,7 @@ type equipmentData struct {
 	Featured         bool
 	FeaturedID       int
 	FeaturedImageSRC string
-	Rented           boo
+	Rented           bool
 	Bookmarked       bool
 	Repair           bool
 	RentedByUserID   int64
