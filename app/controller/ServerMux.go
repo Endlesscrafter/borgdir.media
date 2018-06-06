@@ -24,7 +24,7 @@ const (
 	DB_PASSWORD     = "c58WvoedyiVRmPjaEoEi"
 	DB_NAME         = "goserver"
 	noDefaultValues = false
-
+	debug           = true
 )
 
 var GLOBALDB *sql.DB
@@ -153,7 +153,6 @@ func cartHandler(w http.ResponseWriter, r *http.Request, params httprouter.Param
 	tmpl, err := template.ParseFiles("template/cart.html")
 	if err == nil {
 
-
 		eq, user := getCartItemsForUser(GLOBALDB, "TEST")
 
 		data := siteData{}
@@ -191,14 +190,13 @@ func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	//fmt.Fprintf(w, "index")
 }
 
-
 func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "")
 	tmpl, err := template.ParseFiles("template/my-equipment.html")
 	if err == nil {
 
 		user := getLoggedInUser()
-		eq := getEquipFromOwner(GLOBALDB,user.UserID)
+		eq := getEquipFromOwner(GLOBALDB, user.UserID)
 
 		data := siteData{}
 		for _, element := range *eq {
@@ -244,7 +242,6 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		tmpl, err := template.ParseFiles("template/admin/clients.html")
 		if err == nil {
 
-
 			user := getLoggedInUser()
 			users := getAllUsers(GLOBALDB)
 
@@ -277,7 +274,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		if err == nil {
 
 			user := getLoggedInUser()
-			eq := getEquipFromOwner(GLOBALDB,user.UserID)
+			eq := getEquipFromOwner(GLOBALDB, user.UserID)
 
 			data := siteData{}
 			for _, element := range *eq {
@@ -305,8 +302,12 @@ func logAccess(r *http.Request, params httprouter.Params, fileDir string) {
 
 }
 
-func logDatabase(query string, data string){
-	fmt.Println(time.Now().Format(time.RFC3339) + " " + "QUERY: " + query + " | RESULT: " + data)
+func logDatabase(query string, data string) {
+	if (debug) {
+		fmt.Println(time.Now().Format(time.RFC3339) + " " + "QUERY: " + query + " | RESULT: " + data)
+	} else {
+		fmt.Println(time.Now().Format(time.RFC3339) + " " + "QUERY: " + query + " | RESULT OMITTED")
+	}
 }
 
 func connectDatabase() *sql.DB {
@@ -388,8 +389,6 @@ func createDummyValues(db *sql.DB) {
 	if err3 != nil {
 		log.Fatal(err)
 	}
-
-
 
 	//TODO: Insert equipment 1,2,3 #7
 	_, err4 := db.Exec("INSERT INTO equipment VALUES(" +
@@ -519,14 +518,14 @@ func createTables(db *sql.DB) {
 
 //Gets the Cart Items, that the given User has in his cart
 //TODO: Still dummy, has to be used with session cookies
-func getCartItemsForUser(db * sql.DB, UserSessionCookie string) (*[]equipmentData, *user){
+func getCartItemsForUser(db *sql.DB, UserSessionCookie string) (*[]equipmentData, *user) {
 
 	var eq []equipmentData
 	eq = append(eq, nequip1)
 	eq = append(eq, nequip2)
 	eq = append(eq, nequip3)
 
-	logDatabase("!!!DUMMY!!!", fmt.Sprint(eq) + "|" + fmt.Sprint(nadmuser) )
+	logDatabase("!!!DUMMY!!!", fmt.Sprint(eq)+"|"+fmt.Sprint(nadmuser))
 
 	return &eq, &nadmuser
 }
@@ -540,9 +539,9 @@ func getLoggedInUser() *user {
 }
 
 //TODO: Gets the user, that the admin wants to edit, has to be used with session cookies or a flag in the database
-func getEditUser() *user{
+func getEditUser() *user {
 
-	logDatabase("!!!DUMMY!!!",fmt.Sprint(nadmuser))
+	logDatabase("!!!DUMMY!!!", fmt.Sprint(nadmuser))
 
 	return &nadmuser
 }
@@ -563,7 +562,7 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 			log.Print("Error: The User could not be logged in")
 			//TODO: What to do now?
 		}
-		logDatabase("SELECT * FROM users u WHERE u.Name LIKE '" + username + "';", fmt.Sprint(inUser))
+		logDatabase("SELECT * FROM users u WHERE u.Name LIKE '"+username+"';", fmt.Sprint(inUser))
 		return &inUser
 	}
 
@@ -648,7 +647,7 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) *[]equipmentData 
 		equipment = append(equipment, inEquip)
 
 	}
-	logDatabase("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + strconv.FormatInt(UserID, 10) + " ((AND e.Bookmarked = true));", fmt.Sprint(equipment))
+	logDatabase("SELECT * FROM equipment e WHERE e.RentedbyUserID = "+strconv.FormatInt(UserID, 10)+" ((AND e.Bookmarked = true));", fmt.Sprint(equipment))
 	return &equipment
 
 }
@@ -672,7 +671,7 @@ func getEquipFromOwner(db *sql.DB, UserID int64) *[]equipmentData {
 		equipment = append(equipment, inEquip)
 
 	}
-	logDatabase("SELECT * FROM equipment e WHERE e.EquipmentOwnerID = " + strconv.FormatInt(UserID, 10) + ";", fmt.Sprint(equipment))
+	logDatabase("SELECT * FROM equipment e WHERE e.EquipmentOwnerID = "+strconv.FormatInt(UserID, 10)+";", fmt.Sprint(equipment))
 	return &equipment
 
 }
@@ -680,7 +679,7 @@ func getEquipFromOwner(db *sql.DB, UserID int64) *[]equipmentData {
 //Get one Special product with the given InvID
 func getEquip(db *sql.DB, invID int64) *equipmentData {
 
-	rows, err := db.Query("SELECT * FROM equipment e WHERE e.InvID = " + strconv.FormatInt(invID,10) + ";")
+	rows, err := db.Query("SELECT * FROM equipment e WHERE e.InvID = " + strconv.FormatInt(invID, 10) + ";")
 
 	checkErr(err)
 	for rows.Next() {
@@ -691,7 +690,7 @@ func getEquip(db *sql.DB, invID int64) *equipmentData {
 			&(inEquip.FeaturedImageSRC), &(inEquip.Rented), &(inEquip.Bookmarked), &(inEquip.Repair),
 			&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
 			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
-		logDatabase("SELECT * FROM equipment e WHERE e.InvID = " + strconv.FormatInt(invID,10) + ";", fmt.Sprint(inEquip))
+		logDatabase("SELECT * FROM equipment e WHERE e.InvID = "+strconv.FormatInt(invID, 10)+";", fmt.Sprint(inEquip))
 		return &inEquip
 	}
 
@@ -713,7 +712,7 @@ func getAllUsers(db *sql.DB) *[]user {
 		users = append(users, userN)
 
 	}
-	logDatabase("SELECT * FROM users u;",fmt.Sprint(users))
+	logDatabase("SELECT * FROM users u;", fmt.Sprint(users))
 	return &users
 
 }
