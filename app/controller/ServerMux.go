@@ -286,6 +286,11 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 			tmpl.ExecuteTemplate(w, "equipment.html", data)
 		}
 	}
+	if params.ByName("suburl") == "/profile.html" {
+
+		http.Redirect(w, r, "/profile.html", http.StatusFound)
+
+	}
 	if strings.Contains(params.ByName("suburl"), "img/") {
 		content, err := ioutil.ReadFile("app/model/images/" + strings.Trim(params.ByName("suburl"), "/img"))
 		w.Header().Set("Content-Type", "image/*")
