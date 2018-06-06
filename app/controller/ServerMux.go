@@ -305,6 +305,10 @@ func logAccess(r *http.Request, params httprouter.Params, fileDir string) {
 
 }
 
+func logDatabase(query string, data string){
+	fmt.Println(time.Now().Format(time.RFC3339) + " " + "QUERY: " + query + " | RESULT: " + data)
+}
+
 func connectDatabase() *sql.DB {
 
 	//CREATE DATABASE IF NOT EXISTS borgdirmedia OWNER goserver ENCODING 'UTF-8'
@@ -522,16 +526,24 @@ func getCartItemsForUser(db * sql.DB, UserSessionCookie string) (*[]equipmentDat
 	eq = append(eq, nequip2)
 	eq = append(eq, nequip3)
 
+	logDatabase("!!!DUMMY!!!", fmt.Sprint(eq) + "|" + fmt.Sprint(nadmuser) )
+
 	return &eq, &nadmuser
 }
 
 //TODO: Still dummy, has to be used with session cookies
 func getLoggedInUser() *user {
+
+	logDatabase("!!!DUMMY!!!", fmt.Sprint(nadmuser))
+
 	return &nadmuser
 }
 
 //TODO: Gets the user, that the admin wants to edit, has to be used with session cookies or a flag in the database
 func getEditUser() *user{
+
+	logDatabase("!!!DUMMY!!!",fmt.Sprint(nadmuser))
+
 	return &nadmuser
 }
 
@@ -551,6 +563,7 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 			log.Print("Error: The User could not be logged in")
 			//TODO: What to do now?
 		}
+		logDatabase("SELECT * FROM users u WHERE u.Name LIKE '" + username + "';", fmt.Sprint(inUser))
 		return &inUser
 	}
 
@@ -581,6 +594,7 @@ func getFeaturedProducts(db *sql.DB) *[]equipmentData {
 		}
 	}
 
+	logDatabase("SELECT * FROM equipment e WHERE e.Featured = true AND e.FeaturedID = *;", fmt.Sprint(equipment))
 	return &equipment
 
 }
@@ -604,7 +618,7 @@ func getAvailableEqip(db *sql.DB) *[]equipmentData {
 		equipment = append(equipment, inEquip)
 
 	}
-
+	logDatabase("SELECT * FROM equipment e WHERE e.Rented = false AND e.Bookmarked = false;", fmt.Sprint(equipment))
 	return &equipment
 
 }
@@ -617,7 +631,6 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) *[]equipmentData 
 
 	if (!bookmarked) {
 		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + strconv.FormatInt(UserID, 10) + ";")
-
 	} else {
 		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + strconv.FormatInt(UserID, 10) + " AND e.Bookmarked = true;")
 	}
@@ -635,7 +648,7 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) *[]equipmentData 
 		equipment = append(equipment, inEquip)
 
 	}
-
+	logDatabase("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + strconv.FormatInt(UserID, 10) + " ((AND e.Bookmarked = true));", fmt.Sprint(equipment))
 	return &equipment
 
 }
@@ -659,7 +672,7 @@ func getEquipFromOwner(db *sql.DB, UserID int64) *[]equipmentData {
 		equipment = append(equipment, inEquip)
 
 	}
-
+	logDatabase("SELECT * FROM equipment e WHERE e.EquipmentOwnerID = " + strconv.FormatInt(UserID, 10) + ";", fmt.Sprint(equipment))
 	return &equipment
 
 }
@@ -678,8 +691,8 @@ func getEquip(db *sql.DB, invID int64) *equipmentData {
 			&(inEquip.FeaturedImageSRC), &(inEquip.Rented), &(inEquip.Bookmarked), &(inEquip.Repair),
 			&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
 			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
+		logDatabase("SELECT * FROM equipment e WHERE e.InvID = " + strconv.FormatInt(invID,10) + ";", fmt.Sprint(inEquip))
 		return &inEquip
-
 	}
 
 	log.Print("The Product with ID " + strconv.FormatInt(invID, 10) + " wasn't found in the Database")
@@ -700,7 +713,7 @@ func getAllUsers(db *sql.DB) *[]user {
 		users = append(users, userN)
 
 	}
-
+	logDatabase("SELECT * FROM users u;",fmt.Sprint(users))
 	return &users
 
 }
@@ -716,14 +729,14 @@ func main() {
 	GLOBALDB = connectDatabase()
 	if GLOBALDB != nil {
 
-		fmt.Print("Connection to Database successful\n")
-		fmt.Print(getAllUsers(GLOBALDB))
-		fmt.Print(getUserFromName(GLOBALDB, "Max Mustermann", "", false))
-		fmt.Print(getFeaturedProducts(GLOBALDB))
-		fmt.Print(getAvailableEqip(GLOBALDB))
-		fmt.Print(getRentedEquip(GLOBALDB, 1, false))
-		fmt.Print(getEquipFromOwner(GLOBALDB, 2))
-		fmt.Print(getEquip(GLOBALDB, 1))
+		//fmt.Print("Connection to Database successful\n")
+		//fmt.Print(getAllUsers(GLOBALDB))
+		//fmt.Print(getUserFromName(GLOBALDB, "Max Mustermann", "", false))
+		//fmt.Print(getFeaturedProducts(GLOBALDB))
+		//fmt.Print(getAvailableEqip(GLOBALDB))
+		//fmt.Print(getRentedEquip(GLOBALDB, 1, false))
+		//fmt.Print(getEquipFromOwner(GLOBALDB, 2))
+		//fmt.Print(getEquip(GLOBALDB, 1))
 		//Start Routing the Information
 		router := httprouter.New()
 		router.GET("/", indexHandler)
