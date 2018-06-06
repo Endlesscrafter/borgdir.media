@@ -23,7 +23,7 @@ const (
 	DB_USER         = "goserver"
 	DB_PASSWORD     = "c58WvoedyiVRmPjaEoEi"
 	DB_NAME         = "goserver"
-	noDefaultValues = false
+	noDefaultValues = true
 	debug           = true
 )
 
@@ -342,7 +342,7 @@ func connectDatabase() *sql.DB {
 func createDummyValues(db *sql.DB) {
 
 	//Delete everything beforehand
-	_, e := db.Exec("DELETE FROM users; DELETE FROM equipment;")
+	/*_, e := db.Exec("DELETE FROM users; DELETE FROM equipment;")
 	checkErr(e)
 
 	_, err := db.Exec("INSERT INTO users VALUES (" +
@@ -388,9 +388,8 @@ func createDummyValues(db *sql.DB) {
 
 	if err3 != nil {
 		log.Fatal(err)
-	}
+	}*/
 
-	//TODO: Insert equipment 1,2,3 #7
 	_, err4 := db.Exec("INSERT INTO equipment VALUES(" +
 		"'Kamera Obscura'," +
 		"'Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit'," +
@@ -403,10 +402,10 @@ func createDummyValues(db *sql.DB) {
 		"1," +
 		"'/img/equipment/gandalf.gif'," +
 		"true," +
-		"true," +
 		"false," +
-		"1," +
-		"'Max Mustermann'," +
+		"false," +
+		"DEFAULT," +
+		"DFEAULT," +
 		"'2018-05-25'," +
 		"'2018-05-25'," +
 		"DEFAULT," +
@@ -426,11 +425,11 @@ func createDummyValues(db *sql.DB) {
 		"true," +
 		"2," +
 		"'/img/equipment/gandalf.gif'," +
-		"true," +
 		"false," +
 		"false," +
-		"2," +
-		"'Peter Müller'," +
+		"false," +
+		"DFEAULT," +
+		"DFEAULT," +
 		"'2018-05-25'," +
 		"'2018-05-25'," +
 		"DEFAULT," +
@@ -450,11 +449,11 @@ func createDummyValues(db *sql.DB) {
 		"true," +
 		"3," +
 		"'/img/equipment/gandalf.gif'," +
-		"true," +
 		"false," +
 		"false," +
-		"1," +
-		"'Max Mustermann'," +
+		"false," +
+		"DFEAULT," +
+		"DFEAULT," +
 		"'2018-05-25'," +
 		"'2018-05-25'," +
 		"DEFAULT," +
