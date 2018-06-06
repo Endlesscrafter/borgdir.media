@@ -40,7 +40,7 @@ type equipmentData struct {
 	Featured         bool
 	FeaturedID       int
 	FeaturedImageSRC string
-	Rented           bool
+	Rented           boo
 	Bookmarked       bool
 	Repair           bool
 	RentedByUserID   int64
@@ -196,7 +196,8 @@ func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	if err == nil {
 
 		user := getLoggedInUser()
-		eq := getEquipFromOwner(GLOBALDB, user.UserID)
+		//eq := getEquipFromOwner(GLOBALDB, user.UserID)
+		eq := getRentedEquip(GLOBALDB, user.UserID,false)
 
 		data := siteData{}
 		for _, element := range *eq {
