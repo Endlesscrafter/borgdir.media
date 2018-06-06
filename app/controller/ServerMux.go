@@ -638,7 +638,7 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) *[]equipmentData 
 	var err error
 
 	if (!bookmarked) {
-		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + strconv.FormatInt(UserID, 10) + " AND e.Bookmarked = false;")
+		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + strconv.FormatInt(UserID, 10) + " AND e.Bookmarked = false;") //Works together with template
 	} else {
 		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + strconv.FormatInt(UserID, 10) + " AND e.Bookmarked = true;")
 	}
