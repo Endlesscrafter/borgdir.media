@@ -395,19 +395,19 @@ func createDummyValues(db *sql.DB) {
 		"'Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit'," +
 		"'img/equipment/generic.gif'," +
 		"'Generic Placeholder'," +
-		"'Entliehen'," +
-		"0," +
+		"'Verfügbar'," +
+		"1," +
 		"'None'," +
 		"true," +
 		"1," +
 		"'/img/equipment/gandalf.gif'," +
-		"true," +
 		"false," +
 		"false," +
-		"DEFAULT," +
-		"DFEAULT," +
-		"'2018-05-25'," +
-		"'2018-05-25'," +
+		"false," +
+		"NULL," +
+		"NULL," +
+		"NULL," +
+		"NULL," +
 		"DEFAULT," +
 		"'Baungasse'," +
 		"3" +
@@ -428,10 +428,10 @@ func createDummyValues(db *sql.DB) {
 		"false," +
 		"false," +
 		"false," +
-		"DFEAULT," +
-		"DFEAULT," +
-		"'2018-05-25'," +
-		"'2018-05-25'," +
+		"NULL," +
+		"NULL," +
+		"NULL," +
+		"NULL," +
 		"DEFAULT," +
 		"'Schrank'," +
 		"3" +
@@ -452,10 +452,10 @@ func createDummyValues(db *sql.DB) {
 		"false," +
 		"false," +
 		"false," +
-		"DFEAULT," +
-		"DFEAULT," +
-		"'2018-05-25'," +
-		"'2018-05-25'," +
+		"NULL," +
+		"NULL," +
+		"NULL," +
+		"NULL," +
 		"DEFAULT," +
 		"'Regal 12'," +
 		"3" +
