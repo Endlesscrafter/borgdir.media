@@ -308,7 +308,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 
 func logAccess(r *http.Request, params httprouter.Params, fileDir string) {
 
-	fmt.Println(time.Now().Format(time.RFC3339) + " " + r.Header.Get("User-Agent") + " " + r.Method + " /" + fileDir + params.ByName("suburl"))
+	fmt.Println(time.Now().Format(time.RFC3339) + " ACCESS: " + r.Header.Get("User-Agent") + " " + r.Method + " /" + fileDir + params.ByName("suburl"))
 
 }
 
