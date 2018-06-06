@@ -198,9 +198,13 @@ func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 		user := getLoggedInUser()
 		//eq := getEquipFromOwner(GLOBALDB, user.UserID)
 		eq := getRentedEquip(GLOBALDB, user.UserID,false)
+		eqb := getRentedEquip(GLOBALDB, user.UserID, true)
 
 		data := siteData{}
 		for _, element := range *eq {
+			data.Equipment = append(data.Equipment, element)
+		}
+		for _, element := range *eqb {
 			data.Equipment = append(data.Equipment, element)
 		}
 		data.User = *user
