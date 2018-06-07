@@ -123,6 +123,8 @@ func indexHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		data.Equipment = append(data.Equipment, (*eq)[0])
 		data.Equipment = append(data.Equipment, (*eq)[1])
 		data.Equipment = append(data.Equipment, (*eq)[2])
+		//4th?
+		//data.Equipment = append(data.Equipment, (*eq)[4])
 
 		tmpl.ExecuteTemplate(w, "index.html", data)
 	}
