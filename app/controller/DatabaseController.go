@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"strconv"
 	"log"
+	"golang.org/x/crypto/bcrypt"
 )
 
 //Gets all Users
@@ -214,4 +215,14 @@ func getCartItemsForUser(db *sql.DB, UserSessionCookie string) (*[]equipmentData
 	logDatabase("!!!DUMMY!!!", fmt.Sprint(eq)+"|"+fmt.Sprint(nadmuser))
 
 	return &eq, &nadmuser
+}
+
+//TODO: Fill dummy, make use of hashing
+func updateUser(db *sql.DB, user *user) bool{
+
+
+	var test []byte;
+	bcrypt.GenerateFromPassword(test,0)
+
+	return false
 }
