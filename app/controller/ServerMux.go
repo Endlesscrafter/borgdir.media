@@ -559,6 +559,7 @@ func main() {
 		router.GET("/js/*suburl", jsHandler)
 		router.GET("/img/*suburl", imgHandler)
 
+		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))
 
 	}
