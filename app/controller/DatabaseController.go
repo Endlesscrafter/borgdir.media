@@ -34,7 +34,7 @@ func getAllUsers(db *sql.DB) *[]user {
 //Get one Special product with the given InvID
 func getEquip(db *sql.DB, invID int64) *equipmentData {
 
-	rows, err := db.Query("SELECT * FROM equipment e WHERE e.InvID = " + strconv.FormatInt(invID, 10) + ";")
+	rows, err := db.Query("SELECT * FROM equipment e, rentlist r WHERE e.InvID = " + strconv.FormatInt(invID, 10) + " AND r.invid = " + strconv.FormatInt(invID, 10) +" AND e.invid = r.invid;")
 
 	checkErr(err)
 	for rows.Next() {

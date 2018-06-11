@@ -506,13 +506,7 @@ func createTables(db *sql.DB) {
 		"Featured boolean," +
 		"FeaturedID int," +
 		"FeaturedImageSRC text," +
-		"Rented boolean," +
-		"Bookmarked boolean," +
 		"Repair boolean," +
-		"RentedByUserID bigint REFERENCES users(UserID)," +
-		"RentedByUserName varchar(60)," +
-		"RentDate date," +
-		"ReturnDate date," +
 		"InvID bigserial," +
 		"StorageLocation varchar(60)," +
 		"EquipmentOwnerID bigint REFERENCES users(UserID)," +
@@ -521,6 +515,23 @@ func createTables(db *sql.DB) {
 
 	if err2 != nil {
 		log.Fatal("Fehler beim Anlegen der equip-DB")
+		log.Fatal(err2)
+	}
+
+	_, err3 := db.Exec("CREATE TABLE IF NOT EXISTS rentlist (" +
+		"rentid serial," +
+		"userid bigint references users(UserID)," +
+		"invid bigint references equipment(invid)," +
+		"rentdate date," +
+		"returndate date," +
+		"bookmarked boolean," +
+		"repair boolean," +
+		"amount int," +
+		"PRIMARY KEY (rentid)" +
+		");")
+
+	if err3 != nil {
+		log.Fatal("Fehler beim Anlegen der rentlist-DB")
 		log.Fatal(err2)
 	}
 
