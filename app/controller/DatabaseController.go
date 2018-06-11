@@ -74,38 +74,81 @@ func getEquipFromOwner(db *sql.DB, UserID int64) *[]equipmentData {
 }
 
 //Gets products that are rented by the user UserID (or that are bookmarked)
-func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) *[]equipmentData {
+func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData, *[]rentData) {
 
 	var rows *sql.Rows
 	var err error
 
-	//TODO: Not needed anymore??? ref #11
-	if (!bookmarked) {
-		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + strconv.FormatInt(UserID, 10) + " AND e.Bookmarked = false;") //Works together with template
-	} else {
-		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + strconv.FormatInt(UserID, 10) + " AND e.Bookmarked = true;")
-	}
+	var invs *sql.Rows
+	var rentlist []rentData
+
+	//Fill the Rentlist (All Rents in the List for user UserID)
+	invs, err = db.Query("SELECT r.invid FROM rentlist r WHERE r.userid = " + strconv.FormatInt(UserID, 10))
 	checkErr(err)
+	logDatabase("SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10), fmt.Sprint(invs))
+	for invs.Next(){
+
+		var inRent rentData
+		invs.Scan(&(inRent.RentID),&(inRent.UserID),&(inRent.InvID),&(inRent.RentDate),&(inRent.ReturnDate),
+			&(inRent.Bookmarked),&(inRent.Amount),&(inRent.Repair))
+
+	}
+
+
+	//Get all the InvIDs that are rented or bookmarked by a user
+	if (!bookmarked) {
+		invs, err = db.Query("SELECT r.invid FROM rentlist r WHERE r.userid = " + strconv.FormatInt(UserID, 10) + " AND r.Bookmarked = false;")
+
+		logDatabase("SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10), fmt.Sprint(invs))
+
+		checkErr(err)
+	} else {
+
+		invs, err = db.Query("SELECT r.invid FROM rentlist r WHERE r.userid = " + strconv.FormatInt(UserID, 10) + " AND r.Bookmarked = true;")
+
+		logDatabase("SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10), fmt.Sprint(invs))
+
+		checkErr(err)
+	}
+
+	var ids []int
+
+	//Save alle the IDs
+	for invs.Next() {
+
+		var inIDs int
+		rows.Scan(inIDs)
+		ids = append(ids, inIDs)
+
+	}
 
 	var equipment []equipmentData
-	for rows.Next() {
 
-		var inEquip equipmentData
-		rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
-			&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
-			&(inEquip.FeaturedImageSRC), &(inEquip.Rented), &(inEquip.Bookmarked), &(inEquip.Repair),
-			&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
-			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
-		equipment = append(equipment, inEquip)
+	//select every item from the database
+	for _, element := range ids {
+
+		rows, err = db.Query("SELECT * FROM equipment e WHERE e.invid =" + strconv.Itoa(element))
+		checkErr(err)
+
+		for rows.Next() {
+
+			var inEquip equipmentData
+			rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
+				&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
+				&(inEquip.FeaturedImageSRC), &(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
+			equipment = append(equipment, inEquip)
+
+		}
+		logDatabase("SELECT * FROM equipment e WHERE e.invid ="+strconv.Itoa(element), fmt.Sprint(equipment))
 
 	}
-	logDatabase("SELECT * FROM equipment e WHERE e.RentedbyUserID = "+strconv.FormatInt(UserID, 10)+" ((AND e.Bookmarked = true));", fmt.Sprint(equipment))
-	return &equipment
+
+	return &equipment, &rentlist
 
 }
 
 //Gets products, that are not rented and therefore can be rented
-func getAvailableEqip(db *sql.DB) *[]equipmentData {
+func getAvailableEquip(db *sql.DB) *[]equipmentData {
 
 	rows, err := db.Query("SELECT * FROM equipment e WHERE e.Rented = false AND e.Bookmarked = false;")
 

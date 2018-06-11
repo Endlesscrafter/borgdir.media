@@ -182,7 +182,7 @@ func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	tmpl, err := template.ParseFiles("template/equipment.html")
 	if err == nil {
 
-		eq := getAvailableEqip(GLOBALDB)
+		eq := getAvailableEquip(GLOBALDB)
 		user := getLoggedInUser()
 
 		data := siteData{}
@@ -341,7 +341,6 @@ func connectDatabase() *sql.DB {
 
 	err = db.Ping()
 	if err != nil {
-		//It fails here TODO: #6 BUG
 		log.Fatal(err)
 		log.Fatal("Error: Could not establish a connection with the database")
 	}
@@ -562,7 +561,7 @@ func main() {
 		fmt.Print(getAllUsers(GLOBALDB))
 		fmt.Print(getUserFromName(GLOBALDB, "Max Mustermann", "", false))
 		fmt.Print(getFeaturedProducts(GLOBALDB))
-		fmt.Print(getAvailableEqip(GLOBALDB))
+		fmt.Print(getAvailableEquip(GLOBALDB))
 		fmt.Print(getRentedEquip(GLOBALDB, 1, false))
 		fmt.Print(getEquipFromOwner(GLOBALDB, 2))
 		fmt.Print(getEquip(GLOBALDB, 1))
