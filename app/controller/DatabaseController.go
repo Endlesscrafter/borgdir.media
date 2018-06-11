@@ -86,14 +86,13 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData
 	invs, err = db.Query("SELECT r.invid FROM rentlist r WHERE r.userid = " + strconv.FormatInt(UserID, 10))
 	checkErr(err)
 	logDatabase("SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10), fmt.Sprint(invs))
-	for invs.Next(){
+	for invs.Next() {
 
 		var inRent rentData
-		invs.Scan(&(inRent.RentID),&(inRent.UserID),&(inRent.InvID),&(inRent.RentDate),&(inRent.ReturnDate),
-			&(inRent.Bookmarked),&(inRent.Amount),&(inRent.Repair))
+		invs.Scan(&(inRent.RentID), &(inRent.UserID), &(inRent.InvID), &(inRent.RentDate), &(inRent.ReturnDate),
+			&(inRent.Bookmarked), &(inRent.Amount), &(inRent.Repair))
 
 	}
-
 
 	//Get all the InvIDs that are rented or bookmarked by a user
 	if (!bookmarked) {
@@ -194,6 +193,67 @@ func getFeaturedEquip(db *sql.DB) *[]equipmentData {
 	logDatabase("SELECT * FROM equipment e WHERE e.Featured = true AND e.FeaturedID = *;", fmt.Sprint(equipment))
 	return &equipment
 
+}
+
+//Gets a list of Renting information for a InvID or a UserID (one of the two can be passed, invID preferred)
+func getRentList(db *sql.DB, invID int64, UserID int64) *[]rentData {
+
+	var rentlist []rentData
+
+	//Get all the rows with the given invid
+	if invID > 0 {
+
+		res, err := db.Query("SELECT * FROM rentlist r WHERE r.invid = " + strconv.FormatInt(invID,10)+ ";")
+		checkErr(err)
+		for res.Next(){
+
+			var inRent rentData
+			res.Scan(&(inRent.RentID),&(inRent.UserID),&(inRent.InvID),&(inRent.RentDate),&(inRent.ReturnDate),&(inRent.Bookmarked),&(inRent.Amount),&(inRent.Repair))
+
+			//Get the User Name
+			var user string
+			username, err := db.Query("SELECT name FROM users WHERE userid = " + strconv.FormatInt(inRent.UserID,10)+ ";")
+			checkErr(err)
+			username.Next()
+			username.Scan(user)
+			logDatabase("SELECT name FROM users WHERE userid = " + strconv.FormatInt(inRent.UserID,10)+ ";", user)
+			inRent.RentedByUserName = user
+
+			rentlist = append(rentlist,inRent)
+
+		}
+		logDatabase("SELECT * FROM rentlist r WHERE r.invid = " + strconv.FormatInt(invID,10)+ ";",fmt.Sprint(rentlist))
+		return &rentlist
+
+	//get all the rows with the given userid
+	} else if UserID > 0 {
+
+		res, err := db.Query("SELECT * FROM rentlist r WHERE r.userid = " + strconv.FormatInt(UserID,10)+ ";")
+		checkErr(err)
+		for res.Next(){
+
+			var inRent rentData
+			res.Scan(&(inRent.RentID),&(inRent.UserID),&(inRent.InvID),&(inRent.RentDate),&(inRent.ReturnDate),&(inRent.Bookmarked),&(inRent.Amount),&(inRent.Repair))
+
+			//Get the User Name
+			var user string
+			username, err := db.Query("SELECT name FROM users WHERE userid = " + strconv.FormatInt(UserID,10)+ ";")
+			checkErr(err)
+			username.Next()
+			username.Scan(user)
+			logDatabase("SELECT name FROM users WHERE userid = " + strconv.FormatInt(UserID,10)+ ";", user)
+			inRent.RentedByUserName = user
+
+			rentlist = append(rentlist,inRent)
+
+		}
+		logDatabase("SELECT * FROM rentlist r WHERE r.invid = " + strconv.FormatInt(UserID,10)+ ";",fmt.Sprint(rentlist))
+		return &rentlist
+
+	}
+
+	log.Fatal("getRentList got no valid invID or UserID, it needs one of the two to work")
+	return nil
 }
 
 //Gets a User form the Database and returns a pointer to it, if wanted, you can specify a password an let it test against the database one
