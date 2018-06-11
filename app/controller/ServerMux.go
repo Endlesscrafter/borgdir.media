@@ -39,13 +39,6 @@ type equipmentData struct {
 	Featured         bool
 	FeaturedID       int
 	FeaturedImageSRC string
-	Rented           bool
-	Bookmarked       bool
-	Repair           bool
-	RentedByUserID   int64
-	RentedByUserName string
-	RentDate         string
-	ReturnDate       string
 	InvID            int64
 	StorageLocation  string
 	EquipmentOwnerID int64
@@ -62,16 +55,29 @@ type user struct {
 	ActiveUntilDate string
 }
 
+type rentData struct {
+	RentID			 int64
+	UserID			 int64
+	InvID			 int64
+	RentDate		 string
+	ReturnDate		 string
+	Bookmarked		 bool
+	Amount			 int
+	Repair			 bool
+	RentedByUserName string
+}
+
 type siteData struct {
-	Equipment     []equipmentData
-	User          user
-	AdminUserList []user
+	Equipment		[]equipmentData
+	Rentlist		[]rentData
+	User			user
+	AdminUserList	[]user
 }
 
 //Test Data
-var nequip1 = equipmentData{"Kamera Obscura", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Entliehen", 0, "None", true, 1, "/img/equipment/gandalf.gif", true, true, false, 1, "Max Mustermann", "25.05.18", "25.05.18", 1245, "Baungasse", 2}
-var nequip2 = equipmentData{"Stativ", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Verfügbar", 2, "None", true, 2, "/img/equipment/gandalf.gif", true, false, false, 1, "Karl Karstens", "25.05.18", "25.05.18", 13452, "Schrank", 2}
-var nequip3 = equipmentData{"Mikrophon", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Vorgemerkt", 1, "None", true, 3, "/img/equipment/gandalf.gif", true, false, false, 1, "Max Mustermann", "25.05.18", "25.05.18", 2374, "Regal 12", 2}
+var nequip1 = equipmentData{"Kamera Obscura", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Entliehen", 0, "None", true, 1, "/img/equipment/gandalf.gif", 1245, "Baungasse", 2}
+var nequip2 = equipmentData{"Stativ", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Verfügbar", 2, "None", true, 2, "/img/equipment/gandalf.gif", 13452, "Schrank", 2}
+var nequip3 = equipmentData{"Mikrophon", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Vorgemerkt", 1, "None", true, 3, "/img/equipment/gandalf.gif", 2374, "Regal 12", 2}
 
 var nstduser = user{1, "Max Mustermann", "max@muster.de", "asdf", "img/equipment/gandalf.gif", "Benutzer", false, "25.07.18"}
 var nadmuser = user{2, "Peter Müller", "peter@mueller.de", "asdf", "img/equipment/gandalf.gif", "Administrator", false, "25.07.22"}
