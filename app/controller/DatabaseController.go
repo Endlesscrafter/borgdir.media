@@ -147,10 +147,11 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData
 
 }
 
-//Gets products, that are not rented and therefore can be rented
+//Gets products, that are not rented and therefore can be rented, measured by StockAmount, if thats zero, every item is
+//rented
 func getAvailableEquip(db *sql.DB) *[]equipmentData {
 
-	rows, err := db.Query("SELECT * FROM equipment e WHERE e.Rented = false AND e.Bookmarked = false;")
+	rows, err := db.Query("SELECT * FROM equipment e WHERE e.StockAmount > 0;")
 
 	checkErr(err)
 
@@ -160,13 +161,11 @@ func getAvailableEquip(db *sql.DB) *[]equipmentData {
 		var inEquip equipmentData
 		rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
 			&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
-			&(inEquip.FeaturedImageSRC), &(inEquip.Rented), &(inEquip.Bookmarked), &(inEquip.Repair),
-			&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
-			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
+			&(inEquip.FeaturedImageSRC), &(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
 		equipment = append(equipment, inEquip)
 
 	}
-	logDatabase("SELECT * FROM equipment e WHERE e.Rented = false AND e.Bookmarked = false;", fmt.Sprint(equipment))
+	logDatabase("SELECT * FROM equipment e WHERE e.StockAmount > 0;", fmt.Sprint(equipment))
 	return &equipment
 
 }
