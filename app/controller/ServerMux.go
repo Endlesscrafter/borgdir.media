@@ -331,6 +331,8 @@ func connectDatabase() *sql.DB {
 	checkErr(err)
 	//defer db.Close()
 
+	println("Trying to connect to database...")
+
 	err = db.Ping()
 	if err != nil {
 		//It fails here TODO: #6 BUG
@@ -340,6 +342,8 @@ func connectDatabase() *sql.DB {
 
 	//Create the tables
 	createTables(db)
+
+	println("Connection works, tables created....")
 
 	//Create default Admin user, a distributor, a standard user and some equipment
 	if noDefaultValues {
