@@ -42,9 +42,7 @@ func getEquip(db *sql.DB, invID int64) *equipmentData {
 		var inEquip equipmentData
 		rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
 			&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
-			&(inEquip.FeaturedImageSRC), &(inEquip.Rented), &(inEquip.Bookmarked), &(inEquip.Repair),
-			&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
-			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
+			&(inEquip.FeaturedImageSRC), &(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
 		logDatabase("SELECT * FROM equipment e WHERE e.InvID = "+strconv.FormatInt(invID, 10)+";", fmt.Sprint(inEquip))
 		return &inEquip
 	}
@@ -81,6 +79,7 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) *[]equipmentData 
 	var rows *sql.Rows
 	var err error
 
+	//TODO: Not needed anymore??? ref #11
 	if (!bookmarked) {
 		rows, err = db.Query("SELECT * FROM equipment e WHERE e.RentedbyUserID = " + strconv.FormatInt(UserID, 10) + " AND e.Bookmarked = false;") //Works together with template
 	} else {
