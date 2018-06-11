@@ -123,7 +123,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	w.Header().Set("Content-Type", "text/html")
 	if err == nil {
 
-		eq := getFeaturedProducts(GLOBALDB)
+		eq := getFeaturedEquip(GLOBALDB)
 
 		data := siteData{}
 		data.Equipment = append(data.Equipment, (*eq)[0])
@@ -560,7 +560,7 @@ func main() {
 		fmt.Print("Connection to Database successful\n")
 		fmt.Print(getAllUsers(GLOBALDB))
 		fmt.Print(getUserFromName(GLOBALDB, "Max Mustermann", "", false))
-		fmt.Print(getFeaturedProducts(GLOBALDB))
+		fmt.Print(getFeaturedEquip(GLOBALDB))
 		fmt.Print(getAvailableEquip(GLOBALDB))
 		fmt.Print(getRentedEquip(GLOBALDB, 1, false))
 		fmt.Print(getEquipFromOwner(GLOBALDB, 2))
