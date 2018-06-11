@@ -171,7 +171,7 @@ func getAvailableEquip(db *sql.DB) *[]equipmentData {
 }
 
 //Gets the featured products, in correct order
-func getFeaturedProducts(db *sql.DB) *[]equipmentData {
+func getFeaturedEquip(db *sql.DB) *[]equipmentData {
 
 	var equipment []equipmentData
 
@@ -185,9 +185,7 @@ func getFeaturedProducts(db *sql.DB) *[]equipmentData {
 			var inEquip equipmentData
 			rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
 				&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
-				&(inEquip.FeaturedImageSRC), &(inEquip.Rented), &(inEquip.Bookmarked), &(inEquip.Repair),
-				&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
-				&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
+				&(inEquip.FeaturedImageSRC), &(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
 			equipment = append(equipment, inEquip)
 
 		}
