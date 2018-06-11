@@ -34,23 +34,48 @@ func getAllUsers(db *sql.DB) *[]user {
 //Get one Special product with the given InvID
 func getEquip(db *sql.DB, invID int64) *equipmentData {
 
-	rows, err := db.Query("SELECT * FROM equipment e, rentlist r WHERE e.InvID = " + strconv.FormatInt(invID, 10) + " AND r.invid = " + strconv.FormatInt(invID, 10) +" AND e.invid = r.invid;")
+	rows, err := db.Query("SELECT * FROM equipment e WHERE e.InvID = " + strconv.FormatInt(invID, 10) + ";")
 
 	checkErr(err)
+
+	rent, err := db.Query("SELECT * FROM rentlist r WHERE r.invid = " + strconv.FormatInt(invID, 10) + ";")
+
+	checkErr(err)
+
+	var inEquip equipmentData
+
 	for rows.Next() {
 
-		var inEquip equipmentData
 		rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
 			&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
-			&(inEquip.FeaturedImageSRC), &(inEquip.Rented), &(inEquip.Bookmarked), &(inEquip.Repair),
-			&(inEquip.RentedByUserID), &(inEquip.RentedByUserName), &(inEquip.RentDate), &(inEquip.ReturnDate),
-			&(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
-		logDatabase("SELECT * FROM equipment e WHERE e.InvID = "+strconv.FormatInt(invID, 10)+";", fmt.Sprint(inEquip))
-		return &inEquip
+			&(inEquip.FeaturedImageSRC), &(inEquip.InvID), &(inEquip.StorageLocation))
+
+	}
+	if !rows.Next() {
+
+		log.Print("The Product with ID " + strconv.FormatInt(invID, 10) + " wasn't found in the Database")
+		return nil
+
 	}
 
-	log.Print("The Product with ID " + strconv.FormatInt(invID, 10) + " wasn't found in the Database")
-	return nil
+	if rent.Next() {
+
+		var irr string
+
+		rent.Scan(&(inEquip.RentedByUserID),&irr,&(inEquip.RentDate),&(inEquip.ReturnDate),&(inEquip.Bookmarked),&irr,&(inEquip.Repair))
+
+	} else{
+
+		inEquip.Rented = false
+		inEquip.RentDate = "0"
+		inEquip.ReturnDate = "0"
+		inEquip.Bookmarked = false
+		inEquip.Repair = false
+
+	}
+
+	return &inEquip
+
 }
 
 //Gets the products that are owned by the user UserID
@@ -218,11 +243,10 @@ func getCartItemsForUser(db *sql.DB, UserSessionCookie string) (*[]equipmentData
 }
 
 //TODO: Fill dummy, make use of hashing
-func updateUser(db *sql.DB, user *user) bool{
-
+func updateUser(db *sql.DB, user *user) bool {
 
 	var test []byte;
-	bcrypt.GenerateFromPassword(test,0)
+	bcrypt.GenerateFromPassword(test, 0)
 
 	return false
 }

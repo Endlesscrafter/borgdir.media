@@ -340,23 +340,6 @@ func connectDatabase() *sql.DB {
 		log.Fatal("Error: Could not establish a connection with the database")
 	}
 
-	_, err3 := db.Exec("CREATE TABLE rentlist (" +
-		"rentid serial," +
-		"userid bigint references users(UserID)," +
-		"invid bigint references equipment(invid)," +
-		"rentdate date," +
-		"returndate date," +
-		"bookmarked boolean," +
-		"repair boolean," +
-		"amount int," +
-		"PRIMARY KEY (rentid)" +
-		");")
-
-	if err3 != nil {
-		log.Fatal("Fehler beim Anlegen der rentlist-DB")
-		log.Fatal(err3)
-	}
-
 	//Create the tables
 	createTables(db)
 
@@ -540,7 +523,7 @@ func createTables(db *sql.DB) {
 	}
 
 	_, err3 := db.Exec("CREATE TABLE IF NOT EXISTS rentlist (" +
-		"rentid serial," +
+		"rentid bigserial," +
 		"userid bigint references users(UserID)," +
 		"invid bigint references equipment(invid)," +
 		"rentdate date," +
@@ -569,14 +552,14 @@ func main() {
 	GLOBALDB = connectDatabase()
 	if GLOBALDB != nil {
 
-		//fmt.Print("Connection to Database successful\n")
-		//fmt.Print(getAllUsers(GLOBALDB))
-		//fmt.Print(getUserFromName(GLOBALDB, "Max Mustermann", "", false))
-		//fmt.Print(getFeaturedProducts(GLOBALDB))
-		//fmt.Print(getAvailableEqip(GLOBALDB))
-		//fmt.Print(getRentedEquip(GLOBALDB, 1, false))
-		//fmt.Print(getEquipFromOwner(GLOBALDB, 2))
-		//fmt.Print(getEquip(GLOBALDB, 1))
+		fmt.Print("Connection to Database successful\n")
+		fmt.Print(getAllUsers(GLOBALDB))
+		fmt.Print(getUserFromName(GLOBALDB, "Max Mustermann", "", false))
+		fmt.Print(getFeaturedProducts(GLOBALDB))
+		fmt.Print(getAvailableEqip(GLOBALDB))
+		fmt.Print(getRentedEquip(GLOBALDB, 1, false))
+		fmt.Print(getEquipFromOwner(GLOBALDB, 2))
+		fmt.Print(getEquip(GLOBALDB, 1))
 		//Start Routing the Information
 		router := httprouter.New()
 		router.GET("/", indexHandler)
