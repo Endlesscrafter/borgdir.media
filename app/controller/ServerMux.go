@@ -340,6 +340,23 @@ func connectDatabase() *sql.DB {
 		log.Fatal("Error: Could not establish a connection with the database")
 	}
 
+	_, err3 := db.Exec("CREATE TABLE rentlist (" +
+		"rentid serial," +
+		"userid bigint references users(UserID)," +
+		"invid bigint references equipment(invid)," +
+		"rentdate date," +
+		"returndate date," +
+		"bookmarked boolean," +
+		"repair boolean," +
+		"amount int," +
+		"PRIMARY KEY (rentid)" +
+		");")
+
+	if err3 != nil {
+		log.Fatal("Fehler beim Anlegen der rentlist-DB")
+		log.Fatal(err3)
+	}
+
 	//Create the tables
 	createTables(db)
 
@@ -536,7 +553,7 @@ func createTables(db *sql.DB) {
 
 	if err3 != nil {
 		log.Fatal("Fehler beim Anlegen der rentlist-DB")
-		log.Fatal(err2)
+		log.Fatal(err3)
 	}
 
 }
