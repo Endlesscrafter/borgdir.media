@@ -592,7 +592,7 @@ func main() {
 		router.GET("/css/*suburl", cssHandler)
 		router.GET("/js/*suburl", jsHandler)
 		router.GET("/img/*suburl", imgHandler)
-		router.POST("/*",nilHandler)
+		router.POST("/*suburl",nilHandler)
 
 		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))
