@@ -140,11 +140,11 @@
                         </td>
                         {{end}}
                         <td>
-                            <a href="edit-client.html">
-                                <button type="button" class="btn btn-secondary">
+                            <form action="add-client.html" method="post">
+                                <button type="submit" class="btn btn-secondary" value="{{.UserID}}">
                                     <i class="fas fa-pencil-alt"></i>
                                 </button>
-                            </a>
+                            </form>
                         </td>
                     </tr>
                     {{end}}
