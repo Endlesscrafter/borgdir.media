@@ -83,14 +83,15 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData
 	var rentlist []rentData
 
 	//Fill the Rentlist (All Rents in the List for user UserID)
-	invs, err = db.Query("SELECT r.invid FROM rentlist r WHERE r.userid = " + strconv.FormatInt(UserID, 10))
+	invs, err = db.Query("SELECT * FROM rentlist r WHERE r.userid = " + strconv.FormatInt(UserID, 10))
 	checkErr(err)
-	logDatabase("RENTED-1 SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10), fmt.Sprint(invs))
+	logDatabase("RENTED-1 SELECT * FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10), fmt.Sprint(invs))
 	for invs.Next() {
 
 		var inRent rentData
 		invs.Scan(&(inRent.RentID), &(inRent.UserID), &(inRent.InvID), &(inRent.RentDate), &(inRent.ReturnDate),
 			&(inRent.Bookmarked), &(inRent.Amount), &(inRent.Repair))
+		rentlist = append(rentlist,inRent)
 
 	}
 
