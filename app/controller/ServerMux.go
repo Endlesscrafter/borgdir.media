@@ -321,6 +321,10 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	}
 }
 
+func nilHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	logAccess(r,params, "")
+}
+
 func logAccess(r *http.Request, params httprouter.Params, fileDir string) {
 
 	fmt.Println(time.Now().Format(time.RFC3339) + " ACCESS: " + r.Header.Get("User-Agent") + " " + r.Method + " /" + fileDir + params.ByName("suburl"))
@@ -588,6 +592,7 @@ func main() {
 		router.GET("/css/*suburl", cssHandler)
 		router.GET("/js/*suburl", jsHandler)
 		router.GET("/img/*suburl", imgHandler)
+		router.POST("/*",nilHandler)
 
 		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))
