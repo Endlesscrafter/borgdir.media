@@ -115,11 +115,11 @@
             <div class="col-lg-3 text-left float-left mb-5">
                 <h4>{{.Name}}</h4>
                 <p class="descText">{{.Desc}}</p>
-                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
-                        class="fas fa-cart-arrow-down"></i></button>
             {{if eq .Stock "Entliehen"}}
                 <span class="text-danger stock">Entliehen</span>
             {{else if eq .Stock "Verfügbar"}}
+                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
+                        class="fas fa-cart-arrow-down"></i></button>
                 <span class="text-info stock">{{.StockAmount}} Verfügbar</span>
             {{else if eq .Stock "Vorgemerkt"}}
                 <span class="text-warning stock">Vorgemerkt</span>
