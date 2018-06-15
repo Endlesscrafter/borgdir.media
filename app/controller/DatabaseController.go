@@ -305,9 +305,9 @@ func getLoggedInUser() *user {
 func getCartItemsForUser(db *sql.DB, UserSessionCookie string) (*[]equipmentData, *user) {
 
 	var eq []equipmentData
+	eq = append(eq, nequip3)
 	eq = append(eq, nequip1)
 	eq = append(eq, nequip2)
-	eq = append(eq, nequip3)
 
 	logDatabase("!!!DUMMY!!!", fmt.Sprint(eq)+"|"+fmt.Sprint(nadmuser))
 
