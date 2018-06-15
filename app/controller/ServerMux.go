@@ -210,11 +210,18 @@ func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 		data := siteData{}
 		for _, element := range *eq {
 			data.Equipment = append(data.Equipment, element)
+
 		}
 		for _, element := range *eqb {
 			data.Equipment = append(data.Equipment, element)
 		}
 		data.User = *user
+		for _, element := range *rent1{
+			data.Rentlist = append(data.Rentlist, element)
+		}
+		for _, element := range *rent2{
+			data.Rentlist = append(data.Rentlist, element)
+		}
 
 		tmpl.ExecuteTemplate(w, "my-equipment.html", data)
 	}
