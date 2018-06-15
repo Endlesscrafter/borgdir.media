@@ -85,7 +85,7 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData
 	//Fill the Rentlist (All Rents in the List for user UserID)
 	invs, err = db.Query("SELECT r.invid FROM rentlist r WHERE r.userid = " + strconv.FormatInt(UserID, 10))
 	checkErr(err)
-	logDatabase("SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10), fmt.Sprint(invs))
+	logDatabase("RENTED-1 SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10), fmt.Sprint(invs))
 	for invs.Next() {
 
 		var inRent rentData
@@ -98,14 +98,14 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData
 	if (!bookmarked) {
 		invs, err = db.Query("SELECT r.invid FROM rentlist r WHERE r.userid = " + strconv.FormatInt(UserID, 10) + " AND r.Bookmarked = false;")
 
-		logDatabase("SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10), fmt.Sprint(invs))
+		logDatabase("RENTED-2 SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10), fmt.Sprint(invs))
 
 		checkErr(err)
 	} else {
 
 		invs, err = db.Query("SELECT r.invid FROM rentlist r WHERE r.userid = " + strconv.FormatInt(UserID, 10) + " AND r.Bookmarked = true;")
 
-		logDatabase("SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10), fmt.Sprint(invs))
+		logDatabase("RENTED-3 SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10), fmt.Sprint(invs))
 
 		checkErr(err)
 	}
