@@ -565,13 +565,13 @@ func main() {
 	if GLOBALDB != nil {
 
 		fmt.Print("Connection to Database successful\n")
-		fmt.Print(getAllUsers(GLOBALDB))
-		fmt.Print(getUserFromName(GLOBALDB, "Max Mustermann", "", false))
-		fmt.Print(getFeaturedEquip(GLOBALDB))
-		fmt.Print(getAvailableEquip(GLOBALDB))
-		fmt.Print(getRentedEquip(GLOBALDB, 1, false))
-		fmt.Print(getEquipFromOwner(GLOBALDB, 2))
-		fmt.Print(getEquip(GLOBALDB, 1))
+		//fmt.Print(getAllUsers(GLOBALDB))
+		//fmt.Print(getUserFromName(GLOBALDB, "Max Mustermann", "", false))
+		//fmt.Print(getFeaturedEquip(GLOBALDB))
+		//fmt.Print(getAvailableEquip(GLOBALDB))
+		//fmt.Print(getRentedEquip(GLOBALDB, 1, false))
+		//fmt.Print(getEquipFromOwner(GLOBALDB, 2))
+		//fmt.Print(getEquip(GLOBALDB, 1))
 		//Start Routing the Information
 		router := httprouter.New()
 		router.GET("/", indexHandler)
