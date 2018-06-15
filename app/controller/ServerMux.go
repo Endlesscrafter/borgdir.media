@@ -86,6 +86,7 @@ func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params
 	logAccess(r, params, "static/css")
 	content, err := ioutil.ReadFile("static/css" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "text/css")
+	w.Header().Set("Cache-Control","max-age=3600")
 	if err != nil {
 		log.Fatal(err)
 	} else {
