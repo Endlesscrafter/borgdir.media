@@ -116,7 +116,7 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData
 	for invs.Next() {
 
 		var inIDs int
-		invs.Scan(inIDs)
+		invs.Scan(&inIDs)
 		ids = append(ids, inIDs)
 
 	}
