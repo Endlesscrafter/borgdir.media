@@ -300,6 +300,7 @@ func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params 
 	userid := session.Values["userid"]
 	//THEN:
 	//query := "SELECT * FROM users u WHERE u.userid = " + userid + ";"
+	log.Print(fmt.Sprint(userid))
 	rows, err := db.Query("SELECT * FROM users u WHERE u.userid = " + fmt.Sprint(userid) + ";")
 
 	var userN user
