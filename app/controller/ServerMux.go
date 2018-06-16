@@ -280,7 +280,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		tmpl, err := template.ParseFiles("template/admin/edit-client.html")
 		if err == nil {
 
-			user := getLoggedInUser()
+			user := getLoggedInUser(GLOBALDB, w,r,params)
 			edituser := getEditUser()
 
 			data := siteData{}
@@ -295,7 +295,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		tmpl, err := template.ParseFiles("template/admin/equipment.html")
 		if err == nil {
 
-			user := getLoggedInUser()
+			user := getLoggedInUser(GLOBALDB, w,r,params)
 			eq := getEquipFromOwner(GLOBALDB, user.UserID)
 
 			data := siteData{}
