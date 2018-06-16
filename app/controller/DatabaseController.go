@@ -138,12 +138,13 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData
 				&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
 				&(inEquip.FeaturedImageSRC), &(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
 			equipment = append(equipment, inEquip)
+			logDatabase("SELECT * FROM equipment e WHERE e.invid ="+strconv.Itoa(element), fmt.Sprint(inEquip))
 
 		}
-		logDatabase("SELECT * FROM equipment e WHERE e.invid ="+strconv.Itoa(element), fmt.Sprint(equipment))
+
 
 	}
-
+	logDatabase("SELECT * FROM equipment e WHERE e.invid =*", fmt.Sprint(equipment))
 	return &equipment, &rentlist
 
 }
