@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"log"
 	"golang.org/x/crypto/bcrypt"
+	"net/http"
+	"github.com/julienschmidt/httprouter"
 )
 
 //Gets all Users
@@ -291,16 +293,29 @@ func getEditUser() *user {
 	return &nadmuser
 }
 
-//TODO: Still dummy, has to be used with session cookies
-func getLoggedInUser() *user {
+func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params httprouter.Params) *user {
 
 	//Get Cookie with UserID
+	session, _ := store.Get(r, "session")
+	userid := session.Values["userid"]
 	//THEN:
 	//query := "SELECT * FROM users u WHERE u.userid = " + userid + ";"
+	rows, err := db.Query("SELECT * FROM users u WHERE u.userid = " + fmt.Sprint(userid) + ";")
 
-	logDatabase("!!!DUMMY!!!", fmt.Sprint(nadmuser))
+	var userN user
+	checkErr(err)
+	for rows.Next() {
 
-	return &nadmuser
+		rows.Scan(&(userN.UserID), &(userN.Name), &(userN.Email), &(userN.Password), &(userN.ProfileImageSRC), &(userN.UserLevel), &(userN.Blocked), &(userN.ActiveUntilDate))
+
+	}
+	if(userN.UserID != 0){
+		return &userN
+	} else{
+		http.Redirect(w, r, "/login.html", http.StatusFound)
+	}
+	logDatabase("SELECT * FROM users u WHERE u.userid = " + fmt.Sprint(userid) + ";", fmt.Sprint(nadmuser))
+	return nil
 }
 
 //Gets the Cart Items, that the given User has in his cart

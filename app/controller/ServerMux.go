@@ -188,7 +188,7 @@ func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	if err == nil {
 
 		eq := getAvailableEquip(GLOBALDB)
-		user := getLoggedInUser()
+		user := getLoggedInUser(GLOBALDB, w,r,params)
 
 		data := siteData{}
 		for _, element := range *eq {
@@ -207,7 +207,7 @@ func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	tmpl, err := template.ParseFiles("template/my-equipment.html")
 	if err == nil {
 
-		user := getLoggedInUser()
+		user := getLoggedInUser(GLOBALDB, w,r,params)
 		//eq := getEquipFromOwner(GLOBALDB, user.UserID)
 		eq, rent1 := getRentedEquip(GLOBALDB, user.UserID, false)
 		eqb, _ := getRentedEquip(GLOBALDB, user.UserID, true)
@@ -236,7 +236,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	tmpl, err := template.ParseFiles("template/profile.html")
 	if err == nil {
 
-		user := getLoggedInUser()
+		user := getLoggedInUser(GLOBALDB, w,r,params)
 
 		data := siteData{}
 		data.User = *user
@@ -337,7 +337,12 @@ func loginPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.
 		session.Values["username"] = user.Name
 		session.Values["userid"] = user.UserID
 		session.Save(r, w)
-		http.Redirect(w, r, "/", http.StatusFound)
+		if(user.UserLevel == "Administrator"){
+			http.Redirect(w, r, "/admin/", http.StatusFound)
+		} else{
+			http.Redirect(w, r, "/", http.StatusFound)
+		}
+
 	} else{
 		http.Redirect(w,r, "login.html", http.StatusFound)
 	}
@@ -362,6 +367,10 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 func editPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "")
 }
+func logoutPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	logAccess(r, params, "")
+}
+
 
 func logAccess(r *http.Request, params httprouter.Params, fileDir string) {
 
@@ -637,6 +646,7 @@ func main() {
 		router.POST("/profile.html", profilePOSTHandler)
 		router.POST("/admin/add.html", addPOSTHandler)
 		router.POST("/admin/edit-client.html", editPOSTHandler)
+		router.POST("/logout.html", logoutPOSTHandler)
 
 		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))
