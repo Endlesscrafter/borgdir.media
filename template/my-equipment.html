@@ -153,6 +153,7 @@
                     </thead>
                     <tbody>
                     {{range .EquipmentBookmarked}}
+                    {{$Ginvid := .InvID}}
                     <tr>
                         <th scope="row" class="float-left">
                             <img class="img-fluid"
@@ -165,6 +166,8 @@
                         </th>
                         <td class="descText">{{.Desc}}
                         </td>
+                        {{range $.Rentlist}}
+                        {{if eq .InvID $Ginvid}}
                         <td>
                             <br/>
                             <span class="text-dark">{{.RentDate}}</span>
@@ -173,6 +176,8 @@
                             Rückgabe:<br/>
                             <span class="text-info">2{{.ReturnDate}}</span>
                         </td>
+                        {{end}}
+                        {{end}}
                         <td>
                             <button type="button" class="btn btn-primary">
                                 Entfernen
