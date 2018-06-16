@@ -56,22 +56,22 @@ type user struct {
 }
 
 type rentData struct {
-	RentID			 int64
-	UserID			 int64
-	InvID			 int64
-	RentDate		 string
-	ReturnDate		 string
-	Bookmarked		 bool
-	Amount			 int
-	Repair			 bool
+	RentID           int64
+	UserID           int64
+	InvID            int64
+	RentDate         string
+	ReturnDate       string
+	Bookmarked       bool
+	Amount           int
+	Repair           bool
 	RentedByUserName string
 }
 
 type siteData struct {
-	Equipment		[]equipmentData
-	Rentlist		[]rentData
-	User			user
-	AdminUserList	[]user
+	Equipment     []equipmentData
+	Rentlist      []rentData
+	User          user
+	AdminUserList []user
 }
 
 //Test Data
@@ -86,7 +86,7 @@ func cssHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params
 	logAccess(r, params, "static/css")
 	content, err := ioutil.ReadFile("static/css" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "text/css")
-	w.Header().Set("Cache-Control","max-age=3600")
+	w.Header().Set("Cache-Control", "max-age=3600")
 	if err != nil {
 		log.Fatal(err)
 	} else {
@@ -205,8 +205,8 @@ func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 
 		user := getLoggedInUser()
 		//eq := getEquipFromOwner(GLOBALDB, user.UserID)
-		eq,rent1 := getRentedEquip(GLOBALDB, user.UserID,false)
-		eqb,rent2 := getRentedEquip(GLOBALDB, user.UserID, true)
+		eq, rent1 := getRentedEquip(GLOBALDB, user.UserID, false)
+		eqb, rent2 := getRentedEquip(GLOBALDB, user.UserID, true)
 
 		data := siteData{}
 		for _, element := range *eq {
@@ -217,10 +217,11 @@ func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 			data.Equipment = append(data.Equipment, element)
 		}
 		data.User = *user
-		for _, element := range *rent1{
+
+		for _, element := range *rent1 {
 			data.Rentlist = append(data.Rentlist, element)
 		}
-		for _, element := range *rent2{
+		for _, element := range *rent2 {
 			data.Rentlist = append(data.Rentlist, element)
 		}
 
@@ -322,7 +323,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 }
 
 func nilHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	logAccess(r,params, "")
+	logAccess(r, params, "")
 }
 
 func logAccess(r *http.Request, params httprouter.Params, fileDir string) {
@@ -592,7 +593,7 @@ func main() {
 		router.GET("/css/*suburl", cssHandler)
 		router.GET("/js/*suburl", jsHandler)
 		router.GET("/img/*suburl", imgHandler)
-		router.POST("/*suburl",nilHandler)
+		router.POST("/*suburl", nilHandler)
 
 		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))
