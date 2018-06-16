@@ -100,16 +100,14 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData
 	if (!bookmarked) {
 		invs, err = db.Query("SELECT r.invid FROM rentlist r WHERE r.userid = " + strconv.FormatInt(UserID, 10) + " AND r.Bookmarked = false;")
 
-		logDatabase("RENTED-2 SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10)+" AND r.Bookmarked = false;", fmt.Sprint(*invs))
-
 		checkErr(err)
+
 	} else {
 
 		invs, err = db.Query("SELECT r.invid FROM rentlist r WHERE r.userid = " + strconv.FormatInt(UserID, 10) + " AND r.Bookmarked = true;")
 
-		logDatabase("RENTED-3 SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10)+" AND r.Bookmarked = true;", fmt.Sprint(*invs))
-
 		checkErr(err)
+
 	}
 
 	var ids []int
@@ -122,6 +120,8 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData
 		ids = append(ids, inIDs)
 
 	}
+
+	logDatabase("RENTED-2 SELECT r.invid FROM rentlist r WHERE r.userid = "+strconv.FormatInt(UserID, 10)+" AND r.Bookmarked = "+fmt.Sprint(bookmarked), fmt.Sprint(ids))
 
 	var equipment []equipmentData
 
