@@ -96,7 +96,6 @@
                     </thead>
                     <tbody>
                     {{range .Equipment}}
-                    {{if eq .Rented true}}
                     <tr>
                         <th scope="row" class="float-left">
                             <img class="img-fluid"
@@ -123,7 +122,6 @@
                             </button>
                         </td>
                     </tr>
-                    {{end}}
                     {{end}}
                     </tbody>
                 </table>
@@ -149,8 +147,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {{range .Equipment}}
-                    {{if eq .Bookmarked true}}
+                    {{range .EquipmentBookmarked}}
                     <tr>
                         <th scope="row" class="float-left">
                             <img class="img-fluid"
@@ -177,7 +174,6 @@
                             </button>
                         </td>
                     </tr>
-                    {{end}}
                     {{end}}
                     </tbody>
                 </table>

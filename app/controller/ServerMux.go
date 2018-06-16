@@ -68,10 +68,11 @@ type rentData struct {
 }
 
 type siteData struct {
-	Equipment     []equipmentData
-	Rentlist      []rentData
-	User          user
-	AdminUserList []user
+	Equipment     		[]equipmentData
+	Rentlist      		[]rentData
+	User          		user
+	AdminUserList 		[]user
+	EquipmentBookmarked []equipmentData
 }
 
 //Test Data
@@ -206,7 +207,7 @@ func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 		user := getLoggedInUser()
 		//eq := getEquipFromOwner(GLOBALDB, user.UserID)
 		eq, rent1 := getRentedEquip(GLOBALDB, user.UserID, false)
-		eqb, rent2 := getRentedEquip(GLOBALDB, user.UserID, true)
+		eqb, _ := getRentedEquip(GLOBALDB, user.UserID, true)
 
 		data := siteData{}
 		for _, element := range *eq {
@@ -214,14 +215,11 @@ func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 
 		}
 		for _, element := range *eqb {
-			data.Equipment = append(data.Equipment, element)
+			data.EquipmentBookmarked = append(data.EquipmentBookmarked, element)
 		}
 		data.User = *user
 
 		for _, element := range *rent1 {
-			data.Rentlist = append(data.Rentlist, element)
-		}
-		for _, element := range *rent2 {
 			data.Rentlist = append(data.Rentlist, element)
 		}
 
