@@ -109,7 +109,6 @@
                         <td class="descText">{{.Desc}}
                         </td>
                         {{range $.Rentlist}}
-                        {{if eq $.Rentlist.InvID .InvID}}
                         <td>
                             <br/>
                             <span class="text-dark">{{.RentDate}}</span>
@@ -118,7 +117,6 @@
                             Rückgabe:<br/>
                             <span class="text-info">2{{.ReturnDate}}</span>
                         </td>
-                        {{end}}
                         {{end}}
                         <td>
                             <button type="button" class="btn btn-primary">
