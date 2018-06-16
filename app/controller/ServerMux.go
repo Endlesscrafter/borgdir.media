@@ -264,7 +264,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		tmpl, err := template.ParseFiles("template/admin/clients.html")
 		if err == nil {
 
-			user := getLoggedInUser()
+			user := getLoggedInUser(GLOBALDB, w,r,params)
 			users := getAllUsers(GLOBALDB)
 
 			data := siteData{}
