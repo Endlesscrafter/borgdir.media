@@ -304,23 +304,26 @@ func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params 
 	log.Print(fmt.Sprint(userid))
 	id,_ := strconv.Atoi(fmt.Sprint(userid))
 	if( id > 0){
-		http.Redirect(w, r, "/login.html", http.StatusFound)
-	}
-	rows, err := db.Query("SELECT * FROM users u WHERE u.userid = " + fmt.Sprint(userid) + ";")
+		rows, err := db.Query("SELECT * FROM users u WHERE u.userid = " + fmt.Sprint(userid) + ";")
+		var userN user
 
-	var userN user
-	checkErr(err)
-	for rows.Next() {
+		checkErr(err)
+		for rows.Next() {
 
-		rows.Scan(&(userN.UserID), &(userN.Name), &(userN.Email), &(userN.Password), &(userN.ProfileImageSRC), &(userN.UserLevel), &(userN.Blocked), &(userN.ActiveUntilDate))
+			rows.Scan(&(userN.UserID), &(userN.Name), &(userN.Email), &(userN.Password), &(userN.ProfileImageSRC), &(userN.UserLevel), &(userN.Blocked), &(userN.ActiveUntilDate))
 
-	}
-	if(userN.UserID != 0){
-		return &userN
+		}
+		logDatabase("SELECT * FROM users u WHERE u.userid = " + fmt.Sprint(userid) + ";", fmt.Sprint(userN))
+		if(userN.UserID != 0){
+			return &userN
+		} else{
+			http.Redirect(w, r, "/login.html", http.StatusFound)
+		}
 	} else{
 		http.Redirect(w, r, "/login.html", http.StatusFound)
 	}
-	logDatabase("SELECT * FROM users u WHERE u.userid = " + fmt.Sprint(userid) + ";", fmt.Sprint(nadmuser))
+
+
 	return nil
 }
 
