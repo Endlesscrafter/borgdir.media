@@ -165,7 +165,7 @@ func cartHandler(w http.ResponseWriter, r *http.Request, params httprouter.Param
 	tmpl, err := template.ParseFiles("template/cart.html")
 	if err == nil {
 
-		eq, user := getCartItemsForUser(GLOBALDB, "TEST")
+		eq, user := getCartItemsForUser(GLOBALDB, store)
 
 		data := siteData{}
 
@@ -246,7 +246,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 }
 
 func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	
+
 	getLoggedInUser(GLOBALDB,w,r,params)
 
 	logAccess(r, params, "admin")

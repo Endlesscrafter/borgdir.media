@@ -325,7 +325,7 @@ func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params 
 
 //Gets the Cart Items, that the given User has in his cart
 //TODO: Still dummy, has to be used with session cookies
-func getCartItemsForUser(db *sql.DB, UserSessionCookie *sessions.Session) (*[]equipmentData, *user) {
+func getCartItemsForUser(db *sql.DB, UserSessionCookie *sessions.CookieStore) (*[]equipmentData, *user) {
 
 	var eq []equipmentData
 	eq = append(eq, nequip3)
