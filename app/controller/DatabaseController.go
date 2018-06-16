@@ -302,7 +302,8 @@ func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params 
 	//THEN:
 	//query := "SELECT * FROM users u WHERE u.userid = " + userid + ";"
 	log.Print(fmt.Sprint(userid))
-	if(userid == nil){
+	id,_ := strconv.Atoi(fmt.Sprint(userid))
+	if( id > 0){
 		http.Redirect(w, r, "/login.html", http.StatusFound)
 	}
 	rows, err := db.Query("SELECT * FROM users u WHERE u.userid = " + fmt.Sprint(userid) + ";")
