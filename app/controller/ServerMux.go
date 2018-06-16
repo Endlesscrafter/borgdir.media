@@ -323,7 +323,25 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	}
 }
 
-func nilHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+func loginPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	logAccess(r, params, "")
+}
+func registerPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	logAccess(r, params, "")
+}
+func cartPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	logAccess(r, params, "")
+}
+func myEquipPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	logAccess(r, params, "")
+}
+func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	logAccess(r, params, "")
+}
+func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	logAccess(r, params, "")
+}
+func editPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "")
 }
 
@@ -599,7 +617,8 @@ func main() {
 		router.POST("/cart.html", cartPOSTHandler)
 		router.POST("/my-equipment.html", myEquipPOSTHandler)
 		router.POST("/profile.html", profilePOSTHandler)
-		router.POST("/admin/*suburl", adminHandler)
+		router.POST("/admin/add.html", addPOSTHandler)
+		router.POST("/admin/edit-client.html", editPOSTHandler)
 
 		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))

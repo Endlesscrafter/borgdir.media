@@ -76,16 +76,17 @@
     </div>
     <!-- CONTENT -->
     <div class="container-fluid">
-        {{range .AdminUserList}}
+    {{range .AdminUserList}}
         <div class="row">
             <div class="col-lg-1"></div>
             <div class="col-lg-2 mb-5 text-left">
-                <h6>Kunden-ID: <span class="text-info">{{.UserID}}</span></h6>Status: <span class="text-info">{{.UserLevel}}</span></h6>
+                <h6>Kunden-ID: <span class="text-info">{{.UserID}}</span></h6>Status: <span
+                    class="text-info">{{.UserLevel}}</span></h6>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-lg-4 text-left">
-                <form>
+        <form action="edit-client.html" method="post">
+            <div class="row justify-content-center">
+                <div class="col-lg-4 text-left">
                     <div class="form-group">
                         <label for="changeUsername">Benutzername</label>
                         <input type="text" class="form-control" id="changeUsername"
@@ -106,23 +107,21 @@
                         <input type="password" class="form-control" id="newPasswordConfirm"
                                placeholder="Neues Passwort wiederholen">
                     </div>
-                </form>
-            </div>
-            <div class="col-lg-6 text-right">
-                <p class="font-italic">Profilbild</p>
-                <img class="img-fluid"
-                     src="{{.ProfileImageSRC}}"
-                     alt="Generic placeholder image" width="400px" max-height="300px">
-                <div class="float-right">
-                    <form style="width: 400px;">
-                        <div class="form-group">
+                </div>
+                <div class="col-lg-6 text-right">
+                    <p class="font-italic">Profilbild</p>
+                    <img class="img-fluid"
+                         src="{{.ProfileImageSRC}}"
+                         alt="Generic placeholder image" width="400px" max-height="300px">
+                    <div class="float-right">
+                        <div class="form-group" style="width: 400px;">
                             <input type="file" class="form-control" id="inputProfilepic" placeholder="Bild hochladen">
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        {{end}}
+        </form>
+    {{end}}
     </div>
 
     <div class="container">
