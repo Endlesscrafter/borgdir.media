@@ -16,6 +16,8 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"database/sql"
 	"time"
+	"crypto/rand"
+	"github.com/gorilla/sessions"
 )
 
 const (
@@ -26,6 +28,7 @@ const (
 	debug           = true
 )
 
+var store *sessions.CookieStore
 var GLOBALDB *sql.DB
 
 type equipmentData struct {
@@ -586,16 +589,29 @@ func main() {
 		router.GET("/equipment.html", equipHandler)
 		router.GET("/my-equipment.html", myEquipHandler)
 		router.GET("/profile.html", profileHandler)
-		//Find closest match for /admin, so that all admin sites are handled by adminHandler
 		router.GET("/admin/*suburl", adminHandler)
 		router.GET("/css/*suburl", cssHandler)
 		router.GET("/js/*suburl", jsHandler)
 		router.GET("/img/*suburl", imgHandler)
-		router.POST("/*suburl", nilHandler)
+
+		router.POST("/login.html", loginPOSTHandler)
+		router.POST("/register.html", registerPOSTHandler)
+		router.POST("/cart.html", cartPOSTHandler)
+		router.POST("/my-equipment.html", myEquipPOSTHandler)
+		router.POST("/profile.html", profilePOSTHandler)
+		router.POST("/admin/*suburl", adminHandler)
 
 		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))
 
 	}
 	defer GLOBALDB.Close()
+}
+
+// Is executed automatically on package load
+func init() {
+	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
+	key := make([]byte, 32)
+	rand.Read(key)
+	store = sessions.NewCookieStore(key)
 }
