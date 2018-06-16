@@ -324,6 +324,24 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 }
 
 func loginPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+	session, _ := store.Get(r, "session")
+
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+
+	user := getUserFromName(GLOBALDB, username, password, true)
+	if(user != nil){
+		// Set user as authenticated
+		session.Values["authenticated"] = true
+		session.Values["username"] = user.Name
+		session.Values["userid"] = user.UserID
+		session.Save(r, w)
+		http.Redirect(w, r, "/", http.StatusFound)
+	} else{
+		http.Redirect(w,r, "login.html", http.StatusFound)
+	}
+
 	logAccess(r, params, "")
 }
 func registerPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
