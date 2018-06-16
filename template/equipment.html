@@ -118,8 +118,10 @@
             {{if eq .Stock "Entliehen"}}
                 <span class="text-danger stock">Entliehen</span>
             {{else if eq .Stock "Verfügbar"}}
-                <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen"><i
+                    <form action="cart.html" method="post">
+                    <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen" type="submit" value="{{.InvID}}"><i
                         class="fas fa-cart-arrow-down"></i></button>
+                    </form>
                 <span class="text-info stock">{{.StockAmount}} Verfügbar</span>
             {{else if eq .Stock "Vorgemerkt"}}
                 <span class="text-warning stock">Vorgemerkt</span>
