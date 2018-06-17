@@ -321,7 +321,7 @@ func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params 
 	} else {
 		http.Redirect(w, r, "/login.html", http.StatusFound)
 	}
-
+	http.Redirect(w, r, "/login.html", http.StatusFound)
 	return nil
 }
 
