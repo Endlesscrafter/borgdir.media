@@ -71,10 +71,10 @@ type rentData struct {
 }
 
 type siteData struct {
-	Equipment     		[]equipmentData
-	Rentlist      		[]rentData
-	User          		user
-	AdminUserList 		[]user
+	Equipment           []equipmentData
+	Rentlist            []rentData
+	User                user
+	AdminUserList       []user
 	EquipmentBookmarked []equipmentData
 }
 
@@ -189,7 +189,7 @@ func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	if err == nil {
 
 		eq := getAvailableEquip(GLOBALDB)
-		user := getLoggedInUser(GLOBALDB, w,r,params)
+		user := getLoggedInUser(GLOBALDB, w, r, params)
 
 		data := siteData{}
 		for _, element := range *eq {
@@ -208,7 +208,7 @@ func myEquipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	tmpl, err := template.ParseFiles("template/my-equipment.html")
 	if err == nil {
 
-		user := getLoggedInUser(GLOBALDB, w,r,params)
+		user := getLoggedInUser(GLOBALDB, w, r, params)
 		//eq := getEquipFromOwner(GLOBALDB, user.UserID)
 		eq, rent1 := getRentedEquip(GLOBALDB, user.UserID, false)
 		eqb, _ := getRentedEquip(GLOBALDB, user.UserID, true)
@@ -237,7 +237,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	tmpl, err := template.ParseFiles("template/profile.html")
 	if err == nil {
 
-		user := getLoggedInUser(GLOBALDB, w,r,params)
+		user := getLoggedInUser(GLOBALDB, w, r, params)
 
 		data := siteData{}
 		data.User = *user
@@ -248,14 +248,14 @@ func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 
 func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
-	getLoggedInUser(GLOBALDB,w,r,params)
+	getLoggedInUser(GLOBALDB, w, r, params)
 
 	logAccess(r, params, "admin")
 	if params.ByName("suburl") == "/index.html" || params.ByName("suburl") == "/" {
 		tmpl, err := template.ParseFiles("template/admin/index.html")
 		if err == nil {
 			data := siteData{}
-			user := getLoggedInUser(GLOBALDB,w,r,params)
+			user := getLoggedInUser(GLOBALDB, w, r, params)
 			data.User = *user
 			tmpl.ExecuteTemplate(w, "index.html", data)
 		}
@@ -263,14 +263,19 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	if params.ByName("suburl") == "/add.html" {
 		tmpl, err := template.ParseFiles("template/admin/add.html")
 		if err == nil {
-			tmpl.ExecuteTemplate(w, "add.html", "DATATATATATA")
+
+			data := siteData{}
+			user := getLoggedInUser(GLOBALDB, w, r, params)
+			data.User = *user
+
+			tmpl.ExecuteTemplate(w, "add.html", data)
 		}
 	}
 	if params.ByName("suburl") == "/clients.html" {
 		tmpl, err := template.ParseFiles("template/admin/clients.html")
 		if err == nil {
 
-			user := getLoggedInUser(GLOBALDB, w,r,params)
+			user := getLoggedInUser(GLOBALDB, w, r, params)
 			users := getAllUsers(GLOBALDB)
 
 			data := siteData{}
@@ -286,7 +291,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		tmpl, err := template.ParseFiles("template/admin/edit-client.html")
 		if err == nil {
 
-			user := getLoggedInUser(GLOBALDB, w,r,params)
+			user := getLoggedInUser(GLOBALDB, w, r, params)
 			edituser := getEditUser()
 
 			data := siteData{}
@@ -301,7 +306,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		tmpl, err := template.ParseFiles("template/admin/equipment.html")
 		if err == nil {
 
-			user := getLoggedInUser(GLOBALDB, w,r,params)
+			user := getLoggedInUser(GLOBALDB, w, r, params)
 			eq := getEquipFromOwner(GLOBALDB, user.UserID)
 
 			data := siteData{}
@@ -337,20 +342,20 @@ func loginPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.
 	password := r.FormValue("password")
 
 	user := getUserFromName(GLOBALDB, username, password, true)
-	if(user != nil){
+	if (user != nil) {
 		// Set user as authenticated
 		session.Values["authenticated"] = true
 		session.Values["username"] = user.Name
 		session.Values["userid"] = user.UserID
 		session.Save(r, w)
-		if(user.UserLevel == "Administrator"){
+		if (user.UserLevel == "Administrator") {
 			http.Redirect(w, r, "/admin/", http.StatusFound)
-		} else{
+		} else {
 			http.Redirect(w, r, "/", http.StatusFound)
 		}
 
-	} else{
-		http.Redirect(w,r, "login.html", http.StatusFound)
+	} else {
+		http.Redirect(w, r, "login.html", http.StatusFound)
 	}
 
 	logAccess(r, params, "")
@@ -383,7 +388,6 @@ func logoutPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	http.Redirect(w, r, "/", http.StatusFound)
 
 }
-
 
 func logAccess(r *http.Request, params httprouter.Params, fileDir string) {
 
