@@ -324,7 +324,7 @@ func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params 
 		http.Redirect(w, r, "/login.html", http.StatusFound)
 	}
 	//Gast zurückgeben
-	return getUserFromName(db,"Gast","NONE", false)
+	return getUserFromName(db, "Gast", "NONE", false)
 }
 
 //Gets the Cart Items, that the given User has in his cart
@@ -355,16 +355,26 @@ func addUser(db *sql.DB, username string, email string, password string) {
 	_, err := db.Exec("INSERT INTO users VALUES (" +
 		"DEFAULT," +
 		"'" + username + "'," +
-		"'"+email+"'," +
-		"'"+password+"'," +
+		"'" + email + "'," +
+		"'" + password + "'," +
 		"'img/equipment/generic.gif'," +
 		"'Benutzer'," +
 		"false," +
-		"'"+ fmt.Sprint(time.Now().AddDate(1,0,0).Format(time.RFC822)) +"'" +
+		"'" + fmt.Sprint(time.Now().AddDate(1, 0, 0).Format(time.RFC822)) + "'" +
 		");")
 
 	if err != nil {
 		log.Fatal(err)
 	}
+	logDatabase("INSERT INTO users VALUES (" +
+		"DEFAULT," +
+		"'" + username + "'," +
+		"'" + email + "'," +
+		"'" + password + "'," +
+		"'img/equipment/generic.gif'," +
+		"'Benutzer'," +
+		"false," +
+		"'" + fmt.Sprint(time.Now().AddDate(1, 0, 0).Format(time.RFC822)) + "'" +
+		");","")
 
 }
