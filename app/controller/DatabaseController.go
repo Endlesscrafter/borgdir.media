@@ -360,7 +360,7 @@ func addUser(db *sql.DB, username string, email string, password string) {
 		"'img/equipment/generic.gif'," +
 		"'Benutzer'," +
 		"false," +
-		"'"+ fmt.Sprint(time.Now().AddDate(1,0,0)) +"'" +
+		"'"+ fmt.Sprint(time.Now().AddDate(1,0,0).Format(time.RFC822)) +"'" +
 		");")
 
 	if err != nil {
