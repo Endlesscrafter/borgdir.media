@@ -420,7 +420,8 @@ func logDatabase(query string, data string) {
 	if (debug) {
 		fmt.Println(time.Now().Format(time.RFC3339) + " " + "QUERY: " + query + " | RESULT: " + data)
 	} else {
-		fmt.Println(time.Now().Format(time.RFC3339) + " " + "QUERY: " + query + " | RESULT OMITTED")
+		//No output
+		//fmt.Println(time.Now().Format(time.RFC3339) + " " + "QUERY: " + query + " | RESULT OMITTED")
 	}
 }
 
