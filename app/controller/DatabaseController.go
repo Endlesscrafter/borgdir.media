@@ -271,13 +271,14 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 		var inUser user
 
 		rows.Scan(&(inUser.UserID), &(inUser.Name), &(inUser.Email), &(inUser.Password), &(inUser.ProfileImageSRC), &(inUser.UserLevel), &(inUser.Blocked), &(inUser.ActiveUntilDate))
+		logDatabase("SELECT * FROM users u WHERE u.Name LIKE '"+username+"';", fmt.Sprint(inUser))
 		if (validatePassword && inUser.Password == password) {
 			return &inUser
 		} else {
 			log.Print("Error: The User could not be logged in")
 			//TODO: What to do now?
 		}
-		logDatabase("SELECT * FROM users u WHERE u.Name LIKE '"+username+"';", fmt.Sprint(inUser))
+
 		return &inUser
 	}
 
