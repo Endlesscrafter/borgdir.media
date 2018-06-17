@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"github.com/julienschmidt/httprouter"
 	"github.com/gorilla/sessions"
+	"time"
 )
 
 //Gets all Users
@@ -347,4 +348,23 @@ func updateUser(db *sql.DB, user *user) bool {
 	bcrypt.GenerateFromPassword(test, 0)
 
 	return false
+}
+
+func addUser(db *sql.DB, username string, email string, password string) {
+
+	_, err := db.Exec("INSERT INTO users VALUES (" +
+		"DEFAULT," +
+		"'" + username + "'," +
+		"'"+email+"'," +
+		"'"+password+"'," +
+		"'img/equipment/generic.gif'," +
+		"'Benutzer'," +
+		"false," +
+		"'"+ fmt.Sprint(time.Now().AddDate(1,0,0)) +"'" +
+		");")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }

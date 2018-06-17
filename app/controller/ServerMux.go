@@ -382,8 +382,23 @@ func loginGuestPOSTHandler(w http.ResponseWriter, r *http.Request, params httpro
 	logAccess(r, params, "")
 }
 func registerPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+	username := r.FormValue("username")
+	email := r.FormValue("email")
+	password1 := r.FormValue("password1")
+	password2 := r.FormValue("password2")
+	if(password1 != password2){
+		http.Redirect(w,r,"/register.html",http.StatusFound)
+	} else{
+
+		addUser(GLOBALDB,username,email,password1)
+		http.Redirect(w,r,"/login.html",http.StatusFound)
+
+	}
+
 	logAccess(r, params, "")
 }
+
 func cartPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "")
 }
