@@ -254,7 +254,10 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	if params.ByName("suburl") == "/index.html" || params.ByName("suburl") == "/" {
 		tmpl, err := template.ParseFiles("template/admin/index.html")
 		if err == nil {
-			tmpl.ExecuteTemplate(w, "index.html", "DATATATATATA")
+			data := siteData{}
+			user := getLoggedInUser(GLOBALDB,w,r,params)
+			data.User = *user
+			tmpl.ExecuteTemplate(w, "index.html", data)
 		}
 	}
 	if params.ByName("suburl") == "/add.html" {
