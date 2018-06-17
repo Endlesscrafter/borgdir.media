@@ -339,6 +339,7 @@ func getCartItemsForUser(db *sql.DB, UserSessionCookie *sessions.CookieStore) (*
 	logDatabase("!!!DUMMY!!!", fmt.Sprint(eq)+"|"+fmt.Sprint(nadmuser))
 
 	return &eq, &nadmuser
+
 }
 
 //TODO: Fill dummy, make use of hashing

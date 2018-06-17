@@ -239,8 +239,8 @@ func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 
 		user := getLoggedInUser(GLOBALDB, w, r, params)
 
-		if(user.UserID == 4){
-			http.Redirect(w,r,"/",http.StatusFound)
+		if (user.UserID == 4) {
+			http.Redirect(w, r, "/", http.StatusFound)
 		}
 
 		data := siteData{}
@@ -387,12 +387,12 @@ func registerPOSTHandler(w http.ResponseWriter, r *http.Request, params httprout
 	email := r.FormValue("email")
 	password1 := r.FormValue("password1")
 	password2 := r.FormValue("password2")
-	if(password1 != password2){
-		http.Redirect(w,r,"/register.html",http.StatusFound)
-	} else{
+	if (password1 != password2) {
+		http.Redirect(w, r, "/register.html", http.StatusFound)
+	} else {
 
-		addUser(GLOBALDB,username,email,password1)
-		http.Redirect(w,r,"/login.html",http.StatusFound)
+		addUser(GLOBALDB, username, email, password1)
+		http.Redirect(w, r, "/login.html", http.StatusFound)
 
 	}
 
