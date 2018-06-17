@@ -114,6 +114,7 @@ func imgHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params
 	logAccess(r, params, "app/model/images")
 	content, err := ioutil.ReadFile("app/model/images/" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "image/*")
+	w.Header().Set("Cache-Control", "max-age=3600")
 	if err != nil {
 		log.Fatal(err)
 	} else {
