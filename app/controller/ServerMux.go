@@ -371,6 +371,13 @@ func editPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 }
 func logoutPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "")
+
+	session, _ := store.Get(r, "session")
+	session.Values["authenticated"] = false
+	session.Values["username"] = "NONE"
+	session.Values["userid"] = 0
+	http.Redirect(w, r, "/", http.StatusFound)
+
 }
 
 

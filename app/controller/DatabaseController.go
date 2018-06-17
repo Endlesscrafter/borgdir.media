@@ -145,7 +145,6 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData
 
 		}
 
-
 	}
 	logDatabase("SELECT * FROM equipment e WHERE e.invid =*", fmt.Sprint(equipment))
 	return &equipment, &rentlist
@@ -302,8 +301,8 @@ func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params 
 	//THEN:
 	//query := "SELECT * FROM users u WHERE u.userid = " + userid + ";"
 	log.Print(fmt.Sprint(userid))
-	id,_ := strconv.Atoi(fmt.Sprint(userid))
-	if( id > 0){
+	id, _ := strconv.Atoi(fmt.Sprint(userid))
+	if (id > 0) {
 		rows, err := db.Query("SELECT * FROM users u WHERE u.userid = " + fmt.Sprint(userid) + ";")
 		var userN user
 
@@ -313,16 +312,15 @@ func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params 
 			rows.Scan(&(userN.UserID), &(userN.Name), &(userN.Email), &(userN.Password), &(userN.ProfileImageSRC), &(userN.UserLevel), &(userN.Blocked), &(userN.ActiveUntilDate))
 
 		}
-		logDatabase("SELECT * FROM users u WHERE u.userid = " + fmt.Sprint(userid) + ";", fmt.Sprint(userN))
-		if(userN.UserID != 0){
+		logDatabase("SELECT * FROM users u WHERE u.userid = "+fmt.Sprint(userid)+";", fmt.Sprint(userN))
+		if (userN.UserID != 0) {
 			return &userN
-		} else{
+		} else {
 			http.Redirect(w, r, "/login.html", http.StatusFound)
 		}
-	} else{
+	} else {
 		http.Redirect(w, r, "/login.html", http.StatusFound)
 	}
-
 
 	return nil
 }
