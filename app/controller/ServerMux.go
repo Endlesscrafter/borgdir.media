@@ -248,7 +248,10 @@ func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 
 func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
-	getLoggedInUser(GLOBALDB, w, r, params)
+	user := getLoggedInUser(GLOBALDB, w, r, params)
+	if(user.UserLevel == "Benutzer"){
+		http.Redirect(w,r,"/index.html",http.StatusFound)
+	}
 
 	logAccess(r, params, "admin")
 	if params.ByName("suburl") == "/index.html" || params.ByName("suburl") == "/" {

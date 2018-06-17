@@ -321,8 +321,8 @@ func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params 
 	} else {
 		http.Redirect(w, r, "/login.html", http.StatusFound)
 	}
-	http.Redirect(w, r, "/login.html", http.StatusFound)
-	return nil
+	//Gast zurückgeben
+	return getUserFromName(db,"Gast","NONE", false)
 }
 
 //Gets the Cart Items, that the given User has in his cart
