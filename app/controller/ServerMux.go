@@ -249,8 +249,8 @@ func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
 	user := getLoggedInUser(GLOBALDB, w, r, params)
-	if(user.UserLevel == "Benutzer"){
-		http.Redirect(w,r,"/index.html",http.StatusFound)
+	if (user.UserLevel == "Benutzer") {
+		http.Redirect(w, r, "/index.html", http.StatusFound)
 	}
 
 	logAccess(r, params, "admin")
@@ -360,6 +360,20 @@ func loginPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.
 	} else {
 		http.Redirect(w, r, "login.html", http.StatusFound)
 	}
+
+	logAccess(r, params, "")
+}
+func loginGuestPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+	session, _ := store.Get(r, "session")
+
+	// Set user as authenticated
+	session.Values["authenticated"] = false
+	session.Values["username"] = "Gast"
+	session.Values["userid"] = 4
+	session.Save(r, w)
+
+	http.Redirect(w, r, "/equipment.html", http.StatusFound)
 
 	logAccess(r, params, "")
 }
@@ -660,6 +674,7 @@ func main() {
 		router.GET("/img/*suburl", imgHandler)
 
 		router.POST("/login.html", loginPOSTHandler)
+		router.POST("/loginGuest.html", loginGuestPOSTHandler)
 		router.POST("/register.html", registerPOSTHandler)
 		router.POST("/cart.html", cartPOSTHandler)
 		router.POST("/my-equipment.html", myEquipPOSTHandler)
