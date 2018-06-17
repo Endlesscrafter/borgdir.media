@@ -239,6 +239,10 @@ func profileHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 
 		user := getLoggedInUser(GLOBALDB, w, r, params)
 
+		if(user.UserID == 4){
+			http.Redirect(w,r,"/",http.StatusFound)
+		}
+
 		data := siteData{}
 		data.User = *user
 		tmpl.ExecuteTemplate(w, "profile.html", data)
