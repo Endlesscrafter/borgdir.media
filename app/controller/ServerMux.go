@@ -101,6 +101,7 @@ func jsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params)
 	logAccess(r, params, "static/js")
 	content, err := ioutil.ReadFile("static/js" + params.ByName("suburl"))
 	w.Header().Set("Content-Type", "text/javascript")
+	w.Header().Set("Cache-Control", "max-age=3600")
 	if err != nil {
 		log.Fatal(err)
 	} else {
