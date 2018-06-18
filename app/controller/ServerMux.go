@@ -407,7 +407,7 @@ func cartPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 	invid, _ := strconv.Atoi(r.FormValue("cart"))
 	session, _ := store.Get(r, "session")
 
-	if (getExistingKey(session.Values["cart"]) == "") {
+	if (getExistingKey(session.Values["cart"]) == nil) {
 
 		log.Println("There is no Cart, create it")
 		var cartids []int
@@ -421,7 +421,7 @@ func cartPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 
 		log.Println("There already is a cart, use it")
 
-		cartids := ([]int) getExistingKey(session.Values["cart"])
+		cartids :=  getExistingKey(session.Values["cart"])
 
 		cartids = append(cartids, invid)
 		session.Values["cart"] = cartids
@@ -750,11 +750,11 @@ func init() {
 	store = sessions.NewCookieStore(key)
 }
 
-func getExistingKey(f interface{}) string {
+func getExistingKey(f interface{}) []int {
 	if f != nil {
-		if key, ok := f.(string); ok {
+		if key, ok := f.([]int); ok {
 			return key
 		}
 	}
-	return ""
+	return nil
 }

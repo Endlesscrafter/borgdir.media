@@ -332,7 +332,7 @@ func getCartItemsForUser(db *sql.DB, session *sessions.Session) (*[]equipmentDat
 
 	var eq []equipmentData
 
-	if (getExistingKey(session.Values["cart"]) == "") {
+	if (getExistingKey(session.Values["cart"]) == nil) {
 
 		log.Println("There is no Cart, do nothing in the Database")
 
