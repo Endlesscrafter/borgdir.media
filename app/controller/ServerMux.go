@@ -80,6 +80,8 @@ type siteData struct {
 	ReturnDate          string
 }
 
+var editUser *user
+
 //Test Data
 var nequip1 = equipmentData{"Kamera Obscura", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Entliehen", 0, "None", true, 1, "/img/equipment/gandalf.gif", 1245, "Baungasse", 2}
 var nequip2 = equipmentData{"Stativ", "Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit", "img/equipment/generic.gif", "Generic Placeholder", "Verfügbar", 2, "None", true, 2, "/img/equipment/gandalf.gif", 13452, "Schrank", 2}
@@ -452,11 +454,11 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 	if (password1 != password2) {
 		http.Redirect(w, r, "/profile.html", http.StatusFound)
 	} else {
-		user := getUserFromName(GLOBALDB,username,password1,false)
+		user := getUserFromName(GLOBALDB, username, password1, false)
 		user.Name = username
 		user.Email = email
 		user.Password = password1
-		updateUser(GLOBALDB,user)
+		updateUser(GLOBALDB, user)
 		http.Redirect(w, r, "/index.html", http.StatusFound)
 	}
 
@@ -478,7 +480,7 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	eq.Featured = false
 	eq.FeaturedID = -1
 	eq.Category = cat
-	eq.StockAmount,_ = strconv.Atoi(amount)
+	eq.StockAmount, _ = strconv.Atoi(amount)
 	eq.Stock = "Verfügbar"
 	eq.ImageAlt = "NONE"
 	eq.Desc = desc
@@ -488,17 +490,29 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 
 	userid := session.Values["userid"]
 	id := fmt.Sprint(userid)
-	idi,_ := strconv.ParseInt(id,10,64)
+	idi, _ := strconv.ParseInt(id, 10, 64)
 	eq.EquipmentOwnerID = idi
 
 	addEquipment(GLOBALDB, eq)
 
 	logAccess(r, params, "")
-	http.Redirect(w,r,"/admin/equipment.html",http.StatusFound)
+	http.Redirect(w, r, "/admin/equipment.html", http.StatusFound)
 }
 
 //Links to edit-client, when a client should be edited
 func editPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+	useridstr := r.FormValue("userid")
+	userid, _ := strconv.Atoi(useridstr)
+
+	editUser = getUserFromID(GLOBALDB, userid)
+
+	if editUser != nil {
+
+		http.Redirect(w,r,"/admin/edit-client.html",http.StatusFound)
+
+	}
+
 	logAccess(r, params, "")
 }
 
