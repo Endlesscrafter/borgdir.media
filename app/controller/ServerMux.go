@@ -528,7 +528,7 @@ func editedPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	password1 := r.FormValue("password1")
 	password2 := r.FormValue("password2")
 	//No use??
-	image := r.FormValue("image")
+	//image := r.FormValue("image")
 
 	if (password1 != password2) {
 		http.Redirect(w, r, "/admin/edit-client.html", http.StatusFound)
