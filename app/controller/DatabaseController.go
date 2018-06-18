@@ -366,11 +366,47 @@ func getCartItemsForUser(db *sql.DB, session *sessions.Session) (*[]equipmentDat
 
 }
 
+func addEquipment(db *sql.DB, eq equipmentData) {
+
+	_, err4 := db.Exec("INSERT INTO equipment VALUES(" +
+		"'" + eq.Name + "'," +
+		"'" + eq.Desc + "'," +
+		"'" + eq.ImageSRC + "'," +
+		"'Generic Placeholder'," +
+		"'" + eq.Stock + "'," +
+		"" + fmt.Sprint(eq.StockAmount) + "," +
+		"'" + eq.Category + "'," +
+		"false," +
+		"-1," +
+		"'NONE'," +
+		"DEFAULT," +
+		"'" + eq.StorageLocation+"'," +
+		"" + strconv.FormatInt(eq.EquipmentOwnerID,10) + "" +
+		");")
+	checkErr(err4)
+	logDatabase("INSERT INTO equipment VALUES(" +
+		"'" + eq.Name + "'," +
+		"'" + eq.Desc + "'," +
+		"'" + eq.ImageSRC + "'," +
+		"'Generic Placeholder'," +
+		"'" + eq.Stock + "'," +
+		"" + fmt.Sprint(eq.StockAmount) + "," +
+		"'" + eq.Category + "'," +
+		"false," +
+		"-1," +
+		"'NONE'," +
+		"DEFAULT," +
+		"'" + eq.StorageLocation+"'," +
+		"" + strconv.FormatInt(eq.EquipmentOwnerID,10) + "" +
+		");","")
+
+}
+
 //TODO: Fill dummy, make use of hashing
 func updateUser(db *sql.DB, user *user) bool {
 
-	db.Exec("UPDATE users SET name='" + user.Name + "', email='" + user.Email + "',password=" + user.Password + " WHERE userid=" + strconv.FormatInt(user.UserID, 10)+ ";")
-	logDatabase("UPDATE users SET name='" + user.Name + "', email='" + user.Email + "',password=" + user.Password + " WHERE userid=" + strconv.FormatInt(user.UserID, 10)+ ";","")
+	db.Exec("UPDATE users SET name='" + user.Name + "', email='" + user.Email + "',password=" + user.Password + " WHERE userid=" + strconv.FormatInt(user.UserID, 10) + ";")
+	logDatabase("UPDATE users SET name='"+user.Name+"', email='"+user.Email+"',password="+user.Password+" WHERE userid="+strconv.FormatInt(user.UserID, 10)+";", "")
 	var test []byte;
 	bcrypt.GenerateFromPassword(test, 0)
 

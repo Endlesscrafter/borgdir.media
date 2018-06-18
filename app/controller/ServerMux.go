@@ -461,8 +461,40 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 	}
 
 }
+
 func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+	name := r.FormValue("name")
+	desc := r.FormValue("description")
+	cat := r.FormValue("category")
+	amount := r.FormValue("amount")
+	storagelocation := r.FormValue("storagelocation")
+	image := r.FormValue("image")
+
+	var eq equipmentData
+	eq.Name = name
+	eq.StorageLocation = storagelocation
+	eq.FeaturedImageSRC = "NONE"
+	eq.Featured = false
+	eq.FeaturedID = -1
+	eq.Category = cat
+	eq.StockAmount,_ = strconv.Atoi(amount)
+	eq.Stock = "Verfügbar"
+	eq.ImageAlt = "NONE"
+	eq.Desc = desc
+	eq.ImageSRC = image
+
+	session, _ := store.Get(r, "session")
+
+	userid := session.Values["userid"]
+	id := fmt.Sprint(userid)
+	idi,_ := strconv.ParseInt(id,10,64)
+	eq.EquipmentOwnerID = idi
+
+	addEquipment(GLOBALDB, eq)
+
 	logAccess(r, params, "")
+	http.Redirect(w,r,"/admin/equipment.html",http.StatusFound)
 }
 
 //Links to edit-client, when a client should be edited
