@@ -327,18 +327,43 @@ func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params 
 	return getUserFromName(db, "Gast", "NONE", false)
 }
 
-//Gets the Cart Items, that the given User has in his cart
-//TODO: Still dummy, has to be used with session cookies
-func getCartItemsForUser(db *sql.DB, UserSessionCookie *sessions.CookieStore) (*[]equipmentData, *user) {
+//Gets the Cart Items, that the logged-in User has in his cart
+func getCartItemsForUser(db *sql.DB, session *sessions.Session) (*[]equipmentData) {
 
 	var eq []equipmentData
-	eq = append(eq, nequip3)
-	eq = append(eq, nequip1)
-	eq = append(eq, nequip2)
 
-	logDatabase("!!!DUMMY!!!", fmt.Sprint(eq)+"|"+fmt.Sprint(nadmuser))
+	if (getExistingKey(session.Values["cart"]) == "") {
 
-	return &eq, &nadmuser
+		log.Println("There is no Cart, do nothing in the Database")
+
+	} else {
+
+		log.Println("There is a Cart")
+
+		//Get the Items
+		cartids := ([]int)
+		getExistingKey(session.Values["cart"])
+
+		for _, element := range cartids {
+
+			rows, err := db.Query("SELECT * FROM equipment e WHERE e.invid = " + fmt.Sprint(element) + ";")
+			checkErr(err)
+
+			for rows.Next() {
+				var inEquip equipmentData
+				rows.Scan(&(inEquip.Name), &(inEquip.Desc), &(inEquip.ImageSRC), &(inEquip.ImageAlt), &(inEquip.Stock),
+					&(inEquip.StockAmount), &(inEquip.Category), &(inEquip.Featured), &(inEquip.FeaturedID),
+					&(inEquip.FeaturedImageSRC), &(inEquip.InvID), &(inEquip.StorageLocation), &(inEquip.EquipmentOwnerID))
+				eq = append(eq, inEquip)
+
+				logDatabase("SELECT * FROM equipment e WHERE e.invid = "+fmt.Sprint(element)+";", fmt.Sprint(inEquip))
+			}
+
+		}
+
+	}
+
+	return &eq
 
 }
 
@@ -367,15 +392,15 @@ func addUser(db *sql.DB, username string, email string, password string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	logDatabase("INSERT INTO users VALUES (" +
-		"DEFAULT," +
-		"'" + username + "'," +
-		"'" + email + "'," +
-		"'" + password + "'," +
-		"'img/equipment/generic.gif'," +
-		"'Benutzer'," +
-		"false," +
-		"'" + fmt.Sprint(time.Now().AddDate(1, 0, 0).Format(time.RFC822)) + "'" +
-		");","")
+	logDatabase("INSERT INTO users VALUES ("+
+		"DEFAULT,"+
+		"'"+ username+ "',"+
+		"'"+ email+ "',"+
+		"'"+ password+ "',"+
+		"'img/equipment/generic.gif',"+
+		"'Benutzer',"+
+		"false,"+
+		"'"+ fmt.Sprint(time.Now().AddDate(1, 0, 0).Format(time.RFC822))+ "'"+
+		");", "")
 
 }

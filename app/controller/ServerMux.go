@@ -18,6 +18,7 @@ import (
 	"time"
 	"crypto/rand"
 	"github.com/gorilla/sessions"
+	"strconv"
 )
 
 const (
@@ -167,7 +168,8 @@ func cartHandler(w http.ResponseWriter, r *http.Request, params httprouter.Param
 	tmpl, err := template.ParseFiles("template/cart.html")
 	if err == nil {
 
-		eq, user := getCartItemsForUser(GLOBALDB, store)
+		session, _ := store.Get(r, "session")
+		eq := getCartItemsForUser(GLOBALDB, session)
 
 		data := siteData{}
 
@@ -177,7 +179,7 @@ func cartHandler(w http.ResponseWriter, r *http.Request, params httprouter.Param
 		/*data.Equipment = append(data.Equipment, equip2)
 		data.Equipment = append(data.Equipment, equip3)
 		data.Equipment = append(data.Equipment, equip3)*/
-		data.User = *user
+		data.User = *getLoggedInUser(GLOBALDB, w, r, params)
 
 		tmpl.ExecuteTemplate(w, "cart.html", data)
 	}
@@ -401,6 +403,35 @@ func registerPOSTHandler(w http.ResponseWriter, r *http.Request, params httprout
 }
 
 func cartPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+	invid, _ := strconv.Atoi(r.FormValue("cart"))
+	session, _ := store.Get(r, "session")
+
+	if (getExistingKey(session.Values["cart"]) == "") {
+
+		log.Println("There is no Cart, create it")
+		var cartids []int
+		cartids = append(cartids, invid)
+
+		session.Values["cart"] = cartids
+		session.Save(r, w)
+		http.Redirect(w,r,"/equipment.html",http.StatusFound)
+
+	} else {
+
+		log.Println("There already is a cart, use it")
+
+		cartids := ([]int) getExistingKey(session.Values["cart"])
+
+		cartids = append(cartids, invid)
+		session.Values["cart"] = cartids
+		session.Save(r, w)
+		http.Redirect(w,r,"/equipment.html",http.StatusFound)
+
+	}
+
+
+
 	logAccess(r, params, "")
 }
 func myEquipPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -717,4 +748,13 @@ func init() {
 	key := make([]byte, 32)
 	rand.Read(key)
 	store = sessions.NewCookieStore(key)
+}
+
+func getExistingKey(f interface{}) string {
+	if f != nil {
+		if key, ok := f.(string); ok {
+			return key
+		}
+	}
+	return ""
 }
