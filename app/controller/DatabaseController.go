@@ -289,7 +289,7 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 
 func getUserFromID(db *sql.DB, userid int) *user{
 
-	rows, err := db.Query("SELECT * FROM users u WHERE u.useridLIKE '" + fmt.Sprint(userid) + "';")
+	rows, err := db.Query("SELECT * FROM users u WHERE u.userid =" + fmt.Sprint(userid) + ";")
 
 	checkErr(err)
 	for rows.Next(){
