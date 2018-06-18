@@ -77,7 +77,7 @@ type siteData struct {
 	User                user
 	AdminUserList       []user
 	EquipmentBookmarked []equipmentData
-	ReturnDate			string
+	ReturnDate          string
 }
 
 //Test Data
@@ -418,37 +418,60 @@ func cartPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 
 		session.Values["cart"] = cartids
 		session.Save(r, w)
-		http.Redirect(w,r,"/equipment.html",http.StatusFound)
+		http.Redirect(w, r, "/equipment.html", http.StatusFound)
 
 	} else {
 
 		log.Println("There already is a cart, use it")
 
-		cartids :=  getExistingKey(session.Values["cart"])
+		cartids := getExistingKey(session.Values["cart"])
 
 		cartids = append(cartids, invid)
 
-		log.Println("Cart: "+fmt.Sprint(cartids), "Added this time: " + fmt.Sprint(invid))
+		log.Println("Cart: "+fmt.Sprint(cartids), "Added this time: "+fmt.Sprint(invid))
 		session.Values["cart"] = cartids
 		session.Save(r, w)
-		http.Redirect(w,r,"/equipment.html",http.StatusFound)
+		http.Redirect(w, r, "/equipment.html", http.StatusFound)
 
 	}
 
-
-
 	logAccess(r, params, "")
 }
+
 func myEquipPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "")
 }
+
 func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "")
+
+	username := r.FormValue("username")
+	email := r.FormValue("email")
+	password1 := r.FormValue("password1")
+	password2 := r.FormValue("password2")
+	if (password1 != password2) {
+		http.Redirect(w, r, "/profile.html", http.StatusFound)
+	} else {
+		user := getUserFromName(GLOBALDB,username,password1,false)
+		user.Name = username
+		user.Email = email
+		user.Password = password1
+		updateUser(GLOBALDB,user)
+		http.Redirect(w, r, "/index.html", http.StatusFound)
+	}
+
 }
 func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "")
 }
+
+//Links to edit-client, when a client should be edited
 func editPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	logAccess(r, params, "")
+}
+
+//links back to owerview. Gets the edited client as update
+func editedPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "")
 }
 func logoutPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -734,10 +757,11 @@ func main() {
 		router.POST("/loginGuest.html", loginGuestPOSTHandler)
 		router.POST("/register.html", registerPOSTHandler)
 		router.POST("/cart.html", cartPOSTHandler)
-		router.POST("/my-equipment.html", myEquipPOSTHandler)
+		//router.POST("/my-equipment.html", myEquipPOSTHandler)
 		router.POST("/profile.html", profilePOSTHandler)
 		router.POST("/admin/add.html", addPOSTHandler)
 		router.POST("/admin/edit-client.html", editPOSTHandler)
+		router.POST("/admin/edited-client.html", editedPOSTHandler)
 		router.POST("/logout.html", logoutPOSTHandler)
 
 		log.Print("Server started successfully")

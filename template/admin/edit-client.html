@@ -85,28 +85,28 @@
                     class="text-info">{{.UserLevel}}</span></h6>
             </div>
         </div>
-        <form action="edit-client.html" method="post">
+        <form action="edited-client.html" method="post">
             <div class="row justify-content-center">
                 <div class="col-lg-4 text-left">
                     <div class="form-group">
                         <label for="changeUsername">Benutzername</label>
                         <input type="text" class="form-control" id="changeUsername"
-                               placeholder="{{.Name}}">
+                               placeholder="{{.Name}}" name="username">
                     </div>
                     <div class="form-group">
                         <label for="changeEmail">Email-Adresse</label>
                         <input type="email" class="form-control" id="changeEmail"
-                               placeholder="{{.Email}}" autocomplete="email">
+                               placeholder="{{.Email}}" autocomplete="email" name="email">
                     </div>
                     <div class="form-group mt-5">
                         <label for="newPassword">Neues Passwort</label>
                         <input type="password" class="form-control" id="newPassword"
-                               placeholder="Neues Passwort">
+                               placeholder="Neues Passwort" name="password1">
                     </div>
                     <div class="form-group">
                         <label for="newPasswordConfirm">Neues Passwort wiederholen</label>
                         <input type="password" class="form-control" id="newPasswordConfirm"
-                               placeholder="Neues Passwort wiederholen">
+                               placeholder="Neues Passwort wiederholen" name="password2">
                     </div>
                 </div>
                 <div class="col-lg-6 text-right">
@@ -116,7 +116,7 @@
                          alt="Generic placeholder image" width="400px" max-height="300px">
                     <div class="float-right">
                         <div class="form-group" style="width: 400px;">
-                            <input type="file" class="form-control" id="inputProfilepic" placeholder="Bild hochladen">
+                            <input type="file" class="form-control" id="inputProfilepic" placeholder="Bild hochladen" name="image">
                         </div>
                     </div>
                 </div>

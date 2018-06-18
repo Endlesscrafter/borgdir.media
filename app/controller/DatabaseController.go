@@ -369,6 +369,8 @@ func getCartItemsForUser(db *sql.DB, session *sessions.Session) (*[]equipmentDat
 //TODO: Fill dummy, make use of hashing
 func updateUser(db *sql.DB, user *user) bool {
 
+	db.Exec("UPDATE users SET name='" + user.Name + "', email='" + user.Email + "',password=" + user.Password + " WHERE userid=" + strconv.FormatInt(user.UserID, 10)+ ";")
+	logDatabase("UPDATE users SET name='" + user.Name + "', email='" + user.Email + "',password=" + user.Password + " WHERE userid=" + strconv.FormatInt(user.UserID, 10)+ ";","")
 	var test []byte;
 	bcrypt.GenerateFromPassword(test, 0)
 
