@@ -422,8 +422,10 @@ func cartPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 		log.Println("There already is a cart, use it")
 
 		cartids :=  getExistingKey(session.Values["cart"])
-		log.Println("Cart: "+fmt.Sprint(cartids), "Added this time: " + fmt.Sprint(invid))
+
 		cartids = append(cartids, invid)
+
+		log.Println("Cart: "+fmt.Sprint(cartids), "Added this time: " + fmt.Sprint(invid))
 		session.Values["cart"] = cartids
 		session.Save(r, w)
 		http.Redirect(w,r,"/equipment.html",http.StatusFound)
