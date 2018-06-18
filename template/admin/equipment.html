@@ -123,6 +123,7 @@
                     </thead>
                     <tbody>
                     {{range .Equipment}}
+                    {{$Ginvid := .InvID}}
                     <tr>
                         <th scope="row" class="float-left">
                             <img class="img-fluid"
@@ -137,24 +138,28 @@
                         </th>
                         <td class="descText">{{.Desc}}
                         </td>
-                        {{if eq .Rented true}}
-                        <td>
-                            Entliehen an:<br/>
-                            <span class="text-info font-italic">{{.RentedByUserName}}</span>
-                        </td>
-                        {{else if eq .Rented false}}
-                        <td>
-                            <span class="text-success font-italic">Verfügbar</span>
-                        </td>
-                        {{else if eq .Repair true}}
+                    {{range $.Rentlist}}
+                    {{if eq .InvID $Ginvid}}
+                    {{if eq .Repair true}}
                         <td>
                             <span class="text-warning font-italic">In Reperatur</span>
                         </td>
-                        {{end}}
+                    {{else}}
+                        <td>
+                            Entliehen an:<br/>
+                            <span class="text-info font-italic">{{.UserID}}</span>
+                        </td>
+                    {{end}}
+                    {{end}}
                         <td class="text-left pl-3">
                             Rückgabe:<br/>
                             <span class="text-info">{{.ReturnDate}}</span>
                         </td>
+                    {{else}}
+                        <td>
+                            <span class="text-success font-italic">Verfügbar</span>
+                        </td>
+                    {{end}}
                         <td>
                             <a href="#">
                                 <button type="button" class="btn btn-secondary">

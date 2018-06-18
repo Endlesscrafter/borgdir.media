@@ -484,7 +484,11 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	eq.Stock = "Verfügbar"
 	eq.ImageAlt = "NONE"
 	eq.Desc = desc
-	eq.ImageSRC = image
+	if(image != "") {
+		eq.ImageSRC = image
+	} else {
+		eq.ImageSRC = "img/equipment/generic.gif"
+	}
 
 	session, _ := store.Get(r, "session")
 
