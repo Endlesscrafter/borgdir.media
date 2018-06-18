@@ -77,6 +77,7 @@ type siteData struct {
 	User                user
 	AdminUserList       []user
 	EquipmentBookmarked []equipmentData
+	ReturnDate			string
 }
 
 //Test Data
@@ -180,6 +181,8 @@ func cartHandler(w http.ResponseWriter, r *http.Request, params httprouter.Param
 		data.Equipment = append(data.Equipment, equip3)
 		data.Equipment = append(data.Equipment, equip3)*/
 		data.User = *getLoggedInUser(GLOBALDB, w, r, params)
+
+		data.ReturnDate = fmt.Sprint(time.Now().AddDate(0, 1, 0).Format(time.RFC822))
 
 		tmpl.ExecuteTemplate(w, "cart.html", data)
 	}
