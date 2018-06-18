@@ -341,8 +341,7 @@ func getCartItemsForUser(db *sql.DB, session *sessions.Session) (*[]equipmentDat
 		log.Println("There is a Cart")
 
 		//Get the Items
-		cartids := ([]int)
-		getExistingKey(session.Values["cart"])
+		cartids := getExistingKey(session.Values["cart"])
 
 		for _, element := range cartids {
 
