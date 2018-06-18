@@ -522,6 +522,25 @@ func editPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 
 //links back to owerview. Gets the edited client as update
 func editedPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+	name := r.FormValue("username")
+	email := r.FormValue("email")
+	password1 := r.FormValue("password1")
+	password2 := r.FormValue("password2")
+	//No use??
+	image := r.FormValue("image")
+
+	if (password1 != password2) {
+		http.Redirect(w, r, "/admin/edit-client.html", http.StatusFound)
+	} else {
+		user := getUserFromName(GLOBALDB, name, password1, false)
+		user.Name = name
+		user.Email = email
+		user.Password = password1
+		updateUser(GLOBALDB, user)
+		http.Redirect(w, r, "/admin/clients.html", http.StatusFound)
+	}
+
 	logAccess(r, params, "")
 }
 func logoutPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
@@ -531,6 +550,7 @@ func logoutPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	session.Values["authenticated"] = false
 	session.Values["username"] = "NONE"
 	session.Values["userid"] = 0
+	sessions.Save(r,w)
 	http.Redirect(w, r, "/", http.StatusFound)
 
 }
