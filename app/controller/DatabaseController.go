@@ -479,4 +479,35 @@ func createRent(db *sql.DB, userid int64, invid int64, bookmarked bool, amount i
 		log.Fatal(err)
 	}
 
+	//Amount reduzieren und Verfügbarkeit setzen
+
+	eq := getEquip(db,invid)
+
+	if(eq.StockAmount > 0) {
+
+		_, err2 := db.Exec("UPDATE equipment SET " + " stockamount=" + fmt.Sprint(eq.StockAmount-amount)+ " WHERE invid=" + fmt.Sprint(invid))
+
+		if err != nil {
+			log.Fatal(err2)
+		}
+
+	}
+	if (eq.StockAmount-amount)==0{
+
+		_, err2 := db.Exec("UPDATE equipment SET " + " stock='Entliehen' WHERE invid=" + fmt.Sprint(invid))
+
+		if err != nil {
+			log.Fatal(err2)
+		}
+
+	}
+	if(eq.StockAmount-amount)<0 || bookmarked{
+
+		_, err2 := db.Exec("UPDATE equipment SET " + " stock='Vorgemerkt' WHERE invid=" + fmt.Sprint(invid))
+
+		if err != nil {
+			log.Fatal(err2)
+		}
+
+	}
 }
