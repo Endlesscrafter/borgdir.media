@@ -555,6 +555,30 @@ func logoutPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 
 }
 
+func rentPOSTHandler (w http.ResponseWriter, r *http.Request, params httprouter.Params){
+
+	logAccess(r, params, "")
+
+	//User ranholen
+	session, _ := store.Get(r, "session")
+	useridstr := session.Values["userid"]
+	userid, _ := strconv.Atoi(useridstr.(string))
+
+	//Warenkorb holen
+
+	eq := getCartItemsForUser(GLOBALDB,session)
+
+	//Rents erstellen
+	for _, element := range *eq {
+
+		createRent(GLOBALDB,userid,element.InvID,false,1,false)
+
+	}
+
+	//Warenkorb leeren
+
+}
+
 func logAccess(r *http.Request, params httprouter.Params, fileDir string) {
 
 	fmt.Println(time.Now().Format(time.RFC3339) + " ACCESS: " + r.Header.Get("User-Agent") + " " + r.Method + " /" + fileDir + params.ByName("suburl"))
@@ -833,6 +857,7 @@ func main() {
 		router.POST("/admin/edit-client.html", editPOSTHandler)
 		router.POST("/admin/edited-client.html", editedPOSTHandler)
 		router.POST("/logout.html", logoutPOSTHandler)
+		router.POST("/cart-rent.html", rentPOSTHandler)
 
 		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))

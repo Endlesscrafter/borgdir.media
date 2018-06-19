@@ -287,17 +287,17 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 	return nil
 }
 
-func getUserFromID(db *sql.DB, userid int) *user{
+func getUserFromID(db *sql.DB, userid int) *user {
 
 	rows, err := db.Query("SELECT * FROM users u WHERE u.userid =" + fmt.Sprint(userid) + ";")
 
 	checkErr(err)
-	for rows.Next(){
+	for rows.Next() {
 
 		var inUser user
 
 		rows.Scan(&(inUser.UserID), &(inUser.Name), &(inUser.Email), &(inUser.Password), &(inUser.ProfileImageSRC), &(inUser.UserLevel), &(inUser.Blocked), &(inUser.ActiveUntilDate))
-		logDatabase("SELECT * FROM users u WHERE u.useridLIKE '" + fmt.Sprint(userid) + "';", fmt.Sprint(inUser))
+		logDatabase("SELECT * FROM users u WHERE u.useridLIKE '"+fmt.Sprint(userid)+"';", fmt.Sprint(inUser))
 
 		return &inUser
 
@@ -309,7 +309,6 @@ func getUserFromID(db *sql.DB, userid int) *user{
 
 //TODO: Gets the user, that the admin wants to edit, has to be used with session cookies or a flag in the database or query string on the URL
 func getEditUser() *user {
-
 
 	log.Println("Kein Datenbankzugriff nötig")
 
@@ -401,25 +400,25 @@ func addEquipment(db *sql.DB, eq equipmentData) {
 		"-1," +
 		"'NONE'," +
 		"DEFAULT," +
-		"'" + eq.StorageLocation+"'," +
-		"" + strconv.FormatInt(eq.EquipmentOwnerID,10) + "" +
+		"'" + eq.StorageLocation + "'," +
+		"" + strconv.FormatInt(eq.EquipmentOwnerID, 10) + "" +
 		");")
 	checkErr(err4)
-	logDatabase("INSERT INTO equipment VALUES(" +
-		"'" + eq.Name + "'," +
-		"'" + eq.Desc + "'," +
-		"'" + eq.ImageSRC + "'," +
-		"'Generic Placeholder'," +
-		"'" + eq.Stock + "'," +
-		"" + fmt.Sprint(eq.StockAmount) + "," +
-		"'" + eq.Category + "'," +
-		"false," +
-		"-1," +
-		"'NONE'," +
-		"DEFAULT," +
-		"'" + eq.StorageLocation+"'," +
-		"" + strconv.FormatInt(eq.EquipmentOwnerID,10) + "" +
-		");","")
+	logDatabase("INSERT INTO equipment VALUES("+
+		"'"+ eq.Name+ "',"+
+		"'"+ eq.Desc+ "',"+
+		"'"+ eq.ImageSRC+ "',"+
+		"'Generic Placeholder',"+
+		"'"+ eq.Stock+ "',"+
+		""+ fmt.Sprint(eq.StockAmount)+ ","+
+		"'"+ eq.Category+ "',"+
+		"false,"+
+		"-1,"+
+		"'NONE',"+
+		"DEFAULT,"+
+		"'"+ eq.StorageLocation+ "',"+
+		""+ strconv.FormatInt(eq.EquipmentOwnerID, 10)+ ""+
+		");", "")
 
 }
 
@@ -460,5 +459,24 @@ func addUser(db *sql.DB, username string, email string, password string) {
 		"false,"+
 		"'"+ fmt.Sprint(time.Now().AddDate(1, 0, 0).Format(time.RFC822))+ "'"+
 		");", "")
+
+}
+
+func createRent(db *sql.DB, userid int, invid int64, bookmarked bool, amount int, repair bool) {
+
+	_, err := db.Exec("INSERT INTO rentlist VALUES (" +
+		"DEFAULT," +
+		"" + fmt.Sprint(userid) + "," +
+		"" + fmt.Sprint(invid) + "," +
+		"'" + fmt.Sprint(time.Now().Format(time.RFC822)) + "'," +
+		"'" + fmt.Sprint(time.Now().AddDate(0, 1, 0).Format(time.RFC822)) + "'," +
+		"" + fmt.Sprint(bookmarked) + "," +
+		"" + fmt.Sprint(amount) + "" +
+		"" + fmt.Sprint(repair) + "" +
+		");")
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }
