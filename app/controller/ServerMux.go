@@ -576,6 +576,11 @@ func rentPOSTHandler (w http.ResponseWriter, r *http.Request, params httprouter.
 	}
 
 	//Warenkorb leeren
+	var cartids []int
+	session.Values["cart"] = cartids
+	session.Save(r, w)
+	http.Redirect(w, r, "/equipment.html", http.StatusFound)
+
 
 }
 
