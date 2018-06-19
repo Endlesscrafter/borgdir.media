@@ -471,7 +471,7 @@ func createRent(db *sql.DB, userid int64, invid int64, bookmarked bool, amount i
 		"'" + fmt.Sprint(time.Now().Format(time.RFC822)) + "'," +
 		"'" + fmt.Sprint(time.Now().AddDate(0, 1, 0).Format(time.RFC822)) + "'," +
 		"" + fmt.Sprint(bookmarked) + "," +
-		"" + fmt.Sprint(amount) + "" +
+		"" + fmt.Sprint(amount) + "," +
 		"" + fmt.Sprint(repair) + "" +
 		");")
 
