@@ -562,7 +562,7 @@ func rentPOSTHandler (w http.ResponseWriter, r *http.Request, params httprouter.
 	//User ranholen
 	session, _ := store.Get(r, "session")
 	useridstr := session.Values["userid"]
-	userid, _ := strconv.Atoi(useridstr.(string))
+	userid, _ := useridstr.(int64)
 
 	//Warenkorb holen
 

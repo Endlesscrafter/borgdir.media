@@ -462,7 +462,7 @@ func addUser(db *sql.DB, username string, email string, password string) {
 
 }
 
-func createRent(db *sql.DB, userid int, invid int64, bookmarked bool, amount int, repair bool) {
+func createRent(db *sql.DB, userid int64, invid int64, bookmarked bool, amount int, repair bool) {
 
 	_, err := db.Exec("INSERT INTO rentlist VALUES (" +
 		"DEFAULT," +
