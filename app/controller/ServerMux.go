@@ -399,7 +399,8 @@ func registerPOSTHandler(w http.ResponseWriter, r *http.Request, params httprout
 		http.Redirect(w, r, "/register.html", http.StatusFound)
 	} else {
 
-		addUser(GLOBALDB, username, email, password1)
+		hash,_ := HashPassword(password1)
+		addUser(GLOBALDB, username, email, hash)
 		http.Redirect(w, r, "/login.html", http.StatusFound)
 
 	}
@@ -454,10 +455,12 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 	if (password1 != password2) {
 		http.Redirect(w, r, "/profile.html", http.StatusFound)
 	} else {
-		user := getUserFromName(GLOBALDB, username, password1, false)
+
+		hash,_ := HashPassword(password1)
+		user := getUserFromName(GLOBALDB, username, hash, false)
 		user.Name = username
 		user.Email = email
-		user.Password = password1
+		user.Password = hash
 		updateUser(GLOBALDB, user)
 		http.Redirect(w, r, "/index.html", http.StatusFound)
 	}
@@ -533,10 +536,12 @@ func editedPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	if (password1 != password2) {
 		http.Redirect(w, r, "/admin/edit-client.html", http.StatusFound)
 	} else {
-		user := getUserFromName(GLOBALDB, name, password1, false)
+		hash,_ := HashPassword(password1)
+
+		user := getUserFromName(GLOBALDB, name, hash, false)
 		user.Name = name
 		user.Email = email
-		user.Password = password1
+		user.Password = hash
 		updateUser(GLOBALDB, user)
 		http.Redirect(w, r, "/admin/clients.html", http.StatusFound)
 	}

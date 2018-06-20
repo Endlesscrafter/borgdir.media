@@ -273,7 +273,7 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 
 		rows.Scan(&(inUser.UserID), &(inUser.Name), &(inUser.Email), &(inUser.Password), &(inUser.ProfileImageSRC), &(inUser.UserLevel), &(inUser.Blocked), &(inUser.ActiveUntilDate))
 		logDatabase("SELECT * FROM users u WHERE u.Name LIKE '"+username+"';", fmt.Sprint(inUser))
-		if (validatePassword && inUser.Password == password) {
+		if (validatePassword && CheckPasswordHash(password,inUser.Password)) {
 			return &inUser
 		} else {
 			log.Print("Error: The User could not be logged in")
@@ -510,4 +510,14 @@ func createRent(db *sql.DB, userid int64, invid int64, bookmarked bool, amount i
 		}
 
 	}
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
