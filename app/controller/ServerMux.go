@@ -487,6 +487,8 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 		log.Fatal("Image could not be read correctly #2")
 	}
 	encoded := base64.StdEncoding.EncodeToString(fileBytes)
+	var prefix = "data:image/png;base64,";
+	encoded = prefix + encoded
 
 	var eq equipmentData
 	eq.Name = name
