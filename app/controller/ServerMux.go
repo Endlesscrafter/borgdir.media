@@ -19,6 +19,7 @@ import (
 	"crypto/rand"
 	"github.com/gorilla/sessions"
 	"strconv"
+	"encoding/base64"
 )
 
 const (
@@ -474,7 +475,18 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	cat := r.FormValue("category")
 	amount := r.FormValue("amount")
 	storagelocation := r.FormValue("storagelocation")
-	image := r.FormValue("image")
+	//image := r.FormValue("image")
+
+	file, _, err := r.FormFile("image")
+	if err != nil {
+		log.Fatal("Image could not be read correctly")
+	}
+	defer file.Close()
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Fatal("Image could not be read correctly #2")
+	}
+	encoded := base64.StdEncoding.EncodeToString(fileBytes)
 
 	var eq equipmentData
 	eq.Name = name
@@ -487,8 +499,8 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	eq.Stock = "Verfügbar"
 	eq.ImageAlt = "NONE"
 	eq.Desc = desc
-	if(image != "") {
-		eq.ImageSRC = image
+	if(encoded != "") {
+		eq.ImageSRC = encoded
 	} else {
 		eq.ImageSRC = "img/equipment/generic.gif"
 	}
