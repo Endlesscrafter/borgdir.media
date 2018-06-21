@@ -273,7 +273,7 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 
 		rows.Scan(&(inUser.UserID), &(inUser.Name), &(inUser.Email), &(inUser.Password), &(inUser.ProfileImageSRC), &(inUser.UserLevel), &(inUser.Blocked), &(inUser.ActiveUntilDate))
 		logDatabase("SELECT * FROM users u WHERE u.Name LIKE '"+username+"';", fmt.Sprint(inUser))
-		if (validatePassword && CheckPasswordHash(password,inUser.Password)) {
+		if (validatePassword && CheckPasswordHash(password, inUser.Password)) {
 			return &inUser
 		} else {
 			log.Print("Error: The User could not be logged in")
@@ -481,18 +481,18 @@ func createRent(db *sql.DB, userid int64, invid int64, bookmarked bool, amount i
 
 	//Amount reduzieren und Verfügbarkeit setzen
 
-	eq := getEquip(db,invid)
+	eq := getEquip(db, invid)
 
-	if(eq.StockAmount > 0) {
+	if (eq.StockAmount > 0) {
 
-		_, err2 := db.Exec("UPDATE equipment SET " + " stockamount=" + fmt.Sprint(eq.StockAmount-amount)+ " WHERE invid=" + fmt.Sprint(invid))
+		_, err2 := db.Exec("UPDATE equipment SET " + " stockamount=" + fmt.Sprint(eq.StockAmount-amount) + " WHERE invid=" + fmt.Sprint(invid))
 
 		if err != nil {
 			log.Fatal(err2)
 		}
 
 	}
-	if (eq.StockAmount-amount)==0{
+	if (eq.StockAmount - amount) == 0 {
 
 		_, err2 := db.Exec("UPDATE equipment SET " + " stock='Entliehen' WHERE invid=" + fmt.Sprint(invid))
 
@@ -501,7 +501,7 @@ func createRent(db *sql.DB, userid int64, invid int64, bookmarked bool, amount i
 		}
 
 	}
-	if(eq.StockAmount-amount)<0 || bookmarked{
+	if (eq.StockAmount-amount) < 0 || bookmarked {
 
 		_, err2 := db.Exec("UPDATE equipment SET " + " stock='Vorgemerkt' WHERE invid=" + fmt.Sprint(invid))
 
