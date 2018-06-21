@@ -27,7 +27,7 @@ const (
 	DB_PASSWORD     = "c58WvoedyiVRmPjaEoEi"
 	DB_NAME         = "goserver"
 	noDefaultValues = false
-	debug           = false //true
+	debug           = true //true
 )
 
 var store *sessions.CookieStore
