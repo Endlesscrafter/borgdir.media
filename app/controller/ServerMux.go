@@ -487,7 +487,7 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 		log.Fatal("Image could not be read correctly #2")
 	}
 	encoded := base64.StdEncoding.EncodeToString(fileBytes)
-	var prefix = "data:image/png;base64,";
+	var prefix = "data:image/jpg;base64,";
 	encoded = prefix + encoded
 
 	var eq equipmentData
@@ -569,6 +569,9 @@ func logoutPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	session.Values["authenticated"] = false
 	session.Values["username"] = "NONE"
 	session.Values["userid"] = 0
+	//Logout löschen des Warenkorbs
+	var cartids []int
+	session.Values["cart"] = cartids
 	sessions.Save(r,w)
 	http.Redirect(w, r, "/", http.StatusFound)
 
