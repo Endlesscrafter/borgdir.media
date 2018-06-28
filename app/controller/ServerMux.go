@@ -19,7 +19,7 @@ import (
 	"crypto/rand"
 	"github.com/gorilla/sessions"
 	"strconv"
-	"encoding/base64"
+	"github.com/satori/go.uuid"
 )
 
 const (
@@ -486,9 +486,12 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	if err != nil {
 		log.Fatal("Image could not be read correctly #2")
 	}
-	encoded := base64.StdEncoding.EncodeToString(fileBytes)
+	uuid := uuid.Must(uuid.NewV4())
+	err2 := ioutil.WriteFile("./app/model/images/equipment/"+fmt.Sprint(uuid)+".jpg", fileBytes, 0644)
+	check(err2)
+	/*encoded := base64.StdEncoding.EncodeToString(fileBytes)
 	var prefix = "data:image/jpg;base64,";
-	encoded = prefix + encoded
+	encoded = prefix + encoded*/
 
 	var eq equipmentData
 	eq.Name = name
@@ -501,8 +504,8 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	eq.Stock = "Verfügbar"
 	eq.ImageAlt = "NONE"
 	eq.Desc = desc
-	if (encoded != "") {
-		eq.ImageSRC = encoded
+	if (fmt.Sprint(uuid) != "") {
+		eq.ImageSRC = "img/equipment/"+fmt.Sprint(uuid)+".jpg"
 	} else {
 		eq.ImageSRC = "img/equipment/generic.gif"
 	}
@@ -907,4 +910,10 @@ func getExistingKey(f interface{}) []int {
 		}
 	}
 	return nil
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
