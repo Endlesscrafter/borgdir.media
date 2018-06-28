@@ -118,10 +118,11 @@ func jsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params)
 func imgHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "app/model/images")
 	content, err := ioutil.ReadFile("app/model/images/" + params.ByName("suburl"))
+	checkErr(err)
 	w.Header().Set("Content-Type", "image/*")
 	w.Header().Set("Cache-Control", "max-age=3600")
 	if err != nil {
-		log.Fatal(err)
+		w.WriteHeader(404)
 	} else {
 		w.Write(content)
 	}
@@ -744,7 +745,7 @@ func createDummyValues(db *sql.DB) {
 		"'None'," +
 		"true," +
 		"1," +
-		"'/img/equipment/gandalf.gif'," +
+		"'img/equipment/gandalf.gif'," +
 		"false," +
 		"false," +
 		"false," +
