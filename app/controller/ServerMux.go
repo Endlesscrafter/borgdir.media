@@ -27,7 +27,7 @@ const (
 	DB_PASSWORD     = "c58WvoedyiVRmPjaEoEi"
 	DB_NAME         = "goserver"
 	noDefaultValues = false
-	debug           = true
+	debug           = true //true
 )
 
 var store *sessions.CookieStore
@@ -400,7 +400,7 @@ func registerPOSTHandler(w http.ResponseWriter, r *http.Request, params httprout
 		http.Redirect(w, r, "/register.html", http.StatusFound)
 	} else {
 
-		hash,_ := HashPassword(password1)
+		hash, _ := HashPassword(password1)
 		addUser(GLOBALDB, username, email, hash)
 		http.Redirect(w, r, "/login.html", http.StatusFound)
 
@@ -457,7 +457,7 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 		http.Redirect(w, r, "/profile.html", http.StatusFound)
 	} else {
 
-		hash,_ := HashPassword(password1)
+		hash, _ := HashPassword(password1)
 		user := getUserFromName(GLOBALDB, username, hash, false)
 		user.Name = username
 		user.Email = email
@@ -487,7 +487,7 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 		log.Fatal("Image could not be read correctly #2")
 	}
 	encoded := base64.StdEncoding.EncodeToString(fileBytes)
-	var prefix = "data:image/jpg;base64,";
+	var prefix = "data:image/png;base64,";
 	encoded = prefix + encoded
 
 	var eq equipmentData
@@ -501,7 +501,7 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	eq.Stock = "Verfügbar"
 	eq.ImageAlt = "NONE"
 	eq.Desc = desc
-	if(encoded != "") {
+	if (encoded != "") {
 		eq.ImageSRC = encoded
 	} else {
 		eq.ImageSRC = "img/equipment/generic.gif"
@@ -530,7 +530,7 @@ func editPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 
 	if editUser != nil {
 
-		http.Redirect(w,r,"/admin/edit-client.html",http.StatusFound)
+		http.Redirect(w, r, "/admin/edit-client.html", http.StatusFound)
 
 	}
 
@@ -550,7 +550,7 @@ func editedPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	if (password1 != password2) {
 		http.Redirect(w, r, "/admin/edit-client.html", http.StatusFound)
 	} else {
-		hash,_ := HashPassword(password1)
+		hash, _ := HashPassword(password1)
 
 		user := getUserFromName(GLOBALDB, name, hash, false)
 		user.Name = name
@@ -569,15 +569,12 @@ func logoutPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	session.Values["authenticated"] = false
 	session.Values["username"] = "NONE"
 	session.Values["userid"] = 0
-	//Logout löschen des Warenkorbs
-	var cartids []int
-	session.Values["cart"] = cartids
-	sessions.Save(r,w)
+	sessions.Save(r, w)
 	http.Redirect(w, r, "/", http.StatusFound)
 
 }
 
-func rentPOSTHandler (w http.ResponseWriter, r *http.Request, params httprouter.Params){
+func rentPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
 	logAccess(r, params, "")
 
@@ -588,12 +585,12 @@ func rentPOSTHandler (w http.ResponseWriter, r *http.Request, params httprouter.
 
 	//Warenkorb holen
 
-	eq := getCartItemsForUser(GLOBALDB,session)
+	eq := getCartItemsForUser(GLOBALDB, session)
 
 	//Rents erstellen
 	for _, element := range *eq {
 
-		createRent(GLOBALDB,userid,element.InvID,false,1,false)
+		createRent(GLOBALDB, userid, element.InvID, false, 1, false)
 
 	}
 
@@ -602,7 +599,6 @@ func rentPOSTHandler (w http.ResponseWriter, r *http.Request, params httprouter.
 	session.Values["cart"] = cartids
 	session.Save(r, w)
 	http.Redirect(w, r, "/equipment.html", http.StatusFound)
-
 
 }
 
