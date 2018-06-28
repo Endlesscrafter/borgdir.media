@@ -453,15 +453,43 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 	email := r.FormValue("email")
 	password1 := r.FormValue("password1")
 	password2 := r.FormValue("password2")
+
+	/*Profilbild*/
+	file, _, err := r.FormFile("image")
+	uploadedFile := true
+	if err != nil {
+		log.Fatal("Image could not be read correctly")
+		uploadedFile = false
+	}
+	defer file.Close()
+	fileBytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Fatal("Image could not be read correctly #2")
+		uploadedFile = false
+	}
+	uuid := uuid.Must(uuid.NewV4())
+	err2 := ioutil.WriteFile("./app/model/images/profile/"+fmt.Sprint(uuid)+".jpg", fileBytes, 0644)
+	check(err2)
+	if (password1 == "" || password2 == "") {
+		http.Redirect(w, r, "/profile.html", http.StatusFound)
+	}
 	if (password1 != password2) {
 		http.Redirect(w, r, "/profile.html", http.StatusFound)
 	} else {
-
 		hash, _ := HashPassword(password1)
 		user := getUserFromName(GLOBALDB, username, hash, false)
-		user.Name = username
-		user.Email = email
+		if (username != "") {
+			user.Name = username
+		}
+		if (email != "") {
+			user.Email = email
+		}
 		user.Password = hash
+		//Hoffe das klappt so, soll schauen ob die datei leer war
+		if uploadedFile {
+			user.ProfileImageSRC = "img/profile/" + fmt.Sprint(uuid) + ".jpg"
+		}
+		
 		updateUser(GLOBALDB, user)
 		http.Redirect(w, r, "/index.html", http.StatusFound)
 	}
@@ -505,7 +533,7 @@ func addPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 	eq.ImageAlt = "NONE"
 	eq.Desc = desc
 	if (fmt.Sprint(uuid) != "") {
-		eq.ImageSRC = "img/equipment/"+fmt.Sprint(uuid)+".jpg"
+		eq.ImageSRC = "img/equipment/" + fmt.Sprint(uuid) + ".jpg"
 	} else {
 		eq.ImageSRC = "img/equipment/generic.gif"
 	}
