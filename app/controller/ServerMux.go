@@ -489,7 +489,7 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 		if uploadedFile {
 			user.ProfileImageSRC = "img/profile/" + fmt.Sprint(uuid) + ".jpg"
 		}
-		
+
 		updateUser(GLOBALDB, user)
 		http.Redirect(w, r, "/index.html", http.StatusFound)
 	}
