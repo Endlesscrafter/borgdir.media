@@ -637,6 +637,24 @@ func rentPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 
 }
 
+//Löscht einträge aus dem Warenkorb
+func deletePOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+	invid, _ := strconv.Atoi(r.FormValue("cart"))
+	session, _ := store.Get(r, "session")
+
+	cartids := session.Values["cart"].([]int)
+	remove(cartids,invid)
+	session.Values["cart"] = cartids
+	session.Save(r, w)
+	http.Redirect(w, r, "/equipment.html", http.StatusFound)
+
+}
+
+func remove(slice []int, s int) []int {
+	return append(slice[:s], slice[s+1:]...)
+}
+
 func logAccess(r *http.Request, params httprouter.Params, fileDir string) {
 
 	fmt.Println(time.Now().Format(time.RFC3339) + " ACCESS: " + r.Header.Get("User-Agent") + " " + r.Method + " /" + fileDir + params.ByName("suburl"))
@@ -916,6 +934,7 @@ func main() {
 		router.POST("/admin/edited-client.html", editedPOSTHandler)
 		router.POST("/logout.html", logoutPOSTHandler)
 		router.POST("/cart-rent.html", rentPOSTHandler)
+		router.POST("/cart-del.html", deletePOSTHandler)
 
 		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))

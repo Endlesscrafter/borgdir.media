@@ -125,9 +125,11 @@
                             <span class="text-info">{{$.ReturnDate.Format "02 Jan 2006"}}</span>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-secondary">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
+                            <form action="/cart-del.html" method="post">
+                                <button type="button" class="btn btn-secondary" name="{{.InvID}}">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     {{end}}
