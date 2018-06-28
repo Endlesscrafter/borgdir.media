@@ -569,6 +569,9 @@ func logoutPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	session.Values["authenticated"] = false
 	session.Values["username"] = "NONE"
 	session.Values["userid"] = 0
+	//Logout löschen des Warenkorbs
+	var cartids []int
+	session.Values["cart"] = cartids
 	sessions.Save(r, w)
 	http.Redirect(w, r, "/", http.StatusFound)
 
