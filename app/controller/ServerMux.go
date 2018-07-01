@@ -645,6 +645,8 @@ func rentPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 //Löscht einträge aus dem Warenkorb
 func deletePOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
+	logAccess(r, params, "")
+
 	invid, _ := strconv.Atoi(r.FormValue("cart"))
 	session, _ := store.Get(r, "session")
 
