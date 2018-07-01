@@ -463,19 +463,22 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 	/*Profilbild*/
 	file, _, err := r.FormFile("image")
 	uploadedFile := true
+	uuid := uuid.Must(uuid.NewV4())
 	if err != nil {
 		log.Println("Image could not be read correctly")
 		uploadedFile = false
+	} else {
+		//defer file.Close()
+		fileBytes, err := ioutil.ReadAll(file)
+		if err != nil {
+			log.Println("Image could not be read correctly #2")
+			uploadedFile = false
+		}
+
+		err2 := ioutil.WriteFile("./app/model/images/profile/"+fmt.Sprint(uuid)+".jpg", fileBytes, 0644)
+		check(err2)
 	}
-	//defer file.Close()
-	fileBytes, err := ioutil.ReadAll(file)
-	if err != nil {
-		log.Println("Image could not be read correctly #2")
-		uploadedFile = false
-	}
-	uuid := uuid.Must(uuid.NewV4())
-	err2 := ioutil.WriteFile("./app/model/images/profile/"+fmt.Sprint(uuid)+".jpg", fileBytes, 0644)
-	check(err2)
+
 	if (password1 == "" || password2 == "") {
 		http.Redirect(w, r, "/profile.html", http.StatusFound)
 	}
@@ -648,11 +651,11 @@ func deletePOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	logAccess(r, params, "")
 
 	invid, _ := strconv.Atoi(r.FormValue("cart"))
-	log.Print("Zu löschende InventarID: "+ fmt.Sprint(invid))
+	log.Print("Zu löschende InventarID: " + fmt.Sprint(invid))
 	session, _ := store.Get(r, "session")
 
 	cartids := getExistingKey(session.Values["cart"])
-    index := 0
+	index := 0
 	for p, v := range cartids {
 		if (v == invid) {
 			index = p
