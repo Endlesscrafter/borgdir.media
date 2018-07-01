@@ -467,7 +467,7 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 		log.Println("Image could not be read correctly")
 		uploadedFile = false
 	}
-	defer file.Close()
+	//defer file.Close()
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
 		log.Println("Image could not be read correctly #2")
