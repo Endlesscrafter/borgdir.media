@@ -651,8 +651,15 @@ func deletePOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	log.Print("Zu löschende InventarID: "+ fmt.Sprint(invid))
 	session, _ := store.Get(r, "session")
 
-	cartids := session.Values["cart"].(intSlice)
-	cartids = remove(cartids, cartids.pos(invid))
+	cartids := getExistingKey(session.Values["cart"])
+    index := 0
+	for p, v := range cartids {
+		if (v == invid) {
+			index = p
+		}
+	}
+
+	cartids = remove(cartids, index)
 	session.Values["cart"] = cartids
 	session.Save(r, w)
 	http.Redirect(w, r, "/equipment.html", http.StatusFound)
@@ -661,16 +668,6 @@ func deletePOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 
 func remove(slice []int, s int) []int {
 	return append(slice[:s], slice[s+1:]...)
-}
-
-type intSlice []int
-func (slice intSlice) pos(value int) int {
-	for p, v := range slice {
-		if (v == value) {
-			return p
-		}
-	}
-	return -1
 }
 
 func logAccess(r *http.Request, params httprouter.Params, fileDir string) {
