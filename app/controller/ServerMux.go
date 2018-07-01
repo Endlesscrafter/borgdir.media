@@ -651,7 +651,7 @@ func deletePOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	session, _ := store.Get(r, "session")
 
 	cartids := session.Values["cart"].([]int)
-	remove(cartids, invid)
+	cartids = remove(cartids, invid)
 	session.Values["cart"] = cartids
 	session.Save(r, w)
 	http.Redirect(w, r, "/equipment.html", http.StatusFound)
