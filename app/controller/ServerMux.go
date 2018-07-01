@@ -648,6 +648,7 @@ func deletePOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	logAccess(r, params, "")
 
 	invid, _ := strconv.Atoi(r.FormValue("cart"))
+	log.Print("Zu löschende InventarID: "+ fmt.Sprint(invid))
 	session, _ := store.Get(r, "session")
 
 	cartids := session.Values["cart"].([]int)
