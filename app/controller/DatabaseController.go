@@ -29,6 +29,10 @@ func getAllUsers(db *sql.DB) *[]user {
 		rows.Scan(&(userN.UserID), &(userN.Name), &(userN.Email), &(userN.Password), &(userN.ProfileImageSRC), &(userN.UserLevel), &(userN.Blocked), &(userN.ActiveUntilDate))
 		users = append(users, userN)
 
+		activedate := userN.ActiveUntilDate
+		runes1 := []rune(activedate)
+		userN.ActiveUntilDate = string(runes1[0:10])
+
 	}
 	logDatabase("SELECT * FROM users u;", fmt.Sprint(users))
 	return &users
