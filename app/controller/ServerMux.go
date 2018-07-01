@@ -171,11 +171,11 @@ func registerHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 func cartHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "")
 	tmpl, err := template.ParseFiles("template/cart.html")
-	tmpl.Funcs(template.FuncMap{
+	/*tmpl.Funcs(template.FuncMap{
 		"Format": func(t time.Time, layout string) string {
 			return t.Format(layout)
 		},
-	})
+	})*/
 	if err == nil {
 
 		session, _ := store.Get(r, "session")

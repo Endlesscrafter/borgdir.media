@@ -95,6 +95,15 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData
 		var inRent rentData
 		invs.Scan(&(inRent.RentID), &(inRent.UserID), &(inRent.InvID), &(inRent.RentDate), &(inRent.ReturnDate),
 			&(inRent.Bookmarked), &(inRent.Amount), &(inRent.Repair))
+
+		rentdate := inRent.RentDate
+		returndate := inRent.ReturnDate
+		runes1 := []rune(rentdate)
+		runes2 := []rune(returndate)
+
+		inRent.RentDate = string(runes1[0:10])
+		inRent.ReturnDate = string(runes2[0:10])
+
 		rentlist = append(rentlist, inRent)
 
 	}
@@ -216,6 +225,14 @@ func getRentList(db *sql.DB, invID int64, UserID int64) *[]rentData {
 			var inRent rentData
 			res.Scan(&(inRent.RentID), &(inRent.UserID), &(inRent.InvID), &(inRent.RentDate), &(inRent.ReturnDate), &(inRent.Bookmarked), &(inRent.Amount), &(inRent.Repair))
 
+			rentdate := inRent.RentDate
+			returndate := inRent.ReturnDate
+			runes1 := []rune(rentdate)
+			runes2 := []rune(returndate)
+
+			inRent.RentDate = string(runes1[0:10])
+			inRent.ReturnDate = string(runes2[0:10])
+
 			//Get the User Name
 			var user string
 			username, err := db.Query("SELECT name FROM users WHERE userid = " + strconv.FormatInt(inRent.UserID, 10) + ";")
@@ -240,6 +257,14 @@ func getRentList(db *sql.DB, invID int64, UserID int64) *[]rentData {
 
 			var inRent rentData
 			res.Scan(&(inRent.RentID), &(inRent.UserID), &(inRent.InvID), &(inRent.RentDate), &(inRent.ReturnDate), &(inRent.Bookmarked), &(inRent.Amount), &(inRent.Repair))
+
+			rentdate := inRent.RentDate
+			returndate := inRent.ReturnDate
+			runes1 := []rune(rentdate)
+			runes2 := []rune(returndate)
+
+			inRent.RentDate = string(runes1[0:10])
+			inRent.ReturnDate = string(runes2[0:10])
 
 			//Get the User Name
 			var user string
@@ -272,6 +297,12 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 		var inUser user
 
 		rows.Scan(&(inUser.UserID), &(inUser.Name), &(inUser.Email), &(inUser.Password), &(inUser.ProfileImageSRC), &(inUser.UserLevel), &(inUser.Blocked), &(inUser.ActiveUntilDate))
+
+		activedate := inUser.ActiveUntilDate
+		runes1 := []rune(activedate)
+		inUser.ActiveUntilDate = string(runes1[0:10])
+
+
 		logDatabase("SELECT * FROM users u WHERE u.Name LIKE '"+username+"';", fmt.Sprint(inUser))
 		if (validatePassword && CheckPasswordHash(password, inUser.Password)) {
 			return &inUser
@@ -298,6 +329,10 @@ func getUserFromID(db *sql.DB, userid int) *user {
 
 		rows.Scan(&(inUser.UserID), &(inUser.Name), &(inUser.Email), &(inUser.Password), &(inUser.ProfileImageSRC), &(inUser.UserLevel), &(inUser.Blocked), &(inUser.ActiveUntilDate))
 		logDatabase("SELECT * FROM users u WHERE u.useridLIKE '"+fmt.Sprint(userid)+"';", fmt.Sprint(inUser))
+
+		activedate := inUser.ActiveUntilDate
+		runes1 := []rune(activedate)
+		inUser.ActiveUntilDate = string(runes1[0:10])
 
 		return &inUser
 
@@ -332,6 +367,10 @@ func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params 
 		for rows.Next() {
 
 			rows.Scan(&(userN.UserID), &(userN.Name), &(userN.Email), &(userN.Password), &(userN.ProfileImageSRC), &(userN.UserLevel), &(userN.Blocked), &(userN.ActiveUntilDate))
+
+			activedate := userN.ActiveUntilDate
+			runes1 := []rune(activedate)
+			userN.ActiveUntilDate = string(runes1[0:10])
 
 		}
 		logDatabase("SELECT * FROM users u WHERE u.userid = "+fmt.Sprint(userid)+";", fmt.Sprint(userN))
