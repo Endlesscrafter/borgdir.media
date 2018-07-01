@@ -464,13 +464,13 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 	file, _, err := r.FormFile("image")
 	uploadedFile := true
 	if err != nil {
-		log.Fatal("Image could not be read correctly")
+		log.Println("Image could not be read correctly")
 		uploadedFile = false
 	}
 	defer file.Close()
 	fileBytes, err := ioutil.ReadAll(file)
 	if err != nil {
-		log.Fatal("Image could not be read correctly #2")
+		log.Println("Image could not be read correctly #2")
 		uploadedFile = false
 	}
 	uuid := uuid.Must(uuid.NewV4())
