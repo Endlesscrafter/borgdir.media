@@ -348,7 +348,14 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 
 	}
 	if strings.Contains(params.ByName("suburl"), "img/") {
-		content, err := ioutil.ReadFile("app/model/images/" + strings.Trim(params.ByName("suburl"), "/img"))
+
+		imageurl := strings.Trim(params.ByName("suburl"), "/img")
+		if !strings.Contains(imageurl,".jpg"){
+			if(strings.Contains(imageurl, ".jp")){
+				imageurl += "g"
+			}
+		}
+		content, err := ioutil.ReadFile("app/model/images/" + imageurl)
 		w.Header().Set("Content-Type", "image/*")
 		if err != nil {
 			log.Fatal(err)
