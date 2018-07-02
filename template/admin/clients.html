@@ -128,10 +128,10 @@
                                 <span class="text-warning">Benutzer</span>
                             </div>
                         </td>
-                        <td class="descText">
+                        <td class="descText">Inventar-Nr:
                         {{range $.Rentlist}}
                         {{if eq .UserID $Guserid}}
-                        Inventar-Nr: {{.InvID}}
+                        {{.InvID}},
                         {{end}}
                         {{end}}
                         </td>
