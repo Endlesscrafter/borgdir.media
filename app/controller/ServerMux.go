@@ -495,7 +495,7 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 		if (email != "") {
 			user.Email = email
 		}
-		if(password1 == ""){
+		if(password1 != ""){
 			user.Password = hash
 		}
 		//Hoffe das klappt so, soll schauen ob die datei leer war
