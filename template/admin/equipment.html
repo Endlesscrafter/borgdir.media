@@ -90,7 +90,6 @@
                 <form>
                     <input type="text" class="form-control" id="search" placeholder="Suche">
                 </form>
-
             </div>
             <div class="col-lg-1 dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownKatMenuButton"
@@ -166,9 +165,11 @@
                                     <i class="fas fa-pencil-alt"></i>
                                 </button>
                             </a>
-                            <button type="button" class="btn btn-secondary">
+                            <form action="/delete-equip.html" method="post">
+                            <button type="submit" class="btn btn-secondary" name="invid" value="{{.InvID}}">
                                 <i class="far fa-trash-alt"></i>
                             </button>
+                            </form>
                         </td>
                     </tr>
                     {{end}}

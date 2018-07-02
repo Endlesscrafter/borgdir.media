@@ -350,8 +350,8 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	if strings.Contains(params.ByName("suburl"), "img/") {
 
 		imageurl := strings.Trim(params.ByName("suburl"), "/img")
-		if !strings.Contains(imageurl,".jpg"){
-			if(strings.Contains(imageurl, ".jp")){
+		if !strings.Contains(imageurl, ".jpg") {
+			if (strings.Contains(imageurl, ".jp")) {
 				imageurl += "g"
 			}
 		}
@@ -502,7 +502,7 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 		if (email != "") {
 			user.Email = email
 		}
-		if(password1 != ""){
+		if (password1 != "") {
 			user.Password = hash
 		}
 		//Hoffe das klappt so, soll schauen ob die datei leer war
@@ -653,6 +653,18 @@ func rentPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 	session.Values["cart"] = cartids
 	session.Save(r, w)
 	http.Redirect(w, r, "/equipment.html", http.StatusFound)
+
+}
+
+//Löscht aus der Datenbank
+func delEquipPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+	logAccess(r, params, "")
+
+	invid, _ := strconv.Atoi(r.FormValue("cart"))
+	log.Print("Zu löschende InventarID: " + fmt.Sprint(invid))
+
+	delEquipment(GLOBALDB, invid)
 
 }
 
@@ -964,6 +976,7 @@ func main() {
 		router.POST("/logout.html", logoutPOSTHandler)
 		router.POST("/cart-rent.html", rentPOSTHandler)
 		router.POST("/cart-del.html", deletePOSTHandler)
+		router.POST("/delete-equip.html", delEquipPOSTHandler)
 
 		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))

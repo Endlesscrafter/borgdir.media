@@ -503,6 +503,14 @@ func addEquipment(db *sql.DB, eq equipmentData) {
 
 }
 
+func delEquipment(db *sql.DB, InvID int) {
+
+	_, err := db.Exec("DELETE FROM equipment WHERE invid = " + fmt.Sprint(InvID) +";")
+	_, err2 := db.Exec("DELETE FROM rentlist WHERE invid = " + fmt.Sprint(InvID) +";")
+	checkErr(err)
+	checkErr(err2)
+}
+
 //TODO: Fill dummy, make use of hashing
 func updateUser(db *sql.DB, user *user) bool {
 
