@@ -495,7 +495,9 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 		if (email != "") {
 			user.Email = email
 		}
-		user.Password = hash
+		if(password1 == ""){
+			user.Password = hash
+		}
 		//Hoffe das klappt so, soll schauen ob die datei leer war
 		if uploadedFile {
 			user.ProfileImageSRC = "img/profile/" + fmt.Sprint(uuid) + ".jpg"
