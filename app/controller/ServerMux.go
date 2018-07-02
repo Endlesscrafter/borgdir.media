@@ -299,9 +299,11 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 
 			user := getLoggedInUser(GLOBALDB, w, r, params)
 			users := getAllUsers(GLOBALDB)
+			rents := getCompleteRentList(GLOBALDB)
 
 			data := siteData{}
 			data.User = *user
+			data.Rentlist = *rents
 			for _, element := range *users {
 				data.AdminUserList = append(data.AdminUserList, element)
 			}

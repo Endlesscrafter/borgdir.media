@@ -291,6 +291,45 @@ func getRentList(db *sql.DB, invID int64, UserID int64) *[]rentData {
 	return nil
 }
 
+//Gets a list of Renting information for a InvID or a UserID (one of the two can be passed, invID preferred)
+func getCompleteRentList(db *sql.DB) *[]rentData {
+
+	var rentlist []rentData
+
+	res, err := db.Query("SELECT * FROM rentlist r;")
+	checkErr(err)
+	for res.Next() {
+
+		var inRent rentData
+		res.Scan(&(inRent.RentID), &(inRent.UserID), &(inRent.InvID), &(inRent.RentDate), &(inRent.ReturnDate), &(inRent.Bookmarked), &(inRent.Amount), &(inRent.Repair))
+
+		rentdate := inRent.RentDate
+		returndate := inRent.ReturnDate
+		runes1 := []rune(rentdate)
+		runes2 := []rune(returndate)
+
+		inRent.RentDate = string(runes1[0:10])
+		inRent.ReturnDate = string(runes2[0:10])
+
+		//Get the User Name
+		var user string
+		username, err := db.Query("SELECT name FROM users WHERE userid = " + strconv.FormatInt(inRent.UserID, 10) + ";")
+		checkErr(err)
+		username.Next()
+		username.Scan(user)
+		logDatabase("SELECT name FROM users WHERE userid = "+strconv.FormatInt(inRent.UserID, 10)+";", user)
+		inRent.RentedByUserName = user
+
+		rentlist = append(rentlist, inRent)
+
+	}
+	logDatabase("SELECT * FROM rentlist r WHERE r.invid;", fmt.Sprint(rentlist))
+	return &rentlist
+
+	log.Fatal("getRentList got no valid invID or UserID, it needs one of the two to work")
+	return nil
+}
+
 //Gets a User form the Database and returns a pointer to it, if wanted, you can specify a password an let it test against the database one
 func getUserFromName(db *sql.DB, username string, password string, validatePassword bool) *user {
 
@@ -306,9 +345,8 @@ func getUserFromName(db *sql.DB, username string, password string, validatePassw
 		runes1 := []rune(activedate)
 		inUser.ActiveUntilDate = string(runes1[0:10])
 
-
 		logDatabase("SELECT * FROM users u WHERE u.Name LIKE '"+username+"';", fmt.Sprint(inUser))
-		if (validatePassword && CheckPasswordHash(password, inUser.Password)) {
+		if validatePassword && CheckPasswordHash(password, inUser.Password) {
 			return &inUser
 		} else {
 			log.Print("Error: The User could not be logged in")
@@ -363,7 +401,7 @@ func getLoggedInUser(db *sql.DB, w http.ResponseWriter, r *http.Request, params 
 	//query := "SELECT * FROM users u WHERE u.userid = " + userid + ";"
 	log.Print(fmt.Sprint(userid))
 	id, _ := strconv.Atoi(fmt.Sprint(userid))
-	if (id > 0) {
+	if id > 0 {
 		rows, err := db.Query("SELECT * FROM users u WHERE u.userid = " + fmt.Sprint(userid) + ";")
 		var userN user
 

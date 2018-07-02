@@ -115,6 +115,7 @@
                     </thead>
                     <tbody>
                     {{range .AdminUserList}}
+                    {{$Guserid := .UserID}}
                     <tr>
                         <td class="float-left">
                             <img class="img-fluid"
@@ -127,19 +128,23 @@
                                 <span class="text-warning">Benutzer</span>
                             </div>
                         </td>
-                        <td class="descText">Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-                            suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+                        <td class="descText">
+                        {{range $.Rentlist}}
+                        {{if eq .UserID $Guserid}}
+                        Inventar-Nr: {{.InvID}}
+                        {{end}}
+                        {{end}}
                         </td>
-                        {{if eq .Blocked false}}
+                    {{if eq .Blocked false}}
                         <td class="text-left pl-3">
                             Konto aktiv bis:<br/>
                             <span class="text-info">{{.ActiveUntilDate}}</span>
                         </td>
-                        {{else}}
+                    {{else}}
                         <td class="text-left pl-3">
                             <span class="text-warning">Gesperrt</span>
                         </td>
-                        {{end}}
+                    {{end}}
                         <td>
                             <form action="edit-client.html" method="post">
                                 <button type="submit" class="btn btn-secondary" value="{{.UserID}}" name="userid">
