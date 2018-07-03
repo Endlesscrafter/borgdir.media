@@ -334,6 +334,7 @@ func getCompleteRentList(db *sql.DB) *[]rentData {
 func getUserFromName(db *sql.DB, username string, password string, validatePassword bool) *user {
 
 	rows, err := db.Query("SELECT * FROM users u WHERE u.Name LIKE '" + username + "';")
+	logDatabase("SELECT * FROM users u WHERE u.Name LIKE '"+username+"';","")
 
 	checkErr(err)
 	for rows.Next() {

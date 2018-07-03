@@ -468,6 +468,7 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 	email := r.FormValue("email")
 	password1 := r.FormValue("password1")
 	password2 := r.FormValue("password2")
+	password0 := r.FormValue("password0")
 
 	/*Profilbild*/
 	file, _, err := r.FormFile("image")
