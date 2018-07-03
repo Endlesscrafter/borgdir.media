@@ -113,28 +113,26 @@
     <div class="container-fluid shopContainer">
         <div class="row justify-content-center mb-5">
         {{ range .Equipment}}
-            <div id="eq-{{.InvID}}">
-                <div class="col-lg-3 text-left float-left mb-5">
-                    <h4>{{.Name}}</h4>
-                    <p class="descText">{{.Desc}}</p>
-                {{if eq .Stock "Entliehen"}}
-                    <span class="text-danger stock">Entliehen</span>
-                {{else if eq .Stock "Verfügbar"}}
-                    <form action="/cart.html" method="post">
-                        <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen" type="submit"
-                                value="{{.InvID}}" name="cart"><i
-                                class="fas fa-cart-arrow-down"></i></button>
-                    </form>
-                    <span class="text-info stock">{{.StockAmount}} Verfügbar</span>
-                {{else if eq .Stock "Vorgemerkt"}}
-                    <span class="text-warning stock">Vorgemerkt</span>
-                {{end}}
-                </div>
-                <div class="col-lg-2 float-right">
-                    <img class="img-fluid"
-                         src="{{.ImageSRC}}"
-                         alt="{{.ImageAlt}}" width="150" height="150">
-                </div>
+            <div class="col-lg-3 text-left float-left mb-5 eq-{{.InvID}}">
+                <h4>{{.Name}}</h4>
+                <p class="descText">{{.Desc}}</p>
+            {{if eq .Stock "Entliehen"}}
+                <span class="text-danger stock">Entliehen</span>
+            {{else if eq .Stock "Verfügbar"}}
+                <form action="/cart.html" method="post">
+                    <button class="btn btn-secondary" title="Zum Warenkorb hinzufügen" type="submit"
+                            value="{{.InvID}}" name="cart"><i
+                            class="fas fa-cart-arrow-down"></i></button>
+                </form>
+                <span class="text-info stock">{{.StockAmount}} Verfügbar</span>
+            {{else if eq .Stock "Vorgemerkt"}}
+                <span class="text-warning stock">Vorgemerkt</span>
+            {{end}}
+            </div>
+            <div class="col-lg-2 float-right eq-{{.InvID}}">
+                <img class="img-fluid"
+                     src="{{.ImageSRC}}"
+                     alt="{{.ImageAlt}}" width="150" height="150">
             </div>
         {{end}}
         </div>
