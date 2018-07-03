@@ -15,10 +15,10 @@
             integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl"
             crossorigin="anonymous"></script>
     <script>
-        $(document).ready(function(){
-            $("#search").on("keyup", function() {
+        $(document).ready(function () {
+            $("#search").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
-                $("#eq-content div").filter(function() {
+                $("#eq-content div").filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
