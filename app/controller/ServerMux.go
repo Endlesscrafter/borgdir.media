@@ -475,7 +475,7 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 	uploadedFile := true
 	uuid := uuid.Must(uuid.NewV4())
 	if err != nil {
-		log.Println("Image could not be read correctly")
+		log.Println("Image could not be read correctly: " + fmt.Sprint(err))
 		uploadedFile = false
 	} else {
 		//defer file.Close()
