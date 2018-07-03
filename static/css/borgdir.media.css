@@ -115,3 +115,7 @@ body {
 td {
     text-align: justify;
 }
+
+.hidden{
+    font-size: 0;
+}

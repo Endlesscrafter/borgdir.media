@@ -142,7 +142,9 @@
             <div class="col-lg-2 float-right eq-{{.InvID}}">
                 <img class="img-fluid"
                      src="{{.ImageSRC}}"
-                     alt="{{.Name}} - {{.ImageAlt}}" width="150" height="150">
+                     alt="{{.ImageAlt}}" width="150" height="150">
+                <!--Shows no text but is necessary for Searching-->
+                <span class="hidden">{{.Name}} {{.Desc}}</span>
             </div>
         {{end}}
         </div>
