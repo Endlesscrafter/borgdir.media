@@ -334,7 +334,7 @@ func getCompleteRentList(db *sql.DB) *[]rentData {
 func getUserFromName(db *sql.DB, username string, password string, validatePassword bool) *user {
 
 	rows, err := db.Query("SELECT * FROM users u WHERE u.Name LIKE '" + username + "';")
-	logDatabase("SELECT * FROM users u WHERE u.Name LIKE '"+username+"';","")
+	logDatabase("SELECT * FROM users u WHERE u.Name LIKE '"+username+"';", "")
 
 	checkErr(err)
 	for rows.Next() {
@@ -506,8 +506,8 @@ func addEquipment(db *sql.DB, eq equipmentData) {
 
 func delEquipment(db *sql.DB, InvID int) {
 
-	_, err := db.Exec("DELETE FROM equipment WHERE invid = " + fmt.Sprint(InvID) +";")
-	_, err2 := db.Exec("DELETE FROM rentlist WHERE invid = " + fmt.Sprint(InvID) +";")
+	_, err := db.Exec("DELETE FROM equipment WHERE invid = " + fmt.Sprint(InvID) + ";")
+	_, err2 := db.Exec("DELETE FROM rentlist WHERE invid = " + fmt.Sprint(InvID) + ";")
 	checkErr(err)
 	checkErr(err2)
 }
@@ -515,10 +515,10 @@ func delEquipment(db *sql.DB, InvID int) {
 //TODO: Fill dummy, make use of hashing
 func updateUser(db *sql.DB, user *user) bool {
 
-	db.Exec("UPDATE users SET name='" + user.Name + "', email='" + user.Email + "', password=" + user.Password + " WHERE userid=" + strconv.FormatInt(user.UserID, 10) + ";")
-	logDatabase("UPDATE users SET name='"+user.Name+"', email='"+user.Email+"', password="+user.Password+" WHERE userid="+strconv.FormatInt(user.UserID, 10)+";", "")
-	var test []byte;
-	bcrypt.GenerateFromPassword(test, 0)
+	db.Exec("UPDATE users SET name='" + user.Name + "', email='" + user.Email + "', password='" + user.Password + "', profileimagesrc='" + user.ProfileImageSRC + "' WHERE userid=" + strconv.FormatInt(user.UserID, 10) + ";")
+	logDatabase("UPDATE users SET name='"+user.Name+"', email='"+user.Email+"', password='"+user.Password+"', profileimagesrc='" + user.ProfileImageSRC + "' WHERE userid="+strconv.FormatInt(user.UserID, 10)+";", "")
+	//var test []byte;
+	//bcrypt.GenerateFromPassword(test, 0)
 
 	return false
 }
