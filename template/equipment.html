@@ -14,6 +14,16 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"
             integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl"
             crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            $("#search").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#eq-content div").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 
@@ -111,7 +121,7 @@
     <!-- CONTENT -->
 
     <div class="container-fluid shopContainer">
-        <div class="row justify-content-center mb-5">
+        <div class="row justify-content-center mb-5" id="eq-content">
         {{ range .Equipment}}
             <div class="col-lg-3 text-left float-left mb-5 eq-{{.InvID}}">
                 <h4>{{.Name}}</h4>
