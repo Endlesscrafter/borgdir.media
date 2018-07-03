@@ -79,7 +79,7 @@
             </div>
         </div>
     </div>
-    <form action="/profile.html" method="post">
+    <form action="/profile.html" method="post" enctype="multipart/form-data">
         <!-- CONTENT -->
         <div class="container-fluid">
             <div class="row">
@@ -94,7 +94,7 @@
                     <div class="form-group">
                         <label for="changeUsername">Benutzername</label>
                         <input type="text" class="form-control" id="changeUsername"
-                               placeholder="{{.User.Name}}" name="username">
+                               placeholder="{{.User.Name}}" name="username" value="{{.User.Name}}">
                     </div>
                     <div class="form-group">
                         <label for="changeEmail">Email-Adresse</label>

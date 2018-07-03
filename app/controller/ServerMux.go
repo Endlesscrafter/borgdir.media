@@ -468,13 +468,14 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 	email := r.FormValue("email")
 	password1 := r.FormValue("password1")
 	password2 := r.FormValue("password2")
+	//password0 := r.FormValue("password0")
 
 	/*Profilbild*/
 	file, _, err := r.FormFile("image")
 	uploadedFile := true
 	uuid := uuid.Must(uuid.NewV4())
 	if err != nil {
-		log.Println("Image could not be read correctly")
+		log.Println("Image could not be read correctly: " + fmt.Sprint(err))
 		uploadedFile = false
 	} else {
 		//defer file.Close()
