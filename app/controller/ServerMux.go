@@ -293,12 +293,14 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 			tmpl.ExecuteTemplate(w, "add.html", data)
 		}
 	}
-	if  strings.Contains(params.ByName("suburl"),"edit.html"){
+	if  strings.Contains(params.ByName("suburl"),"/edit.html"){
 
 		tmpl, err := template.ParseFiles("template/admin/edit.html")
 		if err == nil {
 
 			suburl := params.ByName("suburl")
+
+			log.Print(suburl)
 
 			parts := strings.SplitAfter(suburl,"?i=")
 
