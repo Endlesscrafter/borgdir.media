@@ -293,7 +293,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 			tmpl.ExecuteTemplate(w, "add.html", data)
 		}
 	}
-	if /*strings.Contains(params.ByName("suburl"), "/edit.html")*/params.ByName("suburl") == "/add.html" {
+	if /*strings.Contains(params.ByName("suburl"), "/edit.html")*/params.ByName("suburl") == "/edit.html" {
 
 		value := r.URL.Query().Get("i")
 
