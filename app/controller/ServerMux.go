@@ -506,7 +506,7 @@ func editEqPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	amount, _ := strconv.Atoi(StockAmount)
 
 	file, _, err := r.FormFile("image")
-	uploadedFile := true
+	uploadedFile := false
 	uuid := uuid.Must(uuid.NewV4())
 	if err != nil {
 		log.Println("Image could not be read correctly: " + fmt.Sprint(err))
@@ -520,6 +520,7 @@ func editEqPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 		}
 
 		err2 := ioutil.WriteFile("./app/model/images/equipment/"+fmt.Sprint(uuid)+".jpg", fileBytes, 0644)
+		uploadedFile = true
 		check(err2)
 	}
 
