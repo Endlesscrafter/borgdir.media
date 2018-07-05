@@ -93,7 +93,8 @@
                     <div class="form-group float-left">
                         <label for="invNr">Inventar-Nummer</label>
                         <input type="text" class="form-control" id="invNr"
-                               disabled name="invid" value="{{.InvID}}">
+                               disabled value="{{.InvID}}" name="unused">
+                        <input type="hidden" name="invid" value="{{.InvID}}">
                     </div>
                     <div class="form-group float-right" style="width:40%;">
                         <label for="lagerort">Lagerort</label>
