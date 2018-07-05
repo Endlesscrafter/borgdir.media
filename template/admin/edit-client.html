@@ -131,7 +131,7 @@
             <button type="submit" class="btn btn-primary">Änderungen speichern</button>
         {{range .AdminUserList}}
             <form action="block.html" method="post">
-                <button type="button" class="btn btn-danger" value="{{.UserID}}" name="userid">Konto sperren</button>
+                <button type="submit" class="btn btn-danger" value="{{.UserID}}" name="userid">Konto sperren</button>
             </form>
         {{end}}
         </div>
