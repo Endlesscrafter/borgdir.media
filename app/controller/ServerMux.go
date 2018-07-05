@@ -293,7 +293,9 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 			tmpl.ExecuteTemplate(w, "add.html", data)
 		}
 	}
-	if strings.Contains(params.ByName("suburl"), "/edit.html") {
+	if /*strings.Contains(params.ByName("suburl"), "/edit.html")*/params.ByName("suburl") == "/add.html" {
+
+		value := r.URL.Query().Get("i")
 
 		tmpl, err := template.ParseFiles("template/admin/edit.html")
 		if err == nil {
@@ -302,9 +304,11 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 
 			log.Print(suburl)
 
-			parts := strings.SplitAfter(suburl, "?i=")
+			//parts := strings.SplitAfter(suburl, "?i=")
 
-			invid, _ := strconv.ParseInt(parts[1], 10, 64)
+			//invid, _ := strconv.ParseInt(parts[1], 10, 64)
+
+			invid, _ := strconv.ParseInt(value, 10, 64)
 
 			log.Print("Zu editierendes Equip: " + fmt.Sprint(invid))
 			data := siteData{}
