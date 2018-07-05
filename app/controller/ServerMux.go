@@ -299,6 +299,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 		log.Println("query-wert: " + value)
 
 		tmpl, err := template.ParseFiles("template/admin/edit.html")
+		log.Println(err)
 		if err == nil {
 
 			suburl := params.ByName("suburl")
