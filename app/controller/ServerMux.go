@@ -293,6 +293,28 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 			tmpl.ExecuteTemplate(w, "add.html", data)
 		}
 	}
+	if  strings.Contains(params.ByName("suburl"),"edit.html"){
+
+		tmpl, err := template.ParseFiles("template/admin/edit.html")
+		if err == nil {
+
+			suburl := params.ByName("suburl")
+
+			parts := strings.SplitAfter(suburl,"?i=")
+
+			invid,_ := strconv.ParseInt(parts[1],10,64)
+
+			data := siteData{}
+			user := getLoggedInUser(GLOBALDB, w, r, params)
+			data.User = *user
+			eq := getEquip(GLOBALDB,invid)
+			data.Equipment = append(data.Equipment, *eq)
+
+			tmpl.ExecuteTemplate(w, "edit.html", data)
+		}
+
+
+	}
 	if params.ByName("suburl") == "/clients.html" {
 		tmpl, err := template.ParseFiles("template/admin/clients.html")
 		if err == nil {
