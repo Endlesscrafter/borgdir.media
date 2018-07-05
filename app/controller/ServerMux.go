@@ -293,7 +293,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 			tmpl.ExecuteTemplate(w, "add.html", data)
 		}
 	}
-	if  strings.Contains(params.ByName("suburl"),"/edit.html"){
+	if strings.Contains(params.ByName("suburl"), "/edit.html") {
 
 		tmpl, err := template.ParseFiles("template/admin/edit.html")
 		if err == nil {
@@ -302,20 +302,19 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 
 			log.Print(suburl)
 
-			parts := strings.SplitAfter(suburl,"?i=")
+			parts := strings.SplitAfter(suburl, "?i=")
 
-			invid,_ := strconv.ParseInt(parts[1],10,64)
+			invid, _ := strconv.ParseInt(parts[1], 10, 64)
 
 			log.Print("Zu editierendes Equip: " + fmt.Sprint(invid))
 			data := siteData{}
 			user := getLoggedInUser(GLOBALDB, w, r, params)
 			data.User = *user
-			eq := getEquip(GLOBALDB,invid)
+			eq := getEquip(GLOBALDB, invid)
 			data.Equipment = append(data.Equipment, *eq)
 
 			tmpl.ExecuteTemplate(w, "edit.html", data)
 		}
-
 
 	}
 	if params.ByName("suburl") == "/clients.html" {
@@ -483,6 +482,55 @@ func cartPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 }
 
 func myEquipPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	logAccess(r, params, "")
+}
+
+func editEqPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+	Name := r.FormValue("name")
+	Desc := r.FormValue("description")
+	StockAmount := r.FormValue("amount")
+	Category := r.FormValue("category")
+	StorageLocation := r.FormValue("storagelocation")
+	InvID := r.FormValue("invid")
+
+	id, _ := strconv.ParseInt(InvID, 10, 64)
+	amount, _ := strconv.Atoi(StockAmount)
+
+	file, _, err := r.FormFile("image")
+	uploadedFile := true
+	uuid := uuid.Must(uuid.NewV4())
+	if err != nil {
+		log.Println("Image could not be read correctly: " + fmt.Sprint(err))
+		uploadedFile = false
+	} else {
+		//defer file.Close()
+		fileBytes, err := ioutil.ReadAll(file)
+		if err != nil {
+			log.Println("Image could not be read correctly #2")
+			uploadedFile = false
+		}
+
+		err2 := ioutil.WriteFile("./app/model/images/equipment/"+fmt.Sprint(uuid)+".jpg", fileBytes, 0644)
+		check(err2)
+	}
+
+	eq := getEquip(GLOBALDB, id)
+	eq.Name = Name
+	eq.Desc = Desc
+	if uploadedFile {
+		eq.ImageSRC = "img/equipment/" + fmt.Sprint(uuid) + ".jpg"
+	}
+	if(amount > 0){
+		eq.Stock = "Verfügbar"
+	}
+	eq.Category = Category
+	eq.StorageLocation = StorageLocation
+	eq.StockAmount = amount
+
+	updateEquip(GLOBALDB, eq)
+	http.Redirect(w, r, "equipment.html", http.StatusFound)
+
 	logAccess(r, params, "")
 }
 
@@ -1003,6 +1051,7 @@ func main() {
 		router.POST("/cart-rent.html", rentPOSTHandler)
 		router.POST("/cart-del.html", deletePOSTHandler)
 		router.POST("/delete-equip.html", delEquipPOSTHandler)
+		router.POST("/admin/edit.html", editEqPOSTHandler)
 
 		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))

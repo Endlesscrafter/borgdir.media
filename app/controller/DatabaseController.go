@@ -516,11 +516,20 @@ func delEquipment(db *sql.DB, InvID int) {
 func updateUser(db *sql.DB, user *user) bool {
 
 	db.Exec("UPDATE users SET name='" + user.Name + "', email='" + user.Email + "', password='" + user.Password + "', profileimagesrc='" + user.ProfileImageSRC + "' WHERE userid=" + strconv.FormatInt(user.UserID, 10) + ";")
-	logDatabase("UPDATE users SET name='"+user.Name+"', email='"+user.Email+"', password='"+user.Password+"', profileimagesrc='" + user.ProfileImageSRC + "' WHERE userid="+strconv.FormatInt(user.UserID, 10)+";", "")
+	logDatabase("UPDATE users SET name='"+user.Name+"', email='"+user.Email+"', password='"+user.Password+"', profileimagesrc='"+user.ProfileImageSRC+"' WHERE userid="+strconv.FormatInt(user.UserID, 10)+";", "")
 	//var test []byte;
 	//bcrypt.GenerateFromPassword(test, 0)
 
-	return false
+	return true
+}
+func updateEquip(db *sql.DB, eq *equipmentData) bool {
+
+	db.Exec("UPDATE equipment SET name='" + eq.Name + "', description='" + eq.Desc + "', ImageSRC='" + eq.ImageSRC + "', stock='" + eq.Stock + "', stockamount=" + fmt.Sprint(eq.StockAmount) + ", category='" + eq.Category + "', storagelocation='" + eq.StorageLocation + "' WHERE invid=" + strconv.FormatInt(eq.InvID, 10) + ";")
+	logDatabase("UPDATE equipment SET name='" + eq.Name + "', description='" + eq.Desc + "', ImageSRC='" + eq.ImageSRC + "', stock='" + eq.Stock + "', stockamount=" + fmt.Sprint(eq.StockAmount) + ", category='" + eq.Category + "', storagelocation='" + eq.StorageLocation + "' WHERE invid=" + strconv.FormatInt(eq.InvID, 10) + ";", "")
+	//var test []byte;
+	//bcrypt.GenerateFromPassword(test, 0)
+
+	return true
 }
 
 func addUser(db *sql.DB, username string, email string, password string) {
