@@ -500,6 +500,8 @@ func editEqPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter
 	StorageLocation := r.FormValue("storagelocation")
 	InvID := r.FormValue("invid")
 
+	log.Println("INVENTARID:" + InvID)
+
 	id, _ := strconv.ParseInt(InvID, 10, 64)
 	amount, _ := strconv.Atoi(StockAmount)
 
