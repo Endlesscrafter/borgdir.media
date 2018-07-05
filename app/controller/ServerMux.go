@@ -296,6 +296,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	if /*strings.Contains(params.ByName("suburl"), "/edit.html")*/params.ByName("suburl") == "/edit.html" {
 
 		value := r.URL.Query().Get("i")
+		log.Println("query-wert: " + value)
 
 		tmpl, err := template.ParseFiles("template/admin/edit.html")
 		if err == nil {
