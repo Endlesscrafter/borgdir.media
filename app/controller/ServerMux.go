@@ -203,7 +203,8 @@ func equipHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 	tmpl, err := template.ParseFiles("template/equipment.html")
 	if err == nil {
 
-		eq := getAvailableEquip(GLOBALDB)
+		//eq := getAvailableEquip(GLOBALDB)
+		eq := getAvailableEquip(GLOBALDB, true)
 		user := getLoggedInUser(GLOBALDB, w, r, params)
 
 		data := siteData{}

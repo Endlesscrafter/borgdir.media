@@ -167,9 +167,15 @@ func getRentedEquip(db *sql.DB, UserID int64, bookmarked bool) (*[]equipmentData
 
 //Gets products, that are not rented and therefore can be rented, measured by StockAmount, if thats zero, every item is
 //rented
-func getAvailableEquip(db *sql.DB) *[]equipmentData {
+func getAvailableEquip(db *sql.DB, all bool) *[]equipmentData {
+	var rows *sql.Rows
+	var err error
 
-	rows, err := db.Query("SELECT * FROM equipment e WHERE e.StockAmount > 0;")
+	if !all {
+		rows, err = db.Query("SELECT * FROM equipment e WHERE e.StockAmount > 0;")
+	} else {
+		rows, err = db.Query("SELECT * FROM equipment e;")
+	}
 
 	checkErr(err)
 
@@ -614,7 +620,7 @@ func createRent(db *sql.DB, userid int64, invid int64, bookmarked bool, amount i
 func blockUser(db *sql.DB, userid int64) {
 
 	db.Exec("UPDATE users SET blocked=true WHERE userid=" + fmt.Sprint(userid) + ";")
-	logDatabase("UPDATE users SET blocked=true WHERE userid=" + fmt.Sprint(userid) + ";","")
+	logDatabase("UPDATE users SET blocked=true WHERE userid="+fmt.Sprint(userid)+";", "")
 
 }
 
