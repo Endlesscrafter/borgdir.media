@@ -491,6 +491,16 @@ func myEquipPOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 	logAccess(r, params, "")
 }
 
+func blockPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	logAccess(r, params, "")
+
+	user := r.FormValue("userid")
+	userid, _ := strconv.ParseInt(user, 10, 64)
+
+	blockUser(GLOBALDB, userid)
+
+}
+
 func editEqPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
 	Name := r.FormValue("name")
@@ -1061,6 +1071,7 @@ func main() {
 		router.POST("/cart-del.html", deletePOSTHandler)
 		router.POST("/delete-equip.html", delEquipPOSTHandler)
 		router.POST("/admin/edit.html", editEqPOSTHandler)
+		router.POST("/admin/block.html", blockPOSTHandler)
 
 		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))

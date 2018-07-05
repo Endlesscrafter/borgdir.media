@@ -116,7 +116,8 @@
                          alt="Generic placeholder image" width="400px" max-height="300px">
                     <div class="float-right">
                         <div class="form-group" style="width: 400px;">
-                            <input type="file" class="form-control" id="inputProfilepic" placeholder="Bild hochladen" name="image">
+                            <input type="file" class="form-control" id="inputProfilepic" placeholder="Bild hochladen"
+                                   name="image">
                         </div>
                     </div>
                 </div>
@@ -128,7 +129,11 @@
     <div class="container">
         <div class="col">
             <button type="submit" class="btn btn-primary">Änderungen speichern</button>
-            <button type="button" class="btn btn-danger">Konto löschen</button>
+        {{range .AdminUserList}}
+            <form action="block.html" method="post">
+                <button type="button" class="btn btn-danger" value="{{.UserID}}" name="userid">Konto sperren</button>
+            </form>
+        {{end}}
         </div>
     </div>
 

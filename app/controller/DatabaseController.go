@@ -525,7 +525,7 @@ func updateUser(db *sql.DB, user *user) bool {
 func updateEquip(db *sql.DB, eq *equipmentData) bool {
 
 	db.Exec("UPDATE equipment SET name='" + eq.Name + "', description='" + eq.Desc + "', ImageSRC='" + eq.ImageSRC + "', stock='" + eq.Stock + "', stockamount=" + fmt.Sprint(eq.StockAmount) + ", category='" + eq.Category + "', storagelocation='" + eq.StorageLocation + "' WHERE invid=" + strconv.FormatInt(eq.InvID, 10) + ";")
-	logDatabase("UPDATE equipment SET name='" + eq.Name + "', description='" + eq.Desc + "', ImageSRC='" + eq.ImageSRC + "', stock='" + eq.Stock + "', stockamount=" + fmt.Sprint(eq.StockAmount) + ", category='" + eq.Category + "', storagelocation='" + eq.StorageLocation + "' WHERE invid=" + strconv.FormatInt(eq.InvID, 10) + ";", "")
+	logDatabase("UPDATE equipment SET name='"+eq.Name+"', description='"+eq.Desc+"', ImageSRC='"+eq.ImageSRC+"', stock='"+eq.Stock+"', stockamount="+fmt.Sprint(eq.StockAmount)+", category='"+eq.Category+"', storagelocation='"+eq.StorageLocation+"' WHERE invid="+strconv.FormatInt(eq.InvID, 10)+";", "")
 	//var test []byte;
 	//bcrypt.GenerateFromPassword(test, 0)
 
@@ -609,6 +609,13 @@ func createRent(db *sql.DB, userid int64, invid int64, bookmarked bool, amount i
 		}
 
 	}
+}
+
+func blockUser(db *sql.DB, userid int64) {
+
+	db.Exec("UPDATE users SET blocked=true WHERE userid=" + fmt.Sprint(userid) + ";")
+	logDatabase("UPDATE users SET blocked=true WHERE userid=" + fmt.Sprint(userid) + ";","")
+
 }
 
 func HashPassword(password string) (string, error) {
