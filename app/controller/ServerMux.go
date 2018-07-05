@@ -304,6 +304,7 @@ func adminHandler(w http.ResponseWriter, r *http.Request, params httprouter.Para
 
 			invid,_ := strconv.ParseInt(parts[1],10,64)
 
+			log.Print("Zu editierendes Equip: " + fmt.Sprint(invid))
 			data := siteData{}
 			user := getLoggedInUser(GLOBALDB, w, r, params)
 			data.User = *user
