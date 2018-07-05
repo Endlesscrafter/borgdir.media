@@ -404,7 +404,7 @@ func loginPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.
 	password := r.FormValue("password")
 
 	user := getUserFromName(GLOBALDB, username, password, true)
-	if (user != nil) {
+	if (user != nil && !user.Blocked) {
 		// Set user as authenticated
 		session.Values["authenticated"] = true
 		session.Values["username"] = user.Name
