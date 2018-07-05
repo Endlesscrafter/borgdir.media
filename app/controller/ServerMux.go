@@ -499,6 +499,8 @@ func blockPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.
 
 	blockUser(GLOBALDB, userid)
 
+	http.Redirect(w, r, "clients.html", http.StatusFound)
+
 }
 
 func editEqPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
