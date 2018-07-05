@@ -585,7 +585,7 @@ func profilePOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 		}
 
 		updateUser(GLOBALDB, user)
-		http.Redirect(w, r, "/index.html", http.StatusFound)
+		http.Redirect(w, r, "/profile.html", http.StatusFound)
 	}
 
 }
