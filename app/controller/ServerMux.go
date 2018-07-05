@@ -492,6 +492,22 @@ func myEquipPOSTHandler(w http.ResponseWriter, r *http.Request, params httproute
 	logAccess(r, params, "")
 }
 
+func wishPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	logAccess(r, params, "")
+
+	wish := r.FormValue("wish")
+	invid, _ := strconv.ParseInt(wish,10,64)
+
+	session, _ := store.Get(r, "session")
+
+	username := session.Values["username"].(string)
+
+	user := getUserFromName(GLOBALDB,username,"",false)
+
+	createRent(GLOBALDB,user.UserID,invid,true,1,false)
+
+}
+
 func blockPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	logAccess(r, params, "")
 
@@ -1075,6 +1091,7 @@ func main() {
 		router.POST("/delete-equip.html", delEquipPOSTHandler)
 		router.POST("/admin/edit.html", editEqPOSTHandler)
 		router.POST("/admin/block.html", blockPOSTHandler)
+		router.POST("/wish.html", wishPOSTHandler)
 
 		log.Print("Server started successfully")
 		log.Fatal(http.ListenAndServe(":80", router))
