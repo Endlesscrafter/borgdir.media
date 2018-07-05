@@ -506,6 +506,8 @@ func wishPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.P
 
 	createRent(GLOBALDB,user.UserID,invid,true,1,false)
 
+	http.Redirect(w, r, "my-equipment.html", http.StatusFound)
+
 }
 
 func blockPOSTHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
